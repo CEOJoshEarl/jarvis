@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Jarvis">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#010B06">
+<link rel="apple-touch-icon" href="icon180.png">
+<link rel="icon" href="icon180.png">
+<title>Jarvis · CEO Josh Earl</title>
+<style>
+  :root{
+    --green:#4CBB17; --lime:#9BF442; --pale:#E8FFD4;
+    --gold:#FFB43A; --dim:#5C7A55;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  html,body{height:100%;overflow:hidden;background:#010B06}
+  body{color:var(--pale);font:400 16px/1.5 ui-rounded,-apple-system,"SF Pro Display",system-ui,sans-serif}
+  #sky{position:fixed;inset:0;width:100%;height:100%;z-index:0}
+
+  header{position:fixed;top:calc(env(safe-area-inset-top) + 18px);left:0;right:0;
+         display:flex;flex-direction:column;align-items:center;gap:9px;
+         pointer-events:none;z-index:6}
+  .mark{width:32px;height:32px;filter:drop-shadow(0 0 18px rgba(76,187,23,.95))}
+  .name{font-size:13px;letter-spacing:.68em;text-indent:.68em;font-weight:800;
+        background:linear-gradient(90deg,#2E9E1E,#9BF442,#FFF3D0,#FFB43A,#4CBB17);
+        background-size:320% 100%;
+        -webkit-background-clip:text;background-clip:text;color:transparent;
+        animation:shimmer 6s ease-in-out infinite;
+        filter:drop-shadow(0 0 16px rgba(155,244,66,.5))}
+  @keyframes shimmer{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+  .sub{font-size:9px;letter-spacing:.34em;color:var(--dim);text-transform:uppercase}
+
+  .hud{position:fixed;z-index:5;pointer-events:none;
+       font:600 9px/1.4 ui-monospace,"SF Mono",Menlo,monospace;
+       letter-spacing:.2em;text-transform:uppercase;color:var(--green);
+       text-shadow:0 0 10px rgba(76,187,23,.85)}
+  .tl{top:calc(env(safe-area-inset-top) + 16px);left:16px}
+  .tr{top:calc(env(safe-area-inset-top) + 16px);right:16px;text-align:right}
+  .bl{bottom:calc(env(safe-area-inset-bottom) + 92px);left:16px}
+  .br{bottom:calc(env(safe-area-inset-bottom) + 92px);right:16px;text-align:right;color:var(--gold);
+      text-shadow:0 0 10px rgba(255,180,58,.8)}
+  .hud .v{color:var(--lime)}
+  .dot{display:inline-block;width:5px;height:5px;border-radius:50%;background:var(--lime);
+       box-shadow:0 0 9px var(--lime);margin-right:5px;vertical-align:middle;
+       animation:blip 2.4s ease-in-out infinite}
+  @keyframes blip{0%,100%{opacity:1}50%{opacity:.2}}
+
+  .cnr{position:fixed;width:24px;height:24px;z-index:5;pointer-events:none;
+       border:1.5px solid rgba(76,187,23,.5);filter:drop-shadow(0 0 6px rgba(76,187,23,.5))}
+  .c1{top:11px;left:11px;border-right:0;border-bottom:0}
+  .c2{top:11px;right:11px;border-left:0;border-bottom:0}
+  .c3{bottom:11px;left:11px;border-right:0;border-top:0}
+  .c4{bottom:11px;right:11px;border-left:0;border-top:0}
+
+  .status{position:fixed;bottom:calc(env(safe-area-inset-bottom) + 108px);left:0;right:0;
+          text-align:center;z-index:6;pointer-events:none}
+  .status b{display:block;font:800 13px/1 ui-monospace,"SF Mono",Menlo,monospace;
+            letter-spacing:.34em;text-indent:.34em;text-transform:uppercase;
+            color:#E4FFC0;text-shadow:0 0 28px rgba(155,244,66,.9)}
+  .status span{display:block;font-size:12px;color:var(--dim);margin-top:8px}
+
+  #convai{position:fixed;bottom:calc(env(safe-area-inset-bottom) + 24px);left:0;right:0;
+          display:flex;justify-content:center;z-index:20}
+  #fallback{position:fixed;bottom:calc(env(safe-area-inset-bottom) + 28px);left:20px;right:20px;
+            text-align:center;font-size:13px;color:var(--dim);z-index:10;display:none}
+  #fallback a{color:var(--lime);font-weight:700}
+  @media (prefers-reduced-motion:reduce){.name,.dot{animation:none}}
+</style>
+</head>
+<body>
+
+<canvas id="sky"></canvas>
+
+<div class="cnr c1"></div><div class="cnr c2"></div>
+<div class="cnr c3"></div><div class="cnr c4"></div>
+
+<header>
+  <svg class="mark" viewBox="0 0 200 200" aria-hidden="true">
+    <defs>
+      <linearGradient id="m1" x1="0" y1="1" x2="1" y2="0">
+        <stop offset="0%" stop-color="#2E9E1E"/><stop offset="45%" stop-color="#4CBB17"/><stop offset="100%" stop-color="#C4FF7A"/>
+      </linearGradient>
+      <linearGradient id="m2" x1="0" y1="1" x2="1" y2="0">
+        <stop offset="0%" stop-color="#4CBB17"/><stop offset="100%" stop-color="#C4FF7A"/>
+      </linearGradient>
+    </defs>
+    <circle cx="100" cy="100" r="92" fill="none" stroke="url(#m1)" stroke-width="16"/>
+    <circle cx="100" cy="100" r="92" fill="none" stroke="#EAFFDA" stroke-width="16"
+            stroke-dasharray="120 460" stroke-linecap="round" transform="rotate(-42 100 100)"/>
+    <rect x="60" y="118" width="20" height="42" rx="6" fill="#5C7A55"/>
+    <rect x="90" y="94"  width="20" height="66" rx="6" fill="#FFFFFF"/>
+    <rect x="120" y="58" width="20" height="102" rx="6" fill="url(#m2)"/>
+  </svg>
+  <div class="name">JARVIS</div>
+  <div class="sub">CEO Josh Earl</div>
+</header>
+
+<div class="hud tl"><span class="dot"></span>SYS <span class="v">ONLINE</span></div>
+<div class="hud tr">CORE <span class="v" id="hCore">100%</span></div>
+<div class="hud bl">LVL <span class="v" id="hLvl">▮▯▯▯▯▯</span></div>
+<div class="hud br">LINK SECURE</div>
+
+<div class="status">
+  <b id="s1">Connecting</b>
+  <span id="s2">Allow the microphone when asked</span>
+</div>
+
+<div id="convai"><elevenlabs-convai agent-id="agent_9801m06x6g03ejgrehv2zecz2y6f"></elevenlabs-convai></div>
+
+<div id="fallback">
+  Widget didn't load.
+  <a href="https://elevenlabs.io/app/talk-to?agent_id=agent_9801m06x6g03ejgrehv2zecz2y6f">Open Jarvis directly &rarr;</a>
+</div>
+
+<script async src="https://unpkg.com/@elevenlabs/convai-widget-embed" type="text/javascript"></script>
+<script>
+/* ══════════════════════════════════════════════════════════════════════════
+   Jarvis v3 — precision instrument, volumetric light.
+
+   Built from two references. The second gave the geometry: exact concentric
+   dials, tick rings, cardinal markers, radiating spokes that terminate in
+   dots. The first gave the light: heavy bokeh, depth of field, streaks
+   flying out of a spinning core, everything glowing through everything else.
+
+   Most HUD animations pick one or the other and end up either sterile or
+   mushy. This runs both at once — the geometry keeps it precise, the
+   volumetrics keep it alive.
+
+   Candy apple green carries it. Gold is the second voice, used sparingly so
+   it still reads as an accent.
+   ══════════════════════════════════════════════════════════════════════════ */
+const cv  = document.getElementById('sky');
+const ctx = cv.getContext('2d', {alpha:false});
+let W, H, CX, CY, R, DPR;
+
+function resize(){
+  DPR = Math.min(devicePixelRatio || 1, 2);
+  W = innerWidth; H = innerHeight;
+  cv.width = W*DPR; cv.height = H*DPR;
+  ctx.setTransform(DPR,0,0,DPR,0,0);
+  CX = W/2; CY = H/2;
+  R  = Math.min(W,H) * 0.20;
+}
+addEventListener('resize', resize); resize();
+
+const TAU = Math.PI*2;
+const rnd = (a,b) => a + Math.random()*(b-a);
+const G   = (a) => 'rgba(120,232,72,'  + a + ')';
+const LI  = (a) => 'rgba(178,255,110,' + a + ')';
+const GO  = (a) => 'rgba(255,180,58,'  + a + ')';
+const HOT = (a) => 'rgba(248,255,226,' + a + ')';
+
+/* ── depth-of-field bokeh: the soft out-of-focus lights ── */
+const bokeh = Array.from({length:54}, () => ({
+  a: Math.random()*TAU, r: rnd(.6,3.4),
+  sz: rnd(14,70), al: rnd(.030,.115),
+  sp: rnd(-.00013,.00013), gold: Math.random()<.22,
+  ph: Math.random()*TAU, ps: rnd(.4,1.3)
+}));
+
+/* ── sharp debris, three depths ── */
+const dust = Array.from({length:300}, () => ({
+  a: Math.random()*TAU, r: rnd(.5,4.2),
+  d: rnd(.25,1), sz: rnd(.5,2.1),
+  sp: rnd(-.00042,.00042),
+  ph: Math.random()*TAU, ps: rnd(.5,2.0),
+  gold: Math.random()<.14
+}));
+
+/* ── radial streak rays out of the core ── */
+const rays = Array.from({length:52}, (_,i) => ({
+  a: (i/52)*TAU + rnd(-.03,.03),
+  len: rnd(1.5,3.9), w: rnd(.5,2.4),
+  al: rnd(.05,.30), ph: Math.random()*TAU, ps: rnd(.5,1.8),
+  gold: Math.random()<.18
+}));
+
+/* ── outward speech streaks ── */
+const streaks = [];
+const waves = [];
+
+const BARS = 84;
+const bars = new Float32Array(BARS);
+
+let t=0, amp=0, target=0, speaking=false, lastSpeak=0, haveFFT=false;
+
+/* ── ring drawing helpers ─────────────────────────────────────────────── */
+function tickRing(rad, n, base, long, everyN, col, rot, w){
+  for (let i=0;i<n;i++){
+    const a = rot + (i/n)*TAU;
+    const L = (i % everyN === 0) ? long : base;
+    const ca = Math.cos(a), sa = Math.sin(a);
+    ctx.strokeStyle = col(i % everyN === 0 ? .62 : .26);
+    ctx.lineWidth = (i % everyN === 0) ? w*1.7 : w;
+    ctx.beginPath();
+    ctx.moveTo(CX+ca*rad, CY+sa*rad);
+    ctx.lineTo(CX+ca*(rad+L), CY+sa*(rad+L));
+    ctx.stroke();
+  }
+}
+function arcRing(rad, segs, col, alpha, w, rot){
+  ctx.lineWidth = w;
+  ctx.strokeStyle = col(alpha);
+  for (const [st,len] of segs){
+    ctx.beginPath();
+    ctx.arc(CX,CY,rad, rot+st*TAU, rot+(st+len)*TAU);
+    ctx.stroke();
+  }
+}
+function spokeDots(rad, n, reach, col, rot){
+  for (let i=0;i<n;i++){
+    const a = rot + (i/n)*TAU;
+    const ca=Math.cos(a), sa=Math.sin(a);
+    ctx.strokeStyle = col(.16); ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(CX+ca*rad, CY+sa*rad);
+    ctx.lineTo(CX+ca*(rad+reach), CY+sa*(rad+reach));
+    ctx.stroke();
+    ctx.fillStyle = col(.55);
+    ctx.beginPath(); ctx.arc(CX+ca*(rad+reach), CY+sa*(rad+reach), 1.8, 0, TAU); ctx.fill();
+  }
+}
+function cardinals(rad, size, col, rot){
+  for (let i=0;i<4;i++){
+    const a = rot + i*(TAU/4);
+    ctx.save();
+    ctx.translate(CX+Math.cos(a)*rad, CY+Math.sin(a)*rad);
+    ctx.rotate(a+Math.PI/2);
+    ctx.fillStyle = col(.72);
+    ctx.beginPath();
+    ctx.moveTo(0,-size); ctx.lineTo(size*.62,size*.55); ctx.lineTo(-size*.62,size*.55);
+    ctx.closePath(); ctx.fill();
+    ctx.restore();
+  }
+}
+
+function frame(ts){
+  t = ts || 0;
+  amp += (target - amp) * 0.11;
+  const beat = 1 + Math.sin(t/1080)*.028 + amp*.17;
+  const glow = .55 + amp*.45;
+
+  ctx.fillStyle = '#010B06';
+  ctx.fillRect(0,0,W,H);
+
+  /* atmosphere — the reason the screen reads green rather than black */
+  const air = ctx.createRadialGradient(CX,CY,0,CX,CY,Math.max(W,H)*.82);
+  air.addColorStop(0,   'rgba(76,187,23,'  + (.40+amp*.24) + ')');
+  air.addColorStop(.22, 'rgba(58,158,26,'  + (.19+amp*.13) + ')');
+  air.addColorStop(.52, 'rgba(26,88,20,'   + (.08+amp*.05) + ')');
+  air.addColorStop(1,   'rgba(1,11,6,0)');
+  ctx.fillStyle = air; ctx.fillRect(0,0,W,H);
+
+  ctx.globalCompositeOperation = 'lighter';
+
+  /* ── bokeh, far behind everything ── */
+  for (const b of bokeh){
+    b.a += b.sp;
+    const tw = .6 + .4*Math.sin(t/900*b.ps + b.ph);
+    const x = CX + Math.cos(b.a)*R*b.r, y = CY + Math.sin(b.a)*R*b.r*.86;
+    const g = ctx.createRadialGradient(x,y,0,x,y,b.sz);
+    const col = b.gold ? '255,180,58' : '120,232,72';
+    g.addColorStop(0,   'rgba('+col+','+(b.al*tw*(1+amp))+')');
+    g.addColorStop(.55, 'rgba('+col+','+(b.al*tw*.34)+')');
+    g.addColorStop(1,   'rgba('+col+',0)');
+    ctx.fillStyle = g;
+    ctx.beginPath(); ctx.arc(x,y,b.sz,0,TAU); ctx.fill();
+  }
+
+  /* ── radial rays ── */
+  for (const ry of rays){
+    const tw = .35 + .65*Math.abs(Math.sin(t/1150*ry.ps + ry.ph));
+    const a = ry.a + t*0.000024;
+    const ca=Math.cos(a), sa=Math.sin(a);
+    const r0 = R*.92*beat, r1 = R*ry.len*beat*(1+amp*.22);
+    const grd = ctx.createLinearGradient(CX+ca*r0, CY+sa*r0, CX+ca*r1, CY+sa*r1);
+    const col = ry.gold ? '255,180,58' : '150,244,86';
+    grd.addColorStop(0, 'rgba('+col+','+(ry.al*tw*glow*1.5)+')');
+    grd.addColorStop(1, 'rgba('+col+',0)');
+    ctx.strokeStyle = grd; ctx.lineWidth = ry.w*(1+amp*.6);
+    ctx.beginPath();
+    ctx.moveTo(CX+ca*r0, CY+sa*r0); ctx.lineTo(CX+ca*r1, CY+sa*r1);
+    ctx.stroke();
+  }
+
+  /* ── sharp debris ── */
+  for (const d of dust){
+    d.a += d.sp*(1+amp*1.6);
+    const tw = .45 + .55*Math.sin(t/700*d.ps + d.ph);
+    const x = CX + Math.cos(d.a)*R*d.r, y = CY + Math.sin(d.a)*R*d.r*.9;
+    ctx.fillStyle = d.gold ? GO(.16+d.d*.5*tw) : LI(.10+d.d*.62*tw);
+    const s = d.sz*(1+amp*.5);
+    ctx.beginPath(); ctx.arc(x,y,s,0,TAU); ctx.fill();
+  }
+
+  /* ── THE DIAL ─────────────────────────────────────────────────────── */
+  const b1 = beat;
+  arcRing(R*1.30*b1, [[0,.20],[.26,.15],[.50,.26],[.84,.11]], LI, .95*glow, 3.0, t*0.00040);
+  arcRing(R*1.44*b1, [[.06,.16],[.30,.30],[.68,.18]],         G,  .55*glow, 1.4, -t*0.00031);
+  tickRing(R*1.58*b1, 120, R*.035, R*.085, 10, LI, -t*0.00009, 1);
+  arcRing(R*1.86*b1, [[0,.46],[.54,.28]],                     G,  .30*glow, 6.0, t*0.00015);
+  arcRing(R*2.02*b1, [[.02,.09],[.16,.05],[.28,.14],[.50,.07],[.64,.11],[.82,.06]],
+                                                              GO, .60*glow, 1.6, -t*0.00021);
+  tickRing(R*2.20*b1, 72, R*.026, R*.062, 6, G, t*0.00007, 1);
+  arcRing(R*2.44*b1, [[.10,.20],[.40,.20],[.70,.20]],         LI, .34*glow, 1.2, -t*0.00011);
+  spokeDots(R*2.60*b1, 24, R*.22, G, t*0.00005);
+  cardinals(R*2.92*b1, R*.075, GO, -t*0.00013);
+  arcRing(R*3.16*b1, [[.20,.14],[.55,.20]],                   GO, .22*glow, 1.0, t*0.00009);
+
+  /* inner dial + crosshair */
+  arcRing(R*.62*b1, [[0,1]], G, .30*glow, 1, 0);
+  arcRing(R*.46*b1, [[.05,.38],[.55,.34]], LI, .50*glow, 1.4, t*0.00072);
+  ctx.strokeStyle = LI(.22*glow); ctx.lineWidth = 1;
+  for (let i=0;i<4;i++){
+    const a = i*(TAU/4) + t*0.00018;
+    ctx.beginPath();
+    ctx.moveTo(CX+Math.cos(a)*R*.30, CY+Math.sin(a)*R*.30);
+    ctx.lineTo(CX+Math.cos(a)*R*.90, CY+Math.sin(a)*R*.90);
+    ctx.stroke();
+  }
+
+  /* ── the vortex: spiral arms winding into the core ── */
+  const ARMS = 5;
+  for (let k=0;k<ARMS;k++){
+    const base = t*0.00052 + k*(TAU/ARMS);
+    ctx.beginPath();
+    for (let i=0;i<=42;i++){
+      const p  = i/42;
+      const rr = R*(.10 + p*1.16)*b1;
+      const aa = base + Math.log(1+p*5.2)*1.55;
+      const x = CX+Math.cos(aa)*rr, y = CY+Math.sin(aa)*rr;
+      i ? ctx.lineTo(x,y) : ctx.moveTo(x,y);
+    }
+    ctx.strokeStyle = (k%3===0 ? GO : LI)(.20 + amp*.34);
+    ctx.lineWidth = 1.6 + amp*2.2;
+    ctx.stroke();
+  }
+
+  /* ── voice, wrapped around the core ── */
+  if (!haveFFT){
+    for (let i=0;i<BARS;i++){
+      const w = Math.sin(t/205 + i*.40)*Math.sin(t/93 + i*.16);
+      bars[i] += ((speaking ? (.30+.70*Math.abs(w))*(.4+amp) : 0) - bars[i])*.18;
+    }
+  }
+  const wr = R*1.04*b1;
+  ctx.beginPath();
+  for (let i=0;i<=BARS;i++){
+    const k=i%BARS, a=(i/BARS)*TAU - Math.PI/2;
+    const rr = wr + bars[k]*R*.55;
+    const x=CX+Math.cos(a)*rr, y=CY+Math.sin(a)*rr;
+    i ? ctx.lineTo(x,y) : ctx.moveTo(x,y);
+  }
+  ctx.closePath();
+  ctx.strokeStyle = HOT(.40 + amp*.55);
+  ctx.lineWidth = 1.8 + amp*2.6;
+  ctx.stroke();
+
+  /* ── core ── */
+  const R0 = R*(.72 + amp*.14)*b1;
+  const core = ctx.createRadialGradient(CX,CY,0,CX,CY,R0*2.6);
+  core.addColorStop(0,   'rgba(255,255,252,1)');
+  core.addColorStop(.11, 'rgba(240,255,205,.95)');
+  core.addColorStop(.26, 'rgba(178,255,110,' + (.82+amp*.16) + ')');
+  core.addColorStop(.44, 'rgba(96,205,45,'   + (.50+amp*.22) + ')');
+  core.addColorStop(.68, 'rgba(255,180,58,'  + (.12+amp*.10) + ')');
+  core.addColorStop(1,   'rgba(20,80,20,0)');
+  ctx.fillStyle = core;
+  ctx.beginPath(); ctx.arc(CX,CY,R0*2.6,0,TAU); ctx.fill();
+
+  ctx.fillStyle = HOT(.97);
+  ctx.beginPath(); ctx.arc(CX,CY,R0*.26,0,TAU); ctx.fill();
+  ctx.strokeStyle = HOT(.50 + amp*.4); ctx.lineWidth = 1.3;
+  ctx.beginPath(); ctx.arc(CX,CY,R0*.70,0,TAU); ctx.stroke();
+
+  /* ── speech streaks flying outward ── */
+  for (let i=streaks.length-1;i>=0;i--){
+    const s = streaks[i];
+    s.r += s.v; s.v *= .982; s.a *= .955;
+    if (s.a < .01){ streaks.splice(i,1); continue; }
+    const ca=Math.cos(s.ang), sa=Math.sin(s.ang);
+    const g2 = ctx.createLinearGradient(CX+ca*s.r, CY+sa*s.r, CX+ca*(s.r+s.len), CY+sa*(s.r+s.len));
+    g2.addColorStop(0,'rgba(255,255,235,'+s.a+')');
+    g2.addColorStop(1,'rgba(150,244,86,0)');
+    ctx.strokeStyle = g2; ctx.lineWidth = s.w;
+    ctx.beginPath();
+    ctx.moveTo(CX+ca*s.r, CY+sa*s.r);
+    ctx.lineTo(CX+ca*(s.r+s.len), CY+sa*(s.r+s.len));
+    ctx.stroke();
+  }
+
+  /* ── shockwaves ── */
+  for (let i=waves.length-1;i>=0;i--){
+    const w = waves[i];
+    w.r += w.v; w.v *= .986; w.a *= .962;
+    if (w.a < .008){ waves.splice(i,1); continue; }
+    ctx.strokeStyle = LI(w.a); ctx.lineWidth = 1 + w.a*5;
+    ctx.beginPath(); ctx.arc(CX,CY,w.r,0,TAU); ctx.stroke();
+  }
+
+  ctx.globalCompositeOperation = 'source-over';
+
+  const vg = ctx.createRadialGradient(CX,CY,Math.min(W,H)*.28,CX,CY,Math.max(W,H)*.82);
+  vg.addColorStop(0,'rgba(1,11,6,0)');
+  vg.addColorStop(1,'rgba(0,5,3,.82)');
+  ctx.fillStyle = vg; ctx.fillRect(0,0,W,H);
+
+  requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+
+function pulse(){
+  waves.push({r:R*.9, v:R*.16, a:.58});
+  for (let i=0;i<14;i++){
+    streaks.push({ang: Math.random()*TAU, r: R*1.0, v: R*rnd(.05,.16),
+                  len: R*rnd(.18,.62), w: rnd(.8,2.4), a: rnd(.35,.85)});
+  }
+}
+
+const hCore = document.getElementById('hCore'), hLvl = document.getElementById('hLvl');
+setInterval(() => {
+  const n = Math.max(1, Math.round(Math.min(6, amp*7.5)));
+  hLvl.textContent = '▮'.repeat(n) + '▯'.repeat(6-n);
+  hCore.textContent = (96 + Math.round(amp*4)) + '%';
+}, 140);
+
+/* ══ status + audio ══════════════════════════════════════════════════════
+   Reads Jarvis's own output only. Never the microphone — two consumers
+   fighting over one input device is how an earlier build silently killed
+   the conversation widget. */
+const s1 = document.getElementById('s1'), s2 = document.getElementById('s2');
+function say(a,b){ s1.textContent = a; if (b !== undefined) s2.textContent = b; }
+
+function hook(el){
+  if (el.__hooked) return; el.__hooked = true;
+
+  /* Only tap a live MediaStream. Routing a cross-origin <audio src> through an
+     AudioContext taints it and the browser silences the output — that would
+     mute Jarvis to win an animation. Not a trade worth making. */
+  const safe = !!el.srcObject;
+
+  try{
+    if (!safe) throw 0;
+    const ac = new (window.AudioContext || window.webkitAudioContext)();
+    const an = ac.createAnalyser(); an.fftSize = 256; an.smoothingTimeConstant = .72;
+    ac.createMediaElementSource(el).connect(an); an.connect(ac.destination);
+    const buf = new Uint8Array(an.frequencyBinCount);
+    haveFFT = true;
+    (function poll(){
+      an.getByteFrequencyData(buf);
+      let s=0; for (let i=0;i<34;i++) s += buf[i];
+      const lvl = Math.min(1,(s/34)/104);
+      target = el.paused ? 0 : lvl;
+      for (let i=0;i<BARS;i++){
+        const v = el.paused ? 0 : buf[Math.floor(i/BARS*72)+2]/255;
+        bars[i] += (v - bars[i])*.30;
+      }
+      if (!el.paused && lvl > .42 && performance.now()-lastSpeak > 170){
+        lastSpeak = performance.now(); pulse();
+      }
+      requestAnimationFrame(poll);
+    })();
+  }catch(e){ haveFFT = false; }
+
+  if (!safe){
+    (function fake(){
+      target = (speaking && !el.paused)
+        ? .28 + .36*Math.abs(Math.sin(performance.now()/150))*(.55+.45*Math.random())
+        : 0;
+      if (speaking && !el.paused && performance.now()-lastSpeak > 430){
+        lastSpeak = performance.now(); pulse();
+      }
+      requestAnimationFrame(fake);
+    })();
+  }
+
+  el.addEventListener('playing', () => { speaking = true; pulse(); say('Speaking',''); });
+  ['pause','ended'].forEach(ev => el.addEventListener(ev, () => {
+    speaking = false; target = 0;
+    say('Listening','Speak naturally — interrupt any time');
+  }));
+}
+new MutationObserver(() => document.querySelectorAll('audio').forEach(hook))
+  .observe(document.documentElement, {childList:true, subtree:true});
+
+setTimeout(() => {
+  if (!document.querySelector('#convai elevenlabs-convai')?.shadowRoot){
+    document.getElementById('fallback').style.display = 'block';
+    say('Widget blocked','Use the link below — it works the same');
+  } else {
+    say('Ready','Tap the button below and start talking');
+    pulse();
+  }
+}, 3500);
+</script>
+</body>
+</html>
