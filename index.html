@@ -11,10 +11,7 @@
 <link rel="icon" href="icon180.png">
 <title>Jarvis · CEO Josh Earl</title>
 <style>
-  :root{
-    --green:#4CBB17; --lime:#9BF442; --pale:#E8FFD4;
-    --gold:#FFB43A; --dim:#5C7A55;
-  }
+  :root{ --green:#4CBB17; --lime:#9BF442; --pale:#E8FFD4; --gold:#FFB43A; --dim:#5C7A55; }
   *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
   html,body{height:100%;overflow:hidden;background:#010B06}
   body{color:var(--pale);font:400 16px/1.5 ui-rounded,-apple-system,"SF Pro Display",system-ui,sans-serif}
@@ -26,10 +23,8 @@
   .mark{width:32px;height:32px;filter:drop-shadow(0 0 18px rgba(76,187,23,.95))}
   .name{font-size:13px;letter-spacing:.68em;text-indent:.68em;font-weight:800;
         background:linear-gradient(90deg,#2E9E1E,#9BF442,#FFF3D0,#FFB43A,#4CBB17);
-        background-size:320% 100%;
-        -webkit-background-clip:text;background-clip:text;color:transparent;
-        animation:shimmer 6s ease-in-out infinite;
-        filter:drop-shadow(0 0 16px rgba(155,244,66,.5))}
+        background-size:320% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;
+        animation:shimmer 6s ease-in-out infinite;filter:drop-shadow(0 0 16px rgba(155,244,66,.5))}
   @keyframes shimmer{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
   .sub{font-size:9px;letter-spacing:.34em;color:var(--dim);text-transform:uppercase}
 
@@ -99,7 +94,7 @@
 </header>
 
 <div class="hud tl"><span class="dot"></span>SYS <span class="v">ONLINE</span></div>
-<div class="hud tr">CORE <span class="v" id="hCore">100%</span></div>
+<div class="hud tr">CORE <span class="v" id="hCore">96%</span></div>
 <div class="hud bl">LVL <span class="v" id="hLvl">▮▯▯▯▯▯</span></div>
 <div class="hud br">LINK SECURE</div>
 
@@ -118,23 +113,33 @@
 <script async src="https://unpkg.com/@elevenlabs/convai-widget-embed" type="text/javascript"></script>
 <script>
 /* ══════════════════════════════════════════════════════════════════════════
-   Jarvis v3 — precision instrument, volumetric light.
+   Jarvis v4 — a galaxy that answers.
 
-   Built from two references. The second gave the geometry: exact concentric
-   dials, tick rings, cardinal markers, radiating spokes that terminate in
-   dots. The first gave the light: heavy bokeh, depth of field, streaks
-   flying out of a spinning core, everything glowing through everything else.
+   WHY THE LAST ONE ONLY SPUN
+   The audio tap used document.querySelectorAll('audio'). The ElevenLabs
+   widget keeps its audio element inside a shadow DOM, and querySelectorAll
+   does not cross shadow boundaries — so the analyser never attached and the
+   scene had nothing to react to. Two fixes here:
+     1. HTMLMediaElement.prototype.play is patched, so ANY element that starts
+        playing announces itself no matter where in the tree it lives.
+     2. A recursive walk that descends through every shadowRoot, as a backup.
 
-   Most HUD animations pick one or the other and end up either sterile or
-   mushy. This runs both at once — the geometry keeps it precise, the
-   volumetrics keep it alive.
+   And the tap now uses createMediaStreamSource on the WebRTC stream rather
+   than createMediaElementSource on the element. That matters: the element
+   version REROUTES the audio through our graph, so a mistake there mutes
+   Jarvis. The stream version only observes. It cannot break his voice.
 
-   Candy apple green carries it. Gold is the second voice, used sparingly so
-   it still reads as an accent.
+   THE SCENE
+   Centre is a real galaxy — two spiral arms of particles on differential
+   orbits, so the inside turns faster than the outside, the way one actually
+   does. It is the part that reacts: when he speaks the particles take a
+   radial kick, brighten, and scatter, then settle. Outside, the instrument
+   rings keep their own steady rotation regardless. Motion you can read as
+   speech, over motion you can read as a machine idling.
    ══════════════════════════════════════════════════════════════════════════ */
 const cv  = document.getElementById('sky');
 const ctx = cv.getContext('2d', {alpha:false});
-let W, H, CX, CY, R, DPR;
+let W,H,CX,CY,R,DPR;
 
 function resize(){
   DPR = Math.min(devicePixelRatio || 1, 2);
@@ -148,347 +153,290 @@ addEventListener('resize', resize); resize();
 
 const TAU = Math.PI*2;
 const rnd = (a,b) => a + Math.random()*(b-a);
-const G   = (a) => 'rgba(120,232,72,'  + a + ')';
-const LI  = (a) => 'rgba(178,255,110,' + a + ')';
-const GO  = (a) => 'rgba(255,180,58,'  + a + ')';
-const HOT = (a) => 'rgba(248,255,226,' + a + ')';
+const G   = a => 'rgba(120,232,72,'  + a + ')';
+const LI  = a => 'rgba(178,255,110,' + a + ')';
+const GO  = a => 'rgba(255,180,58,'  + a + ')';
+const HOT = a => 'rgba(248,255,226,' + a + ')';
 
-/* ── depth-of-field bokeh: the soft out-of-focus lights ── */
-const bokeh = Array.from({length:54}, () => ({
-  a: Math.random()*TAU, r: rnd(.6,3.4),
-  sz: rnd(14,70), al: rnd(.030,.115),
-  sp: rnd(-.00013,.00013), gold: Math.random()<.22,
-  ph: Math.random()*TAU, ps: rnd(.4,1.3)
+/* ── the galaxy at the centre ── */
+const ARMS = 2, PER_ARM = 300, HALO = 220;
+const gal = [];
+for (let a=0;a<ARMS;a++){
+  const phase = a*(TAU/ARMS);
+  for (let i=0;i<PER_ARM;i++){
+    const f = i/PER_ARM;
+    const r = 0.14 + f*0.86;
+    gal.push({
+      r, a: phase + Math.log(r+1)*4.4 + rnd(-.22,.22)*(1-f*.4),
+      y: rnd(-1,1)*((1-f)*.16+.05),
+      sz: rnd(.6,2.0), hot: Math.random()<.17,
+      sp: rnd(.9,1.1), v:0, ph: Math.random()*TAU
+    });
+  }
+}
+for (let i=0;i<HALO;i++){
+  gal.push({
+    r: Math.pow(Math.random(),.6)*.55, a: Math.random()*TAU,
+    y: rnd(-1,1)*.34, sz: rnd(.5,1.6), hot: Math.random()<.28,
+    sp: rnd(.7,1.3), v:0, halo:true, ph: Math.random()*TAU
+  });
+}
+
+/* ── outer instrument rings ── */
+const RINGS = [
+  {rr:1.62, w:3.0, sp: 0.00042, a:1.00, seg:[[.00,.20],[.26,.15],[.50,.26],[.84,.11]]},
+  {rr:1.86, w:1.6, sp:-0.00027, a:.70,  seg:[[.04,.31],[.44,.19],[.70,.21]]},
+  {rr:2.16, w:5.0, sp: 0.00015, a:.28,  seg:[[.00,.43],[.54,.28]]},
+  {rr:2.36, w:1.6, sp:-0.00021, a:.60,  seg:[[.02,.09],[.16,.05],[.28,.14],[.50,.07],[.64,.11],[.82,.06]], gold:true},
+  {rr:2.72, w:1.2, sp:-0.00010, a:.36,  seg:[[.08,.22],[.38,.22],[.68,.22]]},
+  {rr:3.10, w:1.0, sp: 0.00007, a:.20,  seg:[[.14,.30],[.60,.30]]}
+];
+const rays = Array.from({length:46},(_,i)=>({
+  a:(i/46)*TAU+rnd(-.03,.03), len:rnd(1.9,4.2), w:rnd(.5,2.2),
+  al:rnd(.05,.26), ph:Math.random()*TAU, ps:rnd(.5,1.8), gold:Math.random()<.18
 }));
-
-/* ── sharp debris, three depths ── */
-const dust = Array.from({length:300}, () => ({
-  a: Math.random()*TAU, r: rnd(.5,4.2),
-  d: rnd(.25,1), sz: rnd(.5,2.1),
-  sp: rnd(-.00042,.00042),
-  ph: Math.random()*TAU, ps: rnd(.5,2.0),
-  gold: Math.random()<.14
+const bokeh = Array.from({length:40},()=>({
+  a:Math.random()*TAU, r:rnd(1.1,3.6), sz:rnd(16,70), al:rnd(.03,.10),
+  sp:rnd(-.00012,.00012), gold:Math.random()<.22, ph:Math.random()*TAU, ps:rnd(.4,1.3)
 }));
-
-/* ── radial streak rays out of the core ── */
-const rays = Array.from({length:52}, (_,i) => ({
-  a: (i/52)*TAU + rnd(-.03,.03),
-  len: rnd(1.5,3.9), w: rnd(.5,2.4),
-  al: rnd(.05,.30), ph: Math.random()*TAU, ps: rnd(.5,1.8),
-  gold: Math.random()<.18
-}));
-
-/* ── outward speech streaks ── */
-const streaks = [];
 const waves = [];
 
 const BARS = 84;
 const bars = new Float32Array(BARS);
-
-let t=0, amp=0, target=0, speaking=false, lastSpeak=0, haveFFT=false;
-
-/* ── ring drawing helpers ─────────────────────────────────────────────── */
-function tickRing(rad, n, base, long, everyN, col, rot, w){
-  for (let i=0;i<n;i++){
-    const a = rot + (i/n)*TAU;
-    const L = (i % everyN === 0) ? long : base;
-    const ca = Math.cos(a), sa = Math.sin(a);
-    ctx.strokeStyle = col(i % everyN === 0 ? .62 : .26);
-    ctx.lineWidth = (i % everyN === 0) ? w*1.7 : w;
-    ctx.beginPath();
-    ctx.moveTo(CX+ca*rad, CY+sa*rad);
-    ctx.lineTo(CX+ca*(rad+L), CY+sa*(rad+L));
-    ctx.stroke();
-  }
-}
-function arcRing(rad, segs, col, alpha, w, rot){
-  ctx.lineWidth = w;
-  ctx.strokeStyle = col(alpha);
-  for (const [st,len] of segs){
-    ctx.beginPath();
-    ctx.arc(CX,CY,rad, rot+st*TAU, rot+(st+len)*TAU);
-    ctx.stroke();
-  }
-}
-function spokeDots(rad, n, reach, col, rot){
-  for (let i=0;i<n;i++){
-    const a = rot + (i/n)*TAU;
-    const ca=Math.cos(a), sa=Math.sin(a);
-    ctx.strokeStyle = col(.16); ctx.lineWidth = 1;
-    ctx.beginPath();
-    ctx.moveTo(CX+ca*rad, CY+sa*rad);
-    ctx.lineTo(CX+ca*(rad+reach), CY+sa*(rad+reach));
-    ctx.stroke();
-    ctx.fillStyle = col(.55);
-    ctx.beginPath(); ctx.arc(CX+ca*(rad+reach), CY+sa*(rad+reach), 1.8, 0, TAU); ctx.fill();
-  }
-}
-function cardinals(rad, size, col, rot){
-  for (let i=0;i<4;i++){
-    const a = rot + i*(TAU/4);
-    ctx.save();
-    ctx.translate(CX+Math.cos(a)*rad, CY+Math.sin(a)*rad);
-    ctx.rotate(a+Math.PI/2);
-    ctx.fillStyle = col(.72);
-    ctx.beginPath();
-    ctx.moveTo(0,-size); ctx.lineTo(size*.62,size*.55); ctx.lineTo(-size*.62,size*.55);
-    ctx.closePath(); ctx.fill();
-    ctx.restore();
-  }
-}
+let t=0, amp=0, target=0, speaking=false, lastKick=0, haveFFT=false;
 
 function frame(ts){
-  t = ts || 0;
-  amp += (target - amp) * 0.11;
-  const beat = 1 + Math.sin(t/1080)*.028 + amp*.17;
+  t = ts||0;
+  amp += (target-amp)*0.13;
+  const beat = 1 + Math.sin(t/1080)*.028 + amp*.16;
   const glow = .55 + amp*.45;
 
-  ctx.fillStyle = '#010B06';
-  ctx.fillRect(0,0,W,H);
+  ctx.fillStyle = '#010B06'; ctx.fillRect(0,0,W,H);
 
-  /* atmosphere — the reason the screen reads green rather than black */
   const air = ctx.createRadialGradient(CX,CY,0,CX,CY,Math.max(W,H)*.82);
-  air.addColorStop(0,   'rgba(76,187,23,'  + (.40+amp*.24) + ')');
-  air.addColorStop(.22, 'rgba(58,158,26,'  + (.19+amp*.13) + ')');
-  air.addColorStop(.52, 'rgba(26,88,20,'   + (.08+amp*.05) + ')');
+  air.addColorStop(0,   'rgba(76,187,23,'+(.38+amp*.28)+')');
+  air.addColorStop(.22, 'rgba(58,158,26,'+(.18+amp*.14)+')');
+  air.addColorStop(.52, 'rgba(26,88,20,' +(.07+amp*.05)+')');
   air.addColorStop(1,   'rgba(1,11,6,0)');
   ctx.fillStyle = air; ctx.fillRect(0,0,W,H);
 
   ctx.globalCompositeOperation = 'lighter';
 
-  /* ── bokeh, far behind everything ── */
   for (const b of bokeh){
     b.a += b.sp;
-    const tw = .6 + .4*Math.sin(t/900*b.ps + b.ph);
-    const x = CX + Math.cos(b.a)*R*b.r, y = CY + Math.sin(b.a)*R*b.r*.86;
+    const tw = .6+.4*Math.sin(t/900*b.ps+b.ph);
+    const x = CX+Math.cos(b.a)*R*b.r, y = CY+Math.sin(b.a)*R*b.r*.86;
     const g = ctx.createRadialGradient(x,y,0,x,y,b.sz);
-    const col = b.gold ? '255,180,58' : '120,232,72';
-    g.addColorStop(0,   'rgba('+col+','+(b.al*tw*(1+amp))+')');
-    g.addColorStop(.55, 'rgba('+col+','+(b.al*tw*.34)+')');
-    g.addColorStop(1,   'rgba('+col+',0)');
-    ctx.fillStyle = g;
-    ctx.beginPath(); ctx.arc(x,y,b.sz,0,TAU); ctx.fill();
+    const c = b.gold ? '255,180,58' : '120,232,72';
+    g.addColorStop(0,'rgba('+c+','+(b.al*tw*(1+amp))+')');
+    g.addColorStop(1,'rgba('+c+',0)');
+    ctx.fillStyle=g; ctx.beginPath(); ctx.arc(x,y,b.sz,0,TAU); ctx.fill();
   }
 
-  /* ── radial rays ── */
   for (const ry of rays){
-    const tw = .35 + .65*Math.abs(Math.sin(t/1150*ry.ps + ry.ph));
-    const a = ry.a + t*0.000024;
-    const ca=Math.cos(a), sa=Math.sin(a);
-    const r0 = R*.92*beat, r1 = R*ry.len*beat*(1+amp*.22);
-    const grd = ctx.createLinearGradient(CX+ca*r0, CY+sa*r0, CX+ca*r1, CY+sa*r1);
-    const col = ry.gold ? '255,180,58' : '150,244,86';
-    grd.addColorStop(0, 'rgba('+col+','+(ry.al*tw*glow*1.5)+')');
-    grd.addColorStop(1, 'rgba('+col+',0)');
-    ctx.strokeStyle = grd; ctx.lineWidth = ry.w*(1+amp*.6);
-    ctx.beginPath();
-    ctx.moveTo(CX+ca*r0, CY+sa*r0); ctx.lineTo(CX+ca*r1, CY+sa*r1);
-    ctx.stroke();
+    const tw=.35+.65*Math.abs(Math.sin(t/1150*ry.ps+ry.ph));
+    const a=ry.a+t*0.000024, ca=Math.cos(a), sa=Math.sin(a);
+    const r0=R*1.45*beat, r1=R*ry.len*beat*(1+amp*.24);
+    const gr=ctx.createLinearGradient(CX+ca*r0,CY+sa*r0,CX+ca*r1,CY+sa*r1);
+    const c=ry.gold?'255,180,58':'150,244,86';
+    gr.addColorStop(0,'rgba('+c+','+(ry.al*tw*glow*1.5)+')');
+    gr.addColorStop(1,'rgba('+c+',0)');
+    ctx.strokeStyle=gr; ctx.lineWidth=ry.w*(1+amp*.6);
+    ctx.beginPath(); ctx.moveTo(CX+ca*r0,CY+sa*r0); ctx.lineTo(CX+ca*r1,CY+sa*r1); ctx.stroke();
   }
 
-  /* ── sharp debris ── */
-  for (const d of dust){
-    d.a += d.sp*(1+amp*1.6);
-    const tw = .45 + .55*Math.sin(t/700*d.ps + d.ph);
-    const x = CX + Math.cos(d.a)*R*d.r, y = CY + Math.sin(d.a)*R*d.r*.9;
-    ctx.fillStyle = d.gold ? GO(.16+d.d*.5*tw) : LI(.10+d.d*.62*tw);
-    const s = d.sz*(1+amp*.5);
+  /* ══ THE GALAXY — this is the part that answers ══ */
+  const kick = amp > .30 && (t-lastKick) > 90;
+  if (kick) lastKick = t;
+  const core = R*1.30;
+  for (const p of gal){
+    /* differential rotation: inner orbits are faster, like a real disc */
+    p.a += 0.00062 * p.sp / Math.max(.22, Math.sqrt(p.r)) * (1 + amp*2.4);
+    /* speech gives every particle a radial shove that then settles */
+    if (kick) p.v += amp*rnd(.02,.09);
+    p.v *= .93;
+    const rr = (p.r + p.v + amp*.10) * core * beat;
+    const wob = p.halo ? 1 : (1 + Math.sin(t/520 + p.ph)*.04);
+    const x = CX + Math.cos(p.a)*rr*wob;
+    const y = CY + Math.sin(p.a)*rr*(p.halo?.88:.42) + p.y*core*.5;
+    const s = p.sz*(1 + amp*.85 + p.v*3);
+    const br = (p.hot ? .85 : .45) * (.42 + amp*.72) + p.v*2.2;
+    ctx.fillStyle = p.hot ? HOT(Math.min(1,br)) : LI(Math.min(1,br*.9));
     ctx.beginPath(); ctx.arc(x,y,s,0,TAU); ctx.fill();
   }
 
-  /* ── THE DIAL ─────────────────────────────────────────────────────── */
-  const b1 = beat;
-  arcRing(R*1.30*b1, [[0,.20],[.26,.15],[.50,.26],[.84,.11]], LI, .95*glow, 3.0, t*0.00040);
-  arcRing(R*1.44*b1, [[.06,.16],[.30,.30],[.68,.18]],         G,  .55*glow, 1.4, -t*0.00031);
-  tickRing(R*1.58*b1, 120, R*.035, R*.085, 10, LI, -t*0.00009, 1);
-  arcRing(R*1.86*b1, [[0,.46],[.54,.28]],                     G,  .30*glow, 6.0, t*0.00015);
-  arcRing(R*2.02*b1, [[.02,.09],[.16,.05],[.28,.14],[.50,.07],[.64,.11],[.82,.06]],
-                                                              GO, .60*glow, 1.6, -t*0.00021);
-  tickRing(R*2.20*b1, 72, R*.026, R*.062, 6, G, t*0.00007, 1);
-  arcRing(R*2.44*b1, [[.10,.20],[.40,.20],[.70,.20]],         LI, .34*glow, 1.2, -t*0.00011);
-  spokeDots(R*2.60*b1, 24, R*.22, G, t*0.00005);
-  cardinals(R*2.92*b1, R*.075, GO, -t*0.00013);
-  arcRing(R*3.16*b1, [[.20,.14],[.55,.20]],                   GO, .22*glow, 1.0, t*0.00009);
+  /* galactic core glow */
+  const cg = ctx.createRadialGradient(CX,CY,0,CX,CY,R*(.62+amp*.34));
+  cg.addColorStop(0,   'rgba(255,255,250,'+(.90+amp*.10)+')');
+  cg.addColorStop(.16, 'rgba(236,255,196,'+(.72+amp*.22)+')');
+  cg.addColorStop(.40, 'rgba(155,244,66,' +(.40+amp*.30)+')');
+  cg.addColorStop(.72, 'rgba(255,180,58,' +(.10+amp*.14)+')');
+  cg.addColorStop(1,   'rgba(20,80,20,0)');
+  ctx.fillStyle=cg; ctx.beginPath(); ctx.arc(CX,CY,R*(.62+amp*.34),0,TAU); ctx.fill();
 
-  /* inner dial + crosshair */
-  arcRing(R*.62*b1, [[0,1]], G, .30*glow, 1, 0);
-  arcRing(R*.46*b1, [[.05,.38],[.55,.34]], LI, .50*glow, 1.4, t*0.00072);
-  ctx.strokeStyle = LI(.22*glow); ctx.lineWidth = 1;
-  for (let i=0;i<4;i++){
-    const a = i*(TAU/4) + t*0.00018;
-    ctx.beginPath();
-    ctx.moveTo(CX+Math.cos(a)*R*.30, CY+Math.sin(a)*R*.30);
-    ctx.lineTo(CX+Math.cos(a)*R*.90, CY+Math.sin(a)*R*.90);
-    ctx.stroke();
-  }
-
-  /* ── the vortex: spiral arms winding into the core ── */
-  const ARMS = 5;
-  for (let k=0;k<ARMS;k++){
-    const base = t*0.00052 + k*(TAU/ARMS);
-    ctx.beginPath();
-    for (let i=0;i<=42;i++){
-      const p  = i/42;
-      const rr = R*(.10 + p*1.16)*b1;
-      const aa = base + Math.log(1+p*5.2)*1.55;
-      const x = CX+Math.cos(aa)*rr, y = CY+Math.sin(aa)*rr;
-      i ? ctx.lineTo(x,y) : ctx.moveTo(x,y);
-    }
-    ctx.strokeStyle = (k%3===0 ? GO : LI)(.20 + amp*.34);
-    ctx.lineWidth = 1.6 + amp*2.2;
-    ctx.stroke();
-  }
-
-  /* ── voice, wrapped around the core ── */
-  if (!haveFFT){
-    for (let i=0;i<BARS;i++){
-      const w = Math.sin(t/205 + i*.40)*Math.sin(t/93 + i*.16);
-      bars[i] += ((speaking ? (.30+.70*Math.abs(w))*(.4+amp) : 0) - bars[i])*.18;
-    }
-  }
-  const wr = R*1.04*b1;
+  /* ══ the voice, wrapped around the galaxy ══ */
+  const wr = R*1.42*beat;
   ctx.beginPath();
   for (let i=0;i<=BARS;i++){
-    const k=i%BARS, a=(i/BARS)*TAU - Math.PI/2;
-    const rr = wr + bars[k]*R*.55;
+    const k=i%BARS, a=(i/BARS)*TAU-Math.PI/2;
+    const rr=wr+bars[k]*R*.70;
     const x=CX+Math.cos(a)*rr, y=CY+Math.sin(a)*rr;
-    i ? ctx.lineTo(x,y) : ctx.moveTo(x,y);
+    i?ctx.lineTo(x,y):ctx.moveTo(x,y);
   }
   ctx.closePath();
-  ctx.strokeStyle = HOT(.40 + amp*.55);
-  ctx.lineWidth = 1.8 + amp*2.6;
+  ctx.strokeStyle = HOT(.34+amp*.62);
+  ctx.lineWidth = 1.8+amp*3.0;
   ctx.stroke();
 
-  /* ── core ── */
-  const R0 = R*(.72 + amp*.14)*b1;
-  const core = ctx.createRadialGradient(CX,CY,0,CX,CY,R0*2.6);
-  core.addColorStop(0,   'rgba(255,255,252,1)');
-  core.addColorStop(.11, 'rgba(240,255,205,.95)');
-  core.addColorStop(.26, 'rgba(178,255,110,' + (.82+amp*.16) + ')');
-  core.addColorStop(.44, 'rgba(96,205,45,'   + (.50+amp*.22) + ')');
-  core.addColorStop(.68, 'rgba(255,180,58,'  + (.12+amp*.10) + ')');
-  core.addColorStop(1,   'rgba(20,80,20,0)');
-  ctx.fillStyle = core;
-  ctx.beginPath(); ctx.arc(CX,CY,R0*2.6,0,TAU); ctx.fill();
-
-  ctx.fillStyle = HOT(.97);
-  ctx.beginPath(); ctx.arc(CX,CY,R0*.26,0,TAU); ctx.fill();
-  ctx.strokeStyle = HOT(.50 + amp*.4); ctx.lineWidth = 1.3;
-  ctx.beginPath(); ctx.arc(CX,CY,R0*.70,0,TAU); ctx.stroke();
-
-  /* ── speech streaks flying outward ── */
-  for (let i=streaks.length-1;i>=0;i--){
-    const s = streaks[i];
-    s.r += s.v; s.v *= .982; s.a *= .955;
-    if (s.a < .01){ streaks.splice(i,1); continue; }
-    const ca=Math.cos(s.ang), sa=Math.sin(s.ang);
-    const g2 = ctx.createLinearGradient(CX+ca*s.r, CY+sa*s.r, CX+ca*(s.r+s.len), CY+sa*(s.r+s.len));
-    g2.addColorStop(0,'rgba(255,255,235,'+s.a+')');
-    g2.addColorStop(1,'rgba(150,244,86,0)');
-    ctx.strokeStyle = g2; ctx.lineWidth = s.w;
-    ctx.beginPath();
-    ctx.moveTo(CX+ca*s.r, CY+sa*s.r);
-    ctx.lineTo(CX+ca*(s.r+s.len), CY+sa*(s.r+s.len));
-    ctx.stroke();
+  /* ══ outer instrument rings — steady, indifferent to speech ══ */
+  ctx.lineCap='butt';
+  for (const g of RINGS){
+    const rot=t*g.sp, rad=R*g.rr*beat;
+    ctx.lineWidth=g.w*(1+amp*.25);
+    ctx.strokeStyle=(g.gold?GO:LI)(g.a*glow*(g.gold?1:.85));
+    for (const [st,len] of g.seg){
+      ctx.beginPath(); ctx.arc(CX,CY,rad,rot+st*TAU,rot+(st+len)*TAU); ctx.stroke();
+    }
+  }
+  const tr=R*2.00*beat, rotT=-t*0.00009;
+  for (let i=0;i<96;i++){
+    const a=rotT+(i/96)*TAU, long=i%8===0, L=long?R*.10:R*.045;
+    const ca=Math.cos(a), sa=Math.sin(a);
+    ctx.strokeStyle=LI((long?.55:.24)*glow); ctx.lineWidth=long?2:1;
+    ctx.beginPath(); ctx.moveTo(CX+ca*tr,CY+sa*tr); ctx.lineTo(CX+ca*(tr+L),CY+sa*(tr+L)); ctx.stroke();
+  }
+  for (let i=0;i<4;i++){
+    const a=-t*0.00013+i*(TAU/4), rad=R*2.90*beat, sz=R*.075;
+    ctx.save(); ctx.translate(CX+Math.cos(a)*rad, CY+Math.sin(a)*rad); ctx.rotate(a+Math.PI/2);
+    ctx.fillStyle=GO(.70);
+    ctx.beginPath(); ctx.moveTo(0,-sz); ctx.lineTo(sz*.62,sz*.55); ctx.lineTo(-sz*.62,sz*.55);
+    ctx.closePath(); ctx.fill(); ctx.restore();
   }
 
-  /* ── shockwaves ── */
   for (let i=waves.length-1;i>=0;i--){
-    const w = waves[i];
-    w.r += w.v; w.v *= .986; w.a *= .962;
-    if (w.a < .008){ waves.splice(i,1); continue; }
-    ctx.strokeStyle = LI(w.a); ctx.lineWidth = 1 + w.a*5;
+    const w=waves[i]; w.r+=w.v; w.v*=.986; w.a*=.960;
+    if (w.a<.008){ waves.splice(i,1); continue; }
+    ctx.strokeStyle=LI(w.a); ctx.lineWidth=1+w.a*5;
     ctx.beginPath(); ctx.arc(CX,CY,w.r,0,TAU); ctx.stroke();
   }
 
-  ctx.globalCompositeOperation = 'source-over';
-
-  const vg = ctx.createRadialGradient(CX,CY,Math.min(W,H)*.28,CX,CY,Math.max(W,H)*.82);
-  vg.addColorStop(0,'rgba(1,11,6,0)');
-  vg.addColorStop(1,'rgba(0,5,3,.82)');
-  ctx.fillStyle = vg; ctx.fillRect(0,0,W,H);
+  ctx.globalCompositeOperation='source-over';
+  const vg=ctx.createRadialGradient(CX,CY,Math.min(W,H)*.28,CX,CY,Math.max(W,H)*.82);
+  vg.addColorStop(0,'rgba(1,11,6,0)'); vg.addColorStop(1,'rgba(0,5,3,.80)');
+  ctx.fillStyle=vg; ctx.fillRect(0,0,W,H);
 
   requestAnimationFrame(frame);
 }
 requestAnimationFrame(frame);
+function pulse(){ waves.push({r:R*1.3, v:R*.15, a:.55}); }
 
-function pulse(){
-  waves.push({r:R*.9, v:R*.16, a:.58});
-  for (let i=0;i<14;i++){
-    streaks.push({ang: Math.random()*TAU, r: R*1.0, v: R*rnd(.05,.16),
-                  len: R*rnd(.18,.62), w: rnd(.8,2.4), a: rnd(.35,.85)});
-  }
+const hCore=document.getElementById('hCore'), hLvl=document.getElementById('hLvl');
+setInterval(()=>{
+  const n=Math.max(1,Math.round(Math.min(6,amp*7.5)));
+  hLvl.textContent='▮'.repeat(n)+'▯'.repeat(6-n);
+  hCore.textContent=(96+Math.round(amp*4))+'%';
+},140);
+
+/* ══════════════════ AUDIO — the part that was broken ══════════════════ */
+const s1=document.getElementById('s1'), s2=document.getElementById('s2');
+function say(a,b){ s1.textContent=a; if(b!==undefined) s2.textContent=b; }
+
+let AC=null;
+const analysers=[];
+const media=new Set();
+
+function ensureCtx(){
+  if (AC) return AC;
+  const C = window.AudioContext || window.webkitAudioContext;
+  if (!C) return null;
+  AC = new C();
+  return AC;
+}
+/* iOS suspends the context until a real gesture — resume on any tap */
+['pointerdown','touchstart','keydown'].forEach(ev =>
+  addEventListener(ev, () => { if (AC && AC.state === 'suspended') AC.resume(); }, {passive:true}));
+
+/* Observe the stream — never reroute it. createMediaStreamSource only reads.
+   createMediaElementSource would take over the element's output, and a single
+   mistake there silences Jarvis. Not a trade worth making for an animation. */
+function tap(el){
+  if (el.__tapped) return;
+  const ms = el.srcObject;
+  if (!ms || typeof ms.getAudioTracks !== 'function' || !ms.getAudioTracks().length) return;
+  const ac = ensureCtx(); if (!ac) return;
+  try{
+    const src = ac.createMediaStreamSource(ms);
+    const an  = ac.createAnalyser();
+    an.fftSize = 512; an.smoothingTimeConstant = .62;
+    src.connect(an);                       // analysis only — no destination
+    analysers.push({an, buf:new Uint8Array(an.frequencyBinCount)});
+    el.__tapped = true; haveFFT = true;
+    if (ac.state === 'suspended') ac.resume();
+  }catch(e){}
 }
 
-const hCore = document.getElementById('hCore'), hLvl = document.getElementById('hLvl');
-setInterval(() => {
-  const n = Math.max(1, Math.round(Math.min(6, amp*7.5)));
-  hLvl.textContent = '▮'.repeat(n) + '▯'.repeat(6-n);
-  hCore.textContent = (96 + Math.round(amp*4)) + '%';
-}, 140);
-
-/* ══ status + audio ══════════════════════════════════════════════════════
-   Reads Jarvis's own output only. Never the microphone — two consumers
-   fighting over one input device is how an earlier build silently killed
-   the conversation widget. */
-const s1 = document.getElementById('s1'), s2 = document.getElementById('s2');
-function say(a,b){ s1.textContent = a; if (b !== undefined) s2.textContent = b; }
-
-function hook(el){
-  if (el.__hooked) return; el.__hooked = true;
-
-  /* Only tap a live MediaStream. Routing a cross-origin <audio src> through an
-     AudioContext taints it and the browser silences the output — that would
-     mute Jarvis to win an animation. Not a trade worth making. */
-  const safe = !!el.srcObject;
-
-  try{
-    if (!safe) throw 0;
-    const ac = new (window.AudioContext || window.webkitAudioContext)();
-    const an = ac.createAnalyser(); an.fftSize = 256; an.smoothingTimeConstant = .72;
-    ac.createMediaElementSource(el).connect(an); an.connect(ac.destination);
-    const buf = new Uint8Array(an.frequencyBinCount);
-    haveFFT = true;
-    (function poll(){
-      an.getByteFrequencyData(buf);
-      let s=0; for (let i=0;i<34;i++) s += buf[i];
-      const lvl = Math.min(1,(s/34)/104);
-      target = el.paused ? 0 : lvl;
-      for (let i=0;i<BARS;i++){
-        const v = el.paused ? 0 : buf[Math.floor(i/BARS*72)+2]/255;
-        bars[i] += (v - bars[i])*.30;
-      }
-      if (!el.paused && lvl > .42 && performance.now()-lastSpeak > 170){
-        lastSpeak = performance.now(); pulse();
-      }
-      requestAnimationFrame(poll);
-    })();
-  }catch(e){ haveFFT = false; }
-
-  if (!safe){
-    (function fake(){
-      target = (speaking && !el.paused)
-        ? .28 + .36*Math.abs(Math.sin(performance.now()/150))*(.55+.45*Math.random())
-        : 0;
-      if (speaking && !el.paused && performance.now()-lastSpeak > 430){
-        lastSpeak = performance.now(); pulse();
-      }
-      requestAnimationFrame(fake);
-    })();
-  }
-
-  el.addEventListener('playing', () => { speaking = true; pulse(); say('Speaking',''); });
-  ['pause','ended'].forEach(ev => el.addEventListener(ev, () => {
-    speaking = false; target = 0;
-    say('Listening','Speak naturally — interrupt any time');
+function watch(el){
+  if (media.has(el)) { tap(el); return; }
+  media.add(el);
+  tap(el);
+  el.addEventListener('playing', () => { tap(el); speaking = true; pulse(); say('Speaking',''); });
+  el.addEventListener('loadedmetadata', () => tap(el));
+  ['pause','ended','emptied'].forEach(ev => el.addEventListener(ev, () => {
+    if ([...media].every(m => m.paused)){
+      speaking = false;
+      say('Listening','Speak naturally — interrupt any time');
+    }
   }));
 }
-new MutationObserver(() => document.querySelectorAll('audio').forEach(hook))
-  .observe(document.documentElement, {childList:true, subtree:true});
+
+/* 1. Catch anything that plays, wherever it lives — including shadow DOM. */
+const _play = HTMLMediaElement.prototype.play;
+HTMLMediaElement.prototype.play = function(){
+  try{ watch(this); }catch(e){}
+  return _play.apply(this, arguments);
+};
+
+/* 2. Backup: walk the tree, descending into every shadow root. */
+function walk(root){
+  try{
+    root.querySelectorAll('audio,video').forEach(watch);
+    root.querySelectorAll('*').forEach(n => { if (n.shadowRoot) walk(n.shadowRoot); });
+  }catch(e){}
+}
+setInterval(() => walk(document), 1200);
+
+/* 3. Read whichever analyser is loudest; fall back to a synthetic cadence. */
+(function poll(){
+  let lvl = 0, any = false;
+  for (const {an,buf} of analysers){
+    an.getByteFrequencyData(buf);
+    let s=0; for (let i=2;i<40;i++) s += buf[i];
+    const v = Math.min(1,(s/38)/98);
+    if (v > lvl) lvl = v;
+    any = true;
+    for (let i=0;i<BARS;i++){
+      const b = buf[Math.floor(i/BARS*80)+2]/255;
+      if (b > bars[i]) bars[i] = b;
+    }
+  }
+  const playing = [...media].some(m => !m.paused);
+  if (any && playing){
+    target = lvl;
+  } else if (playing){
+    const w = Math.sin(performance.now()/150)*Math.sin(performance.now()/91);
+    target = .30 + .38*Math.abs(w);
+    for (let i=0;i<BARS;i++)
+      bars[i] += ((.25+.65*Math.abs(Math.sin(performance.now()/190+i*.4)))*target - bars[i])*.25;
+  } else {
+    target = 0;
+  }
+  for (let i=0;i<BARS;i++) bars[i] *= .86;
+  requestAnimationFrame(poll);
+})();
 
 setTimeout(() => {
   if (!document.querySelector('#convai elevenlabs-convai')?.shadowRoot){
-    document.getElementById('fallback').style.display = 'block';
+    document.getElementById('fallback').style.display='block';
     say('Widget blocked','Use the link below — it works the same');
   } else {
     say('Ready','Tap the button below and start talking');
