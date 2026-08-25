@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>The Business Credit Ladder</title>
+<meta name="description" content="Nine rungs between an idea and getting approved on the business instead of on you. Find out which one you are standing on.">
+<meta property="og:title" content="The Business Credit Ladder">
+<meta property="og:description" content="Nine rungs between an idea and getting approved on the business instead of on you.">
+<style>
+  :root{
+    --ink:#010B06; --ink2:#04150C; --card:#07200F;
+    --green:#4CBB17; --lime:#9BF442; --gold:#FFB43A;
+    --pale:#E8FFD4; --dim:#5C7A55; --line:#123A1E;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    background:
+      radial-gradient(1100px 620px at 50% -10%, #0C2E17 0%, transparent 62%),
+      var(--ink);
+    color:var(--pale);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,Helvetica,Arial,sans-serif;
+    -webkit-font-smoothing:antialiased;
+    line-height:1.5;
+  }
+  .wrap{max-width:720px;margin:0 auto;padding:28px 18px 0}
+  .eyebrow{
+    font-size:11px;letter-spacing:.22em;text-transform:uppercase;
+    color:var(--gold);font-weight:700;margin:0 0 10px
+  }
+  h1{
+    font-size:clamp(30px,7.5vw,46px);line-height:1.04;margin:0 0 12px;
+    font-weight:800;letter-spacing:-.02em;color:#fff
+  }
+  .lede{color:#B6D9A6;font-size:16px;margin:0 0 6px;max-width:52ch}
+  .note{color:var(--dim);font-size:13px;margin:14px 0 0}
+
+  .steps{margin:28px 0 0;padding:0;list-style:none;counter-reset:r}
+  .step{
+    display:flex;gap:14px;align-items:flex-start;
+    background:linear-gradient(180deg,var(--card),#05190C);
+    border:1px solid var(--line);border-radius:14px;
+    padding:14px 16px;margin:0 0 10px;cursor:pointer;
+    transition:border-color .15s ease, transform .08s ease, background .15s ease;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .step:active{transform:scale(.995)}
+  .step.on{border-color:var(--green);background:linear-gradient(180deg,#0B2E14,#071F0D)}
+  .box{
+    flex:0 0 auto;width:26px;height:26px;border-radius:8px;margin-top:1px;
+    border:2px solid #2C5A36;display:grid;place-items:center;
+    background:#03120A;transition:.15s ease
+  }
+  .step.on .box{background:var(--green);border-color:var(--lime)}
+  .box svg{width:15px;height:15px;opacity:0;transition:opacity .15s ease}
+  .step.on .box svg{opacity:1}
+  .rung{flex:1 1 auto;min-width:0}
+  .rung b{
+    display:block;font-size:15px;color:#fff;font-weight:700;margin:0 0 2px;
+    letter-spacing:-.01em
+  }
+  .rung span{display:block;font-size:13.5px;color:#9EC48D}
+  .num{
+    flex:0 0 auto;font-size:11px;font-weight:800;color:var(--dim);
+    background:#04160B;border:1px solid var(--line);border-radius:6px;
+    padding:2px 7px;margin-top:2px
+  }
+  .step.on .num{color:var(--lime);border-color:#2C5A36}
+
+  .result{
+    position:sticky;bottom:0;margin:26px 0 0;padding:20px 18px 26px;
+    background:linear-gradient(180deg,rgba(1,11,6,.4),var(--ink) 22%);
+    backdrop-filter:blur(10px);border-top:1px solid var(--line)
+  }
+  .badge{
+    display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin:0 0 4px
+  }
+  .badge .big{font-size:34px;font-weight:800;color:var(--lime);letter-spacing:-.02em}
+  .badge .of{font-size:14px;color:var(--dim);font-weight:700}
+  .stage{color:var(--gold);font-weight:700;font-size:14px;letter-spacing:.02em}
+  .bar{height:8px;border-radius:99px;background:#0C2413;overflow:hidden;margin:12px 0 16px}
+  .bar i{display:block;height:100%;width:0;border-radius:99px;
+    background:linear-gradient(90deg,var(--green),var(--lime));transition:width .35s ease}
+  .next h3{
+    font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);
+    margin:0 0 8px;font-weight:800
+  }
+  .next ol{margin:0;padding:0 0 0 2px;list-style:none}
+  .next li{
+    display:flex;gap:10px;font-size:14.5px;color:var(--pale);
+    padding:7px 0;border-bottom:1px solid #0E2A15
+  }
+  .next li:last-child{border-bottom:0}
+  .next li em{color:var(--gold);font-style:normal;font-weight:800;flex:0 0 auto}
+  .gap{
+    margin:14px 0 0;padding:11px 13px;border-radius:11px;
+    background:#2A1A03;border:1px solid #5C3F0A;color:#FFE0A6;font-size:13.5px
+  }
+  .gap b{color:var(--gold)}
+  .btns{display:flex;gap:10px;margin:18px 0 0;flex-wrap:wrap}
+  button{
+    font:inherit;font-weight:800;border-radius:12px;padding:13px 18px;
+    border:0;cursor:pointer;flex:1 1 auto;min-width:150px;
+    -webkit-tap-highlight-color:transparent
+  }
+  .primary{background:var(--lime);color:#04170A}
+  .primary:active{background:var(--green)}
+  .ghost{background:transparent;color:#9EC48D;border:1px solid var(--line)}
+  .copied{color:var(--lime);font-size:13px;margin:10px 0 0;height:16px;font-weight:700}
+  footer{color:#3E5C39;font-size:12px;padding:22px 18px 40px;line-height:1.6;max-width:720px;margin:0 auto}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <p class="eyebrow">The CEO Syndicate</p>
+  <h1>The Business Credit Ladder</h1>
+  <p class="lede">Nine rungs between an idea and getting approved on the business instead of on you.</p>
+  <p class="lede">Tick everything that is true <b>right now</b>. Not what you plan to do. What is done.</p>
+
+  <ul class="steps" id="steps"></ul>
+
+</div>
+
+<div class="result">
+  <div class="wrap" style="padding:0;max-width:720px">
+    <div class="badge">
+      <span class="big" id="rungNum">Rung 0</span>
+      <span class="of">of 9</span>
+      <span class="stage" id="stage">Not started</span>
+    </div>
+    <div class="bar"><i id="bar"></i></div>
+    <div class="next">
+      <h3 id="nextTitle">Your next moves</h3>
+      <ol id="next"></ol>
+    </div>
+    <div class="gap" id="gap" hidden></div>
+    <div class="btns">
+      <button class="primary" id="copy">Copy my result</button>
+      <button class="ghost" id="reset">Start over</button>
+    </div>
+    <p class="copied" id="copied"></p>
+  </div>
+</div>
+
+<footer>
+  Educational only. Nothing here is a promise of approval, an amount, or a timeline.
+  Lender and vendor requirements change and every file is different.
+</footer>
+
+<script>
+const RUNGS = [
+  {t:"Entity formed",
+   d:"Your LLC or corporation is registered and in good standing with the state.",
+   a:"File the entity in your state and confirm it reads active."},
+  {t:"EIN secured",
+   d:"You have an EIN from the IRS issued in the business name.",
+   a:"Apply for the EIN directly with the IRS. It is free."},
+  {t:"Business identity matches everywhere",
+   d:"Address, phone and email are business specific and identical on every listing and application.",
+   a:"Pick one address, one phone, one email and make every record match, character for character."},
+  {t:"D-U-N-S number",
+   d:"Dun and Bradstreet has issued you a D-U-N-S number.",
+   a:"Request the D-U-N-S number from D and B. Do not pay for expedited service you do not need."},
+  {t:"Business bank account, funded and moving",
+   d:"An account in the entity name with real deposits and real activity, not a shell.",
+   a:"Open the business account and run genuine revenue and expenses through it."},
+  {t:"Net-30 vendors reporting",
+   d:"At least three net-30 accounts that report to a business bureau, all paid on time.",
+   a:"Open net-30 accounts that actually report, buy something you would buy anyway, pay early."},
+  {t:"Store credit approved",
+   d:"At least one retail or store account in the business name.",
+   a:"Apply for store credit once your vendor accounts are reporting and seasoned."},
+  {t:"Fleet or mid-tier approved",
+   d:"A fleet card or a mid-tier account is open in the business name.",
+   a:"Move to fleet and mid-tier once the reporting file has depth behind it."},
+  {t:"Bank lines without a personal guarantee",
+   d:"A bank line or funding approved on the business, with no personal guarantee.",
+   a:"Bring a clean, seasoned file and financials to the bank relationship."}
+];
+
+const STAGES = [
+  "Not started","Paperwork","Paperwork","Findable","Findable",
+  "Bankable","Building the file","Building the file","Mid-tier","Bank ready"
+];
+
+const KEY = "ceos-ladder-v1";
+let state = new Array(RUNGS.length).fill(false);
+try { const s = JSON.parse(localStorage.getItem(KEY)); if (Array.isArray(s) && s.length === RUNGS.length) state = s; } catch (e) {}
+
+const CHECK = '<svg viewBox="0 0 20 20" fill="none" stroke="#04170A" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10.5l4 4 8-9"/></svg>';
+
+const stepsEl = document.getElementById("steps");
+RUNGS.forEach(function (r, i) {
+  const li = document.createElement("li");
+  li.className = "step";
+  li.innerHTML = '<span class="box">' + CHECK + '</span>'
+    + '<span class="num">' + (i + 1) + '</span>'
+    + '<span class="rung"><b></b><span></span></span>';
+  li.querySelector("b").textContent = r.t;
+  li.querySelector(".rung span").textContent = r.d;
+  li.addEventListener("click", function () { state[i] = !state[i]; save(); render(); });
+  stepsEl.appendChild(li);
+});
+
+function save() { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {} }
+
+function currentRung() {
+  let n = 0;
+  for (let i = 0; i < state.length; i++) { if (state[i]) n = i + 1; else break; }
+  return n;
+}
+function gaps(rung) {
+  const g = [];
+  for (let i = rung; i < state.length; i++) if (state[i]) g.push(i);
+  return g;
+}
+
+function render() {
+  const items = stepsEl.children;
+  for (let i = 0; i < items.length; i++) items[i].classList.toggle("on", !!state[i]);
+
+  const rung = currentRung();
+  const g = gaps(rung);
+
+  document.getElementById("rungNum").textContent = "Rung " + rung;
+  document.getElementById("stage").textContent = STAGES[rung];
+  document.getElementById("bar").style.width = (rung / RUNGS.length * 100) + "%";
+
+  const next = document.getElementById("next");
+  next.innerHTML = "";
+  const title = document.getElementById("nextTitle");
+
+  if (rung === RUNGS.length) {
+    title.textContent = "You are at the top";
+    const li = document.createElement("li");
+    li.innerHTML = '<em>&#9733;</em><span>Nine of nine. Post it on the Wins Board so the people behind you can see it is real.</span>';
+    next.appendChild(li);
+  } else {
+    title.textContent = "Your next moves";
+    for (let i = rung; i < Math.min(rung + 3, RUNGS.length); i++) {
+      const li = document.createElement("li");
+      const em = document.createElement("em");
+      em.textContent = (i + 1) + ".";
+      const sp = document.createElement("span");
+      sp.textContent = RUNGS[i].a;
+      li.appendChild(em); li.appendChild(sp);
+      next.appendChild(li);
+    }
+  }
+
+  const gapEl = document.getElementById("gap");
+  if (g.length) {
+    gapEl.hidden = false;
+    gapEl.innerHTML = "";
+    const b = document.createElement("b");
+    b.textContent = g.length === 1 ? "One rung skipped. " : (g.length + " rungs skipped. ");
+    gapEl.appendChild(b);
+    gapEl.appendChild(document.createTextNode(
+      "You have " + g.map(function (i) { return "rung " + (i + 1); }).join(" and ")
+      + " but not everything under it. The ladder is sequential for a reason. Close the lower rungs before you lean on the higher ones."));
+  } else {
+    gapEl.hidden = true;
+  }
+}
+
+document.getElementById("copy").addEventListener("click", function () {
+  const rung = currentRung();
+  const g = gaps(rung);
+  let line = "Rung " + rung + " of 9 on the ladder. Stage: " + STAGES[rung] + ".";
+  if (rung < RUNGS.length) line += " Next up: " + RUNGS[rung].t + ".";
+  if (g.length) line += " Skipped: " + g.map(function (i) { return "rung " + (i + 1); }).join(", ") + ".";
+  const out = document.getElementById("copied");
+  function done() { out.textContent = "Copied. Paste it in The Group Chat."; setTimeout(function(){ out.textContent = ""; }, 4000); }
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(line).then(done).catch(fallback);
+  } else { fallback(); }
+  function fallback() {
+    const ta = document.createElement("textarea");
+    ta.value = line; ta.style.position = "fixed"; ta.style.opacity = "0";
+    document.body.appendChild(ta); ta.focus(); ta.select();
+    try { document.execCommand("copy"); done(); }
+    catch (e) { out.textContent = line; }
+    document.body.removeChild(ta);
+  }
+});
+
+document.getElementById("reset").addEventListener("click", function () {
+  state = new Array(RUNGS.length).fill(false); save(); render();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+});
+
+render();
+</script>
+</body>
+</html>
