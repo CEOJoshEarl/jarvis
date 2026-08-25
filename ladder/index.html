@@ -4,15 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>The Business Credit Ladder</title>
-<meta name="description" content="Nine rungs between an idea and getting approved on the business instead of on you. Find out which one you are standing on.">
+<meta name="description" content="9 steps between an idea and getting approved on the business instead of on you. Find out which step you are on.">
 <meta property="og:title" content="The Business Credit Ladder">
-<meta property="og:description" content="Nine rungs between an idea and getting approved on the business instead of on you. Find out which one you are standing on.">
-<meta property="og:image" content="https://ceojoshearl.github.io/jarvis/cards/ladder.png">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
-<meta property="og:type" content="website">
-<meta property="og:url" content="https://ceojoshearl.github.io/jarvis/ladder/">
-<meta name="twitter:card" content="summary_large_image">
+<meta property="og:description" content="9 steps between an idea and getting approved on the business instead of on you. Find out which step you are on.">
 <style>
   :root{
     --ink:#010B06; --ink2:#04150C; --card:#07200F;
@@ -121,8 +115,8 @@
 <div class="wrap">
   <p class="eyebrow">The CEO Syndicate</p>
   <h1>The Business Credit Ladder</h1>
-  <p class="lede">Nine rungs between an idea and getting approved on the business instead of on you.</p>
-  <p class="lede">Tick everything that is true <b>right now</b>. Not what you plan to do. What is done.</p>
+  <p class="lede">9 steps between an idea and getting approved on the business instead of on you.</p>
+  <p class="lede">Check off everything that's true <b>right now</b>. Not what you're planning. What's already done.</p>
 
   <ul class="steps" id="steps"></ul>
 
@@ -131,7 +125,7 @@
 <div class="result">
   <div class="wrap" style="padding:0;max-width:720px">
     <div class="badge">
-      <span class="big" id="rungNum">Rung 0</span>
+      <span class="big" id="rungNum">Step 0</span>
       <span class="of">of 9</span>
       <span class="stage" id="stage">Not started</span>
     </div>
@@ -157,37 +151,37 @@
 <script>
 const RUNGS = [
   {t:"Entity formed",
-   d:"Your LLC or corporation is registered and in good standing with the state.",
-   a:"File the entity in your state and confirm it reads active."},
+   d:"Your LLC or corp is registered and in good standing with the state.",
+   a:"File the entity in your state, then confirm it reads active."},
   {t:"EIN secured",
    d:"You have an EIN from the IRS issued in the business name.",
    a:"Apply for the EIN directly with the IRS. It is free."},
   {t:"Business identity matches everywhere",
    d:"Address, phone and email are business specific and identical on every listing and application.",
-   a:"Pick one address, one phone, one email and make every record match, character for character."},
+   a:"Pick one address, one phone, one email. Make every record match, character for character."},
   {t:"D-U-N-S number",
    d:"Dun and Bradstreet has issued you a D-U-N-S number.",
-   a:"Request the D-U-N-S number from D and B. Do not pay for expedited service you do not need."},
+   a:"Request the D-U-N-S number from D and B. Do not pay to rush what you can wait on."},
   {t:"Business bank account, funded and moving",
    d:"An account in the entity name with real deposits and real activity, not a shell.",
-   a:"Open the business account and run genuine revenue and expenses through it."},
+   a:"Open the business account and run real money through it."},
   {t:"Net-30 vendors reporting",
    d:"At least three net-30 accounts that report to a business bureau, all paid on time.",
-   a:"Open net-30 accounts that actually report, buy something you would buy anyway, pay early."},
+   a:"Open net-30 accounts that actually report. Buy something you were buying anyway, then pay early."},
   {t:"Store credit approved",
    d:"At least one retail or store account in the business name.",
-   a:"Apply for store credit once your vendor accounts are reporting and seasoned."},
+   a:"Apply for store credit once those vendor accounts are reporting and seasoned."},
   {t:"Fleet or mid-tier approved",
    d:"A fleet card or a mid-tier account is open in the business name.",
-   a:"Move to fleet and mid-tier once the reporting file has depth behind it."},
+   a:"Move to fleet and mid-tier once your file has some depth behind it."},
   {t:"Bank lines without a personal guarantee",
    d:"A bank line or funding approved on the business, with no personal guarantee.",
-   a:"Bring a clean, seasoned file and financials to the bank relationship."}
+   a:"Bring a clean, seasoned file and real financials to the bank."}
 ];
 
 const STAGES = [
   "Not started","Paperwork","Paperwork","Findable","Findable",
-  "Bankable","Building the file","Building the file","Mid-tier","Bank ready"
+  "Bankable","Building your file","Building your file","Mid-tier","Bank ready"
 ];
 
 const KEY = "ceos-ladder-v1";
@@ -229,7 +223,7 @@ function render() {
   const rung = currentRung();
   const g = gaps(rung);
 
-  document.getElementById("rungNum").textContent = "Rung " + rung;
+  document.getElementById("rungNum").textContent = "Step " + rung;
   document.getElementById("stage").textContent = STAGES[rung];
   document.getElementById("bar").style.width = (rung / RUNGS.length * 100) + "%";
 
@@ -240,7 +234,7 @@ function render() {
   if (rung === RUNGS.length) {
     title.textContent = "You are at the top";
     const li = document.createElement("li");
-    li.innerHTML = '<em>&#9733;</em><span>Nine of nine. Post it on the Wins Board so the people behind you can see it is real.</span>';
+    li.innerHTML = '<em>&#9733;</em><span>9 for 9. Go post that on the Wins Board. Somebody behind you needs to see a real person do it.</span>';
     next.appendChild(li);
   } else {
     title.textContent = "Your next moves";
@@ -260,11 +254,11 @@ function render() {
     gapEl.hidden = false;
     gapEl.innerHTML = "";
     const b = document.createElement("b");
-    b.textContent = g.length === 1 ? "One rung skipped. " : (g.length + " rungs skipped. ");
+    b.textContent = g.length === 1 ? "You skipped a step. " : ("You skipped " + g.length + " steps. ");
     gapEl.appendChild(b);
     gapEl.appendChild(document.createTextNode(
-      "You have " + g.map(function (i) { return "rung " + (i + 1); }).join(" and ")
-      + " but not everything under it. The ladder is sequential for a reason. Close the lower rungs before you lean on the higher ones."));
+      "You've got step " + g.map(function (i) { return (i + 1); }).join(" and ")
+      + ", but not everything underneath it. This order is not random. Go back and close the lower ones before you lean on the higher ones."));
   } else {
     gapEl.hidden = true;
   }
@@ -273,11 +267,11 @@ function render() {
 document.getElementById("copy").addEventListener("click", function () {
   const rung = currentRung();
   const g = gaps(rung);
-  let line = "Rung " + rung + " of 9 on the ladder. Stage: " + STAGES[rung] + ".";
+  let line = "I am on step " + rung + " of 9. Stage: " + STAGES[rung] + ".";
   if (rung < RUNGS.length) line += " Next up: " + RUNGS[rung].t + ".";
-  if (g.length) line += " Skipped: " + g.map(function (i) { return "rung " + (i + 1); }).join(", ") + ".";
+  if (g.length) line += " Skipped: " + g.map(function (i) { return "step " + (i + 1); }).join(", ") + ".";
   const out = document.getElementById("copied");
-  function done() { out.textContent = "Copied. Paste it in The Group Chat."; setTimeout(function(){ out.textContent = ""; }, 4000); }
+  function done() { out.textContent = "Copied. Go paste it in the comments."; setTimeout(function(){ out.textContent = ""; }, 4000); }
   if (navigator.clipboard && navigator.clipboard.writeText) {
     navigator.clipboard.writeText(line).then(done).catch(fallback);
   } else { fallback(); }
