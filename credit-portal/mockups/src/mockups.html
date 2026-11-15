@@ -107,6 +107,7 @@ tr:last-child td{border-bottom:0}
 .box p{font-size:12px;color:var(--ink2)}
 .arrow{color:var(--mute);font-size:22px;text-align:center}
 .tag{display:inline-block;font-size:11px;font-weight:600;border-radius:6px;padding:3px 8px;margin:3px 3px 0 0;background:var(--bg);color:var(--ink2)}
+#team .body{gap:14px;padding:20px 28px}#team .card{padding:14px 18px}#team .stage{padding:7px 10px}#team .stage .n{font-size:19px}#team .kpi .v{font-size:25px}#team .card h3{margin-bottom:9px}#team td{padding:8px 10px}
 </style>
 </head>
 <body>
@@ -116,15 +117,18 @@ tr:last-child td{border-bottom:0}
   <aside class="side">
     <div class="logo"><i>✓</i><div>Fulfillment HQ<small>Internal team workspace</small></div></div>
     <div class="nav on"><span class="ic">▦</span>Command Center</div>
-    <div class="nav"><span class="ic">◧</span>Partner Companies<b>14</b></div>
-    <div class="nav"><span class="ic">☺</span>All Clients<b>612</b></div>
+    <div class="sideh">Services</div>
+    <div class="nav"><span class="ic">▲</span>Credit Repair<b>612</b></div>
+    <div class="nav"><span class="ic">$</span>Business Funding<b>87</b></div>
+    <div class="sideh">Workspace</div>
+    <div class="nav"><span class="ic">◧</span>Partner Companies<b>19</b></div>
+    <div class="nav"><span class="ic">☺</span>All Clients<b>699</b></div>
     <div class="nav"><span class="ic">⇄</span>Dispute Queue<b>48</b></div>
     <div class="nav"><span class="ic">✉</span>Inbox<b>9</b></div>
     <div class="nav"><span class="ic">▤</span>Documents to Review<b>23</b></div>
-    <div class="nav"><span class="ic">☑</span>My Tasks</div>
-    <div class="sideh">Admin</div>
+        <div class="sideh">Admin</div>
     <div class="nav"><span class="ic">♟</span>Team & Roles</div>
-    <div class="nav"><span class="ic">⚙</span>Workflow Stages</div>
+    <div class="nav"><span class="ic">⚙</span>Stages &amp; Lenders</div>
     <div class="nav"><span class="ic">⌁</span>Audit Log</div>
     <div class="role"><strong>Signed in as Team Admin</strong>Sees every partner &amp; client</div>
   </aside>
@@ -133,14 +137,14 @@ tr:last-child td{border-bottom:0}
       <div class="search">⌕ Search any client, partner, dispute…</div><div class="bell">🔔</div><div class="av" style="background:#2E9E1E">JE</div></div>
     <div class="body">
       <div class="row">
-        <div class="card kpi"><div class="l">Active clients (all partners)</div><div class="v">612</div><div class="d">▲ 38 this month</div></div>
+        <div class="card kpi"><div class="l">Active clients (all partners)</div><div class="v">699</div><div class="d">612 credit · 87 funding</div></div>
         <div class="card kpi"><div class="l">Disputes in flight</div><div class="v">1,947</div><div class="d">across 3 bureaus</div></div>
         <div class="card kpi"><div class="l">Items deleted (30 days)</div><div class="v">418</div><div class="d">▲ 12% vs last month</div></div>
-        <div class="card kpi"><div class="l">Responses overdue (&gt;35 days)</div><div class="v" style="color:var(--red)">17</div><div class="d neg">needs follow-up letters</div></div>
-        <div class="card kpi"><div class="l">Avg. score gain</div><div class="v">+62</div><div class="d">graduated clients</div></div>
+        <div class="card kpi"><div class="l">Overdue bureau replies</div><div class="v" style="color:var(--red)">17</div><div class="d neg">needs follow-up letters</div></div>
+        <div class="card kpi"><div class="l">Funded this month</div><div class="v">$1.84M</div><div class="d">14 deals closed</div></div>
       </div>
       <div class="card">
-        <h3>Client pipeline — every client, every stage <span class="lk">Open board view →</span></h3>
+        <h3>Credit repair pipeline <span class="pill s6" style="font-weight:600">Switch: <b style="color:var(--brand)">Credit Repair</b> · Business Funding</span><span class="lk">Open board view →</span></h3>
         <div class="pipe">
           <div class="stage"><div class="n">41</div><div class="t">1 · Onboarding &amp; Agreement</div><div class="b" style="background:var(--blue)"></div></div>
           <div class="stage"><div class="n">27</div><div class="t">2 · Credit Reports Pulled</div><div class="b" style="background:var(--blue)"></div></div>
@@ -152,15 +156,28 @@ tr:last-child td{border-bottom:0}
           <div class="stage"><div class="n">48</div><div class="t">8 · Completed / Graduated</div><div class="b" style="background:var(--brand)"></div></div>
         </div>
       </div>
+      <div class="card" style="padding:14px 18px">
+        <h3 style="margin-bottom:10px">Business funding pipeline <span class="lk">Open board view →</span></h3>
+        <div class="pipe">
+          <div class="stage"><div class="n">12</div><div class="t">1 · Application</div><div class="b" style="background:var(--blue)"></div></div>
+          <div class="stage"><div class="n">18</div><div class="t">2 · Documents</div><div class="b" style="background:var(--blue)"></div></div>
+          <div class="stage"><div class="n">9</div><div class="t">3 · Fundability Review</div><div class="b" style="background:var(--violet)"></div></div>
+          <div class="stage"><div class="n">7</div><div class="t">4 · Lender Matching</div><div class="b" style="background:var(--violet)"></div></div>
+          <div class="stage"><div class="n">15</div><div class="t">5 · Submitted</div><div class="b" style="background:var(--gold)"></div></div>
+          <div class="stage"><div class="n">11</div><div class="t">6 · Offers Received</div><div class="b" style="background:var(--gold)"></div></div>
+          <div class="stage"><div class="n">6</div><div class="t">7 · Closing</div><div class="b" style="background:var(--brand2)"></div></div>
+          <div class="stage"><div class="n">9</div><div class="t">8 · Funded</div><div class="b" style="background:var(--brand)"></div></div>
+        </div>
+      </div>
       <div class="row" style="flex:1;min-height:0">
         <div class="card" style="flex:1.6">
           <h3>Partner companies <span class="lk">Add partner +</span></h3>
           <table>
-            <tr><th>Partner</th><th>Clients</th><th>Disputes</th><th>Unread</th><th>Health</th><th>Owner</th></tr>
-            <tr><td><div class="who"><div class="av" style="background:#2F6FDB">AC</div><div>Apex Credit Solutions<small>Plan: Pro · since Mar 2025</small></div></div></td><td>148</td><td>502</td><td><span class="pill s5">4 new</span></td><td><span class="pill s4">On track</span></td><td>Maria L.</td></tr>
-            <tr><td><div class="who"><div class="av" style="background:#7A4FD8">RF</div><div>Restore Financial Group<small>Plan: Growth · since Aug 2025</small></div></div></td><td>96</td><td>311</td><td><span class="pill s6">0</span></td><td><span class="pill s4">On track</span></td><td>Devon K.</td></tr>
-            <tr><td><div class="who"><div class="av" style="background:#E89A1C">BS</div><div>BlueSky Credit Co.<small>Plan: Pro · since Jan 2026</small></div></div></td><td>211</td><td>688</td><td><span class="pill s5">3 new</span></td><td><span class="pill s3">5 overdue</span></td><td>Maria L.</td></tr>
-            <tr><td><div class="who"><div class="av" style="background:#D6453D">NS</div><div>NextStep Credit<small>Plan: Starter · since Jun 2026</small></div></div></td><td>57</td><td>164</td><td><span class="pill s5">2 new</span></td><td><span class="pill s4">On track</span></td><td>Aisha R.</td></tr>
+            <tr><th>Partner</th><th>Services</th><th>Clients</th><th>Unread</th><th>Health</th></tr>
+            <tr><td><div class="who"><div class="av" style="background:#2F6FDB">AC</div><div>Apex Credit Solutions<small>Credit repair company</small></div></div></td><td><span class="pill s1">Credit</span> <span class="pill s2">Funding</span></td><td>157</td><td><span class="pill s5">4 new</span></td><td><span class="pill s4">On track</span></td></tr>
+            <tr><td><div class="who"><div class="av" style="background:#7A4FD8">ST</div><div>Summit Tax &amp; Accounting<small>Accounting firm</small></div></div></td><td><span class="pill s1">Credit</span> <span class="pill s2">Funding</span></td><td>43</td><td><span class="pill s5">2 new</span></td><td><span class="pill s4">On track</span></td></tr>
+            <tr><td><div class="who"><div class="av" style="background:#E89A1C">BS</div><div>BlueSky Credit Co.<small>Credit repair company</small></div></div></td><td><span class="pill s1">Credit</span></td><td>211</td><td><span class="pill s5">3 new</span></td><td><span class="pill s3">5 overdue</span></td></tr>
+            <tr><td><div class="who"><div class="av" style="background:#D6453D">KI</div><div>Keystone Insurance Group<small>Insurance agency</small></div></div></td><td><span class="pill s2">Funding</span></td><td>22</td><td><span class="pill s6">0</span></td><td><span class="pill s4">On track</span></td></tr>
           </table>
         </div>
         <div class="card" style="flex:1">
@@ -168,9 +185,8 @@ tr:last-child td{border-bottom:0}
           <div class="feed">
             <div><i style="background:var(--red)"></i><div><b>Send 30-day follow-up</b> — T. Brooks (BlueSky)<small>Experian no response · due today · Maria L.</small></div></div>
             <div><i style="background:var(--gold)"></i><div><b>Verify ID upload</b> — K. Nguyen (Apex)<small>Driver's license + utility bill · Devon K.</small></div></div>
-            <div><i style="background:var(--blue)"></i><div><b>Build Round 2 letters</b> — J. Alvarez (Restore)<small>4 items remaining · Aisha R.</small></div></div>
+            <div><i style="background:var(--violet)"></i><div><b>Send to 3 lenders</b> — Rivera Landscaping (Summit)<small>Equipment quote received · Aisha R.</small></div></div>
             <div><i style="background:var(--brand2)"></i><div><b>Log bureau results</b> — 12 TransUnion responses<small>Mail scanned this morning · Devon K.</small></div></div>
-            <div><i style="background:var(--violet)"></i><div><b>Answer partner question</b> — NextStep<small>"Can we add a co-applicant?" · Aisha R.</small></div></div>
           </div>
         </div>
       </div>
@@ -183,15 +199,16 @@ tr:last-child td{border-bottom:0}
   <aside class="side" style="background:#0B1F3A">
     <div class="logo"><i style="background:linear-gradient(135deg,#2F6FDB,#7FB2FF);color:#fff">A</i><div>Apex Credit Solutions<small style="color:#93A9C9">Powered by Fulfillment HQ</small></div></div>
     <div class="nav on" style="background:rgba(127,178,255,.15)"><span class="ic">▦</span>Dashboard</div>
-    <div class="nav"><span class="ic">☺</span>My Clients<b style="background:#7FB2FF">148</b></div>
+    <div class="sideh" style="color:#6F86A8">Services</div>
+    <div class="nav"><span class="ic">▲</span>Credit Repair<b style="background:#7FB2FF">148</b></div>
+    <div class="nav"><span class="ic">$</span>Business Funding<b style="background:#7FB2FF">9</b></div>
+    <div class="sideh" style="color:#6F86A8">Workspace</div>
     <div class="nav"><span class="ic">🔔</span>Notifications<b style="background:#7FB2FF">7</b></div>
     <div class="nav"><span class="ic">✉</span>Messages &amp; Questions<b style="background:#7FB2FF">2</b></div>
     <div class="nav"><span class="ic">▤</span>Documents</div>
     <div class="nav"><span class="ic">★</span>Feedback</div>
-    <div class="nav"><span class="ic">⇩</span>Reports &amp; Exports</div>
-    <div class="sideh" style="color:#6F86A8">Account</div>
-    <div class="nav"><span class="ic">♟</span>My Team Users</div>
-    <div class="nav"><span class="ic">⚙</span>Client Update Settings</div>
+    <div class="nav"><span class="ic">%</span>Funding Payouts</div>
+    <div class="nav"><span class="ic">⚙</span>Settings &amp; Team</div>
     <div class="role"><strong>Partner view</strong>Only Apex's 148 clients are visible. Other partners' data is walled off.</div>
   </aside>
   <div class="main">
@@ -206,7 +223,7 @@ tr:last-child td{border-bottom:0}
       </div>
       <div class="row" style="flex:1;min-height:0">
         <div class="card" style="flex:1.7">
-          <h3>My clients <span class="pill s6" style="font-weight:500">Filter: All stages ▾</span><span class="lk">+ Submit new client</span></h3>
+          <h3>My credit repair clients <span class="pill s6" style="font-weight:500">Filter: All stages ▾</span><span class="lk">+ Submit new client</span></h3>
           <table>
             <tr><th>Client</th><th>Current stage</th><th>Progress</th><th>Items removed</th><th>Score</th><th>Last update</th></tr>
             <tr><td><div class="who"><div class="av" style="background:#4CBB17">KN</div><div>Kevin Nguyen<small>Enrolled Oct 2, 2026</small></div></div></td><td><span class="pill s1">2 · Reports Pulled</span></td><td><div class="bar"><i style="width:22%"></i></div></td><td>0 / 9</td><td>584</td><td>Today</td></tr>
@@ -387,19 +404,19 @@ tr:last-child td{border-bottom:0}
     <div style="font-size:26px;font-weight:800;letter-spacing:-.02em;margin-top:4px">Every user sees exactly their slice — nothing more</div></div>
     <div class="box" style="border-color:#BFDDB4;background:#F6FBF3">
       <h4>🟢 Your fulfillment team <span class="pill s4">Admin · Specialist · Viewer</span></h4>
-      <p>Sees <b>every partner company and every client</b>. Moves clients through stages, logs bureau results, uploads letters, answers questions. Admins manage team members, stages and the audit log.</p>
+      <p>Sees <b>every partner and every client</b> in both services. Runs the work: moves stages, logs bureau results, submits to lenders, answers partner questions. Admins manage the team, stages, lenders and the audit log.</p>
     </div>
     <div class="arrow">▼ assigns &amp; serves</div>
     <div class="row" style="gap:14px">
-      <div class="box" style="flex:1;border-color:#B9CDF2;background:#F4F8FF"><h4>🔵 Apex Credit</h4><p>Owner + staff logins</p><span class="tag">148 clients</span><span class="tag">own messages</span><span class="tag">own docs</span></div>
-      <div class="box" style="flex:1;border-color:#D7C8F5;background:#F8F5FF"><h4>🟣 Restore Financial</h4><p>Owner + staff logins</p><span class="tag">96 clients</span><span class="tag">own messages</span><span class="tag">own docs</span></div>
-      <div class="box" style="flex:1;border-color:#F3D9AE;background:#FFFAF1"><h4>🟠 BlueSky Credit</h4><p>Owner + staff logins</p><span class="tag">211 clients</span><span class="tag">own messages</span><span class="tag">own docs</span></div>
+      <div class="box" style="flex:1;border-color:#B9CDF2;background:#F4F8FF"><h4>🔵 Apex Credit</h4><p>Credit repair company</p><span class="tag">Credit</span><span class="tag">Funding</span><span class="tag">own clients only</span></div>
+      <div class="box" style="flex:1;border-color:#D7C8F5;background:#F8F5FF"><h4>🟣 Summit Tax &amp; Acct.</h4><p>Accounting firm</p><span class="tag">Credit</span><span class="tag">Funding</span><span class="tag">own clients only</span></div>
+      <div class="box" style="flex:1;border-color:#F3D9AE;background:#FFFAF1"><h4>🟠 Keystone Insurance</h4><p>Insurance agency</p><span class="tag">Funding</span><span class="tag">own clients only</span></div>
     </div>
     <div style="display:flex;align-items:center;gap:10px;background:#FDECEB;color:#A3302A;border-radius:10px;padding:10px 14px;font-size:12.5px;font-weight:600">🔒 Hard wall between partners — enforced in the database (row-level security), not just hidden in the UI.</div>
-    <div class="arrow">▼ shares progress with</div>
+    <div class="arrow">▼ their clients</div>
     <div class="row" style="gap:14px">
-      <div class="box" style="flex:1"><h4>👤 Danielle (Apex's client)</h4><p>Optional login: sees only her own progress, updates, and uploads.</p></div>
-      <div class="box" style="flex:1"><h4>👤 Marcus (Apex's client)</h4><p>Cannot see Danielle, or any other partner's clients.</p></div>
+      <div class="box" style="flex:1;border-color:#B9CDF2"><h4>▲ Credit repair client</h4><p>Talks <b>only to the partner</b>. Our team never contacts them. This can't be switched on.</p></div>
+      <div class="box" style="flex:1;border-color:#D7C8F5"><h4>$ Business funding client</h4><p>Our team can talk to them <b>under the partner's name</b>, if the partner allows it. The partner sees every message.</p></div>
     </div>
     <div class="row" style="gap:10px;margin-top:4px">
       <span class="tag" style="background:#E8F7E3;color:var(--brand)">✓ Email + SMS + in-app notifications</span>
@@ -415,7 +432,7 @@ tr:last-child td{border-bottom:0}
   <aside class="side" style="background:#2A1B3D">
     <div class="logo"><i style="background:linear-gradient(135deg,#7A4FD8,#C3A8FF);color:#fff">S</i><div>Summit Tax &amp; Accounting<small style="color:#B7A6D1">Powered by Fulfillment HQ</small></div></div>
     <div class="sideh" style="color:#9583B3;padding-top:4px">Services</div>
-    <div class="nav"><span class="ic">◔</span>Credit Repair<b style="background:#C3A8FF">12</b></div>
+    <div class="nav"><span class="ic">▲</span>Credit Repair<b style="background:#C3A8FF">12</b></div>
     <div class="nav on" style="background:rgba(195,168,255,.16)"><span class="ic">$</span>Business Funding<b style="background:#C3A8FF">31</b></div>
     <div class="sideh" style="color:#9583B3">Workspace</div>
     <div class="nav"><span class="ic">▦</span>Dashboard</div>
@@ -479,7 +496,7 @@ tr:last-child td{border-bottom:0}
   <aside class="side">
     <div class="logo"><i>✓</i><div>Fulfillment HQ<small>Internal team workspace</small></div></div>
     <div class="sideh" style="padding-top:4px">Services</div>
-    <div class="nav"><span class="ic">◔</span>Credit Repair<b>612</b></div>
+    <div class="nav"><span class="ic">▲</span>Credit Repair<b>612</b></div>
     <div class="nav on"><span class="ic">$</span>Business Funding<b>87</b></div>
     <div class="sideh">Workspace</div>
     <div class="nav"><span class="ic">▦</span>Command Center</div>
