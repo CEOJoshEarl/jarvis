@@ -5,6 +5,7 @@ import type { MemberId, Tier } from '../engine/types';
 import { memberOf, useApp } from '../store';
 import { Avatar, Avatars, Logo, toast } from '../ui';
 import { sounds } from '../fx';
+import { FamilyMembers, ProfileSheet } from './Profile';
 
 const TIER_PERKS: Record<Tier, string[]> = {
   500: ['Curfew 12 AM', 'Buys and cooks his own food', 'Does his own laundry'],
@@ -77,14 +78,18 @@ function RotationCard() {
 export function More() {
   const app = useApp();
   const me = memberOf(app.family, app.me!);
+  const [editMe, setEditMe] = useState(false);
   return (
     <div className="page">
       <Logo family={app.family.name} />
       <div className="card row">
-        <Avatar m={me} size="lg" />
+        <button onClick={() => setEditMe(true)} aria-label="Edit your profile" style={{ borderRadius: '50%' }}><Avatar m={me} size="lg" /></button>
         <div className="grow"><h2 className="h2">{me?.name}</h2><p className="sub">{me?.role === 'admin' ? 'Parent · approves proof' : 'Family member'}</p></div>
+        <button className="btn btn-ghost sm" onClick={() => setEditMe(true)}>Edit</button>
         <button className="btn btn-ghost sm" onClick={() => app.setMe(null)}>Switch</button>
       </div>
+      {editMe && me && <ProfileSheet m={me} onClose={() => setEditMe(false)} />}
+      {app.isAdmin && <FamilyMembers />}
       {app.isAdmin && <TierCard />}
       {app.isAdmin && <RotationCard />}
       <section className="card stack">

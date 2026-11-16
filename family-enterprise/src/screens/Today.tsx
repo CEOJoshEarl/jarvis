@@ -4,6 +4,7 @@ import { isDone, needsAction } from '../engine/status';
 import { memberOf, useApp, type Task } from '../store';
 import { Avatars, dueLabel, Ring, StatusPill } from '../ui';
 import { TaskSheet } from './TaskSheet';
+import { ProfileSheet } from './Profile';
 
 function countdown(now: string, due: string): string {
   const m = minutesBetween(now, due);
@@ -39,6 +40,8 @@ export function Today() {
   const app = useApp();
   const { me, now, today, family } = app;
   const [open, setOpen] = useState<Task | null>(null);
+  const [profile, setProfile] = useState(false);
+  const meM = memberOf(family, me!);
   const tasks = app.visible(today, me!);
   const todays = tasks.filter(t => t.dueDate === today);
   const week = tasks.filter(t => t.dueDate !== today && (t.cadence === 'weekly' || t.cadence === 'biweekly'));
@@ -60,6 +63,13 @@ export function Today() {
         <Ring done={doneCount} total={todays.length} />
       </div>
 
+      {meM && !meM.photo && (
+        <button className="banner" style={{ textAlign: 'left', borderColor: 'var(--ember)' }} onClick={() => setProfile(true)}>
+          <span className="grow">Add your picture so the family sees you on the leaderboard and the week board.</span>
+          <span className="pill p-em">Add</span>
+        </button>
+      )}
+      {profile && meM && <ProfileSheet m={meM} onClose={() => setProfile(false)} />}
       {next ? (
         <button className="card hero stack" style={{ textAlign: 'left', gap: 6 }} onClick={() => setOpen(next)}>
           <div className="row between"><span className="eyebrow" style={{ color: 'var(--ember)' }}>Next up</span><span className="pill p-warn">{countdown(now, next.dueAt)}</span></div>

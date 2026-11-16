@@ -118,12 +118,12 @@ export const EARL_CATALOG: ChoreTemplate[] = [
   },
   {
     id: 'kitchen-towels', title: 'Swap kitchen towels and sponges', area: 'Kitchen', checklist: ['Fresh towels', 'New sponges'],
-    proof: 'photo', schedule: { kind: 'weekly', due: 0 }, owner: { kind: 'unassigned' }, due: '21:00',
+    proof: 'photo', schedule: { kind: 'weekly', due: 0 }, owner: fixed('vanilla'), due: '21:00',
   },
   {
     id: 'kitchen-monthly', title: 'Kitchen: monthly', area: 'Kitchen',
     checklist: ['Baseboards', 'Organize cabinets', 'Clean the oven', 'Clean the dishwasher and disposal'],
-    proof: 'photo', schedule: { kind: 'monthly', dueDay: 21 }, owner: { kind: 'unassigned' }, due: '21:00',
+    proof: 'photo', schedule: { kind: 'monthly', dueDay: 21 }, owner: fixed('vanilla'), due: '21:00',
   },
 
   // ---------------- Uso ----------------
@@ -235,6 +235,12 @@ export const EARL_CATALOG: ChoreTemplate[] = [
   // ---------------- Weekly rotation (Andrew, Max, Angela) ----------------
   ...bathroom('guest-bath', 'Guest bathroom', { kind: 'rotation', group: 'kids3', slot: 0 }).filter(t => !t.id.endsWith('-daily')),
   {
+    id: 'front-reset', title: 'Front of the house reset', area: 'Foyer, living and dining room',
+    checklist: ['Foyer: shoes away, floor clear', 'Living room: clutter picked up, pillows and blankets straight', 'Dining room: table cleared and wiped, chairs pushed in'],
+    proof: 'photo', schedule: { kind: 'daily', days: SUN_FRI }, owner: { kind: 'rotation', group: 'kids3', slot: 1 },
+    due: '21:00', dueOn: { 2: '22:00' }, note: 'Whoever has the foyer this week does the nightly reset. Everyone still picks up their own things.',
+  },
+  {
     id: 'foyer-weekly', title: 'Foyer, stairs and hallways: weekly', area: 'Foyer, stairs and hallways',
     checklist: ['Sweep or vacuum', 'Dust', 'Wipe tables', 'Shoes away', 'Coat closet straight'],
     proof: 'photo', schedule: { kind: 'weekly', due: 5 }, owner: { kind: 'rotation', group: 'kids3', slot: 1 }, due: '21:00',
@@ -263,12 +269,12 @@ export const EARL_CATALOG: ChoreTemplate[] = [
   {
     id: 'living-weekly', title: 'Living and dining room: weekly', area: 'Living and dining room',
     checklist: ['Sweep or vacuum', 'Dust', 'Wipe tables', 'Pillows and blankets straight'],
-    proof: 'photo', schedule: { kind: 'weekly', due: 5 }, owner: { kind: 'unassigned' }, due: '21:00',
+    proof: 'photo', schedule: { kind: 'weekly', due: 5 }, owner: fixed('angela'), due: '21:00',
   },
   {
     id: 'living-monthly', title: 'Living and dining room: monthly', area: 'Living and dining room',
     checklist: ['Baseboards', 'Under cushions', 'Doors and switches', 'Ceiling fans', 'Windows and blinds'],
-    proof: 'photo', schedule: { kind: 'monthly', dueDay: 21 }, owner: { kind: 'unassigned' }, due: '21:00',
+    proof: 'photo', schedule: { kind: 'monthly', dueDay: 21 }, owner: fixed('angela'), due: '21:00',
   },
 
   // ---------------- Andrew: outside and the house ----------------
@@ -351,7 +357,8 @@ export const EARL_ASSUMPTIONS: string[] = [
   'Saturday has no kitchen rotation: whoever cooks or eats cleans up after themselves.',
   'Porch, walkways and spider webs: once a month. Pressure washing and light bulbs are assigned by hand when needed.',
   'Gutters: May and November. Outside windows: April and October. HVAC filters: every 3 months. Smoke detectors: March and November.',
-  'Living and dining room (weekly and monthly), kitchen monthly deep clean, and swapping kitchen towels and sponges have no owner in the plan yet.',
+  'Living and dining room weekly and monthly: Angela. Kitchen monthly deep clean and swapping towels and sponges: Vanilla.',
+  'Nightly front of the house reset (foyer, living and dining room), Sunday to Friday by 9 PM: whoever has the foyer in the rotation that week.',
   'Gutters stay with Andrew at every tier. At $1,000, outside windows and the storage room come off his list with no one named to take them.',
   'Each person signs off their own room photo; Josh and Vanilla approve each other\'s.',
 ];

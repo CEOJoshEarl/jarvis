@@ -10,6 +10,8 @@ export interface Member {
   short: string; // two-letter avatar
   color: string;
   role: 'admin' | 'member' | 'pet';
+  /** Profile picture (data URL in demo mode, storage path once the database is connected). */
+  photo?: string;
 }
 
 /** 0 = Sunday ... 6 = Saturday. The family week starts on Sunday. */

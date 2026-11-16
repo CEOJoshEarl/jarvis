@@ -26,12 +26,13 @@ export function Logo({ family }: { family: string }) {
   );
 }
 
-export function Avatar({ m, size }: { m?: Member; size?: 'sm' | 'lg' }) {
+export function Avatar({ m, size }: { m?: Member; size?: 'sm' | 'lg' | 'xl' }) {
   if (!m) return null;
+  if (m.photo) return <img className={`av ${size ?? ''}`} src={m.photo} alt={m.name} title={m.name} style={{ boxShadow: `0 0 0 2px ${m.color}` }} />;
   return <span className={`av ${size ?? ''}`} style={{ background: m.color }} title={m.name}>{m.short}</span>;
 }
 
-export function Avatars({ ms, size }: { ms: (Member | undefined)[]; size?: 'sm' | 'lg' }) {
+export function Avatars({ ms, size }: { ms: (Member | undefined)[]; size?: 'sm' | 'lg' | 'xl' }) {
   return <span className="avs">{ms.map((m, i) => <Avatar key={m?.id ?? i} m={m} size={size} />)}</span>;
 }
 

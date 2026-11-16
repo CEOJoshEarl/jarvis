@@ -20,10 +20,11 @@ interface Persisted {
   rotation: FamilyConfig['rotation'];
   owners: Record<string, MemberId[]>; // owner set by an admin for templates the plan left open
   previewDate: string | null;
+  profiles: Record<MemberId, { name?: string; photo?: string }>;
 }
 
 function load(): Persisted {
-  const base: Persisted = { me: null, states: {}, tiers: EARL_FAMILY.tiers, rotation: EARL_FAMILY.rotation, owners: {}, previewDate: null };
+  const base: Persisted = { me: null, states: {}, tiers: EARL_FAMILY.tiers, rotation: EARL_FAMILY.rotation, owners: {}, previewDate: null, profiles: {} };
   try {
     const raw = localStorage.getItem(KEY);
     return raw ? { ...base, ...JSON.parse(raw) } : base;
@@ -51,6 +52,8 @@ interface Ctx {
   setTier(tier: Tier, from: string): void;
   shuffleRotation(): void;
   setOwner(templateId: string, members: MemberId[]): void;
+  canEditProfile(id: MemberId): boolean;
+  updateProfile(id: MemberId, patch: { name?: string; photo?: string | null }): void;
   previewDate: string | null;
   setPreviewDate(d: string | null): void;
   resetDemo(): void;
@@ -72,7 +75,16 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const now = p.previewDate ? `${p.previewDate}T${clock.slice(11)}` : clock;
   const today = now.slice(0, 10);
 
-  const family = useMemo<FamilyConfig>(() => ({ ...EARL_FAMILY, tiers: p.tiers, rotation: p.rotation }), [p.tiers, p.rotation]);
+  const family = useMemo<FamilyConfig>(() => ({
+    ...EARL_FAMILY, tiers: p.tiers, rotation: p.rotation,
+    members: EARL_FAMILY.members.map(m => {
+      const pr = p.profiles[m.id];
+      if (!pr) return m;
+      const name = pr.name?.trim() || m.name;
+      const short = name.split(/\s+/).length > 1 ? name.split(/\s+/).map(w => w[0]).join('').slice(0, 2).toUpperCase() : name.slice(0, 2).toUpperCase();
+      return { ...m, name, short: pr.name ? short : m.short, photo: pr.photo ?? m.photo };
+    }),
+  }), [p.tiers, p.rotation, p.profiles]);
   const catalog = useMemo(() => EARL_CATALOG.map(t => p.owners[t.id] ? { ...t, owner: { kind: 'fixed' as const, members: p.owners[t.id] } } : t), [p.owners]);
 
   // Delete proof files older than the retention window.
@@ -135,10 +147,19 @@ export function AppProvider({ children }: { children: ReactNode }) {
         return { ...v, rotation: { ...v.rotation, groups: { ...v.rotation.groups, kids3: g } } };
       });
     },
+    canEditProfile: id => id === p.me || family.members.find(m => m.id === p.me)?.role === 'admin',
+    updateProfile(id, patch) {
+      setP(v => {
+        const cur = { ...v.profiles[id] };
+        if (patch.name !== undefined) cur.name = patch.name;
+        if (patch.photo !== undefined) cur.photo = patch.photo ?? undefined;
+        return { ...v, profiles: { ...v.profiles, [id]: cur } };
+      });
+    },
     setOwner: (templateId, members) => setP(v => ({ ...v, owners: { ...v.owners, [templateId]: members } })),
     previewDate: p.previewDate,
     setPreviewDate: d => setP(v => ({ ...v, previewDate: d })),
-    resetDemo: () => setP(v => ({ ...load(), states: {}, me: v.me, previewDate: null, tiers: EARL_FAMILY.tiers, rotation: EARL_FAMILY.rotation, owners: {} })),
+    resetDemo: () => setP(v => ({ ...load(), states: {}, me: v.me, profiles: v.profiles, previewDate: null, tiers: EARL_FAMILY.tiers, rotation: EARL_FAMILY.rotation, owners: {} })),
   };
 
   return <C.Provider value={value}>{children}</C.Provider>;

@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { EARL_CATALOG, EARL_FAMILY } from './earl';
+import { addDays } from './dates';
 import { dueOn, generate, rotationWeek, tierDiff, visibleOn } from './schedule';
 import { resolve } from './status';
 import type { FamilyConfig, TaskInstance } from './types';
@@ -41,6 +42,21 @@ describe('weekly rotation', () => {
     expect(rotationWeek(EARL_FAMILY, '2026-11-29')).toBe(0);
     expect(owner('2026-12-04', 'boys-bath-weekly')).toEqual(['andrew']);
     expect(owner('2026-12-11', 'boys-bath-weekly')).toEqual(['max']);
+  });
+});
+
+describe('front of the house', () => {
+  it('nightly reset goes to whoever has the foyer that week', () => {
+    for (const d of ['2026-11-30', '2026-12-07', '2026-12-14']) {
+      const friday = addDays(d, 4);
+      expect(owner(d, 'front-reset')).toEqual(owner(friday, 'foyer-weekly'));
+    }
+    expect(owner('2026-12-05', 'front-reset')).toBeUndefined(); // Saturday
+  });
+  it('living and dining room belong to Angela, kitchen monthly to Vanilla', () => {
+    expect(owner('2026-12-04', 'living-weekly')).toEqual(['angela']);
+    expect(owner('2026-12-21', 'kitchen-monthly')).toEqual(['vanilla']);
+    expect(owner('2026-12-06', 'kitchen-towels')).toEqual(['vanilla']);
   });
 });
 
