@@ -149,7 +149,7 @@ export const EARL_CATALOG: ChoreTemplate[] = [
     proof: 'photo', schedule: { kind: 'daily' }, owner: fixed('angela'), due: '20:00', dueOn: { 6: '22:00' },
   },
   {
-    id: 'uso-yard', title: 'Pick up the yard', area: 'Uso', checklist: ['Yard poop picked up'],
+    id: 'uso-yard', title: "Pick up Uso's poop in the yard", area: 'Uso', checklist: ['Whole yard checked', 'Bagged and in the trash'],
     proof: 'photo', schedule: { kind: 'daily', days: [1, 4] }, owner: fixed('max'), due: '18:00',
   },
   {
@@ -300,7 +300,7 @@ export const EARL_CATALOG: ChoreTemplate[] = [
   },
   {
     id: 'gutters', title: 'Clean the gutters', area: 'Outside', checklist: ['Gutters cleared', 'Downspouts flowing'],
-    proof: 'either', schedule: { kind: 'monthly', dueDay: 21, months: [5, 11] }, owner: fixed('andrew'), byTier: { 1000: null }, due: '18:00',
+    proof: 'either', schedule: { kind: 'monthly', dueDay: 21, months: [5, 11] }, owner: fixed('andrew'), due: '18:00', note: 'Andrew at every tier.',
   },
   {
     id: 'outside-windows', title: 'Outside windows', area: 'Outside', checklist: ['All outside windows washed'],
@@ -347,11 +347,11 @@ export const EARL_CATALOG: ChoreTemplate[] = [
 export const EARL_ASSUMPTIONS: string[] = [
   "Due times: morning walk by 10 AM, after-school walk by 4:30, dishes and sweeping by 9 PM (Tuesday 10 PM, after church), weekly jobs Friday 9 PM, monthly jobs the 21st.",
   "Saturday: beds and Uso's morning care due by 8 AM. Max does Uso's last walk when you get home (due 10 PM).",
-  'Yard poop: Monday and Thursday by 6 PM.',
+  "Picking up Uso's poop in the yard: Monday and Thursday by 6 PM.",
   'Saturday has no kitchen rotation: whoever cooks or eats cleans up after themselves.',
   'Porch, walkways and spider webs: once a month. Pressure washing and light bulbs are assigned by hand when needed.',
   'Gutters: May and November. Outside windows: April and October. HVAC filters: every 3 months. Smoke detectors: March and November.',
   'Living and dining room (weekly and monthly), kitchen monthly deep clean, and swapping kitchen towels and sponges have no owner in the plan yet.',
-  'At $1,000, gutters, outside windows and the storage room come off the list with no one named to take them.',
+  'Gutters stay with Andrew at every tier. At $1,000, outside windows and the storage room come off his list with no one named to take them.',
   'Each person signs off their own room photo; Josh and Vanilla approve each other\'s.',
 ];

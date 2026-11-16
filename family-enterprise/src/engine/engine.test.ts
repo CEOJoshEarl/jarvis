@@ -56,7 +56,8 @@ describe("Andrew's tiers", () => {
     expect(owner('2026-12-04', 'kitchen-mop', at(1000))).toEqual(['vanilla']);
     expect(owner('2026-12-02', 'trash-out', at(1000))).toEqual(['max']);
     expect(owner('2026-12-02', 'uso-morning', at(1000))).toEqual(['josh']);
-    expect(owner('2026-11-21', 'gutters', at(1000))).toBeUndefined();
+    expect(owner('2026-11-21', 'gutters', at(1000))).toEqual(['andrew']);
+    expect(owner('2026-12-21', 'storage-room', at(1000))).toBeUndefined();
   });
   it('diff lists what changes', () => {
     const d = tierDiff(EARL_CATALOG, EARL_FAMILY, 500, 700, '2026-12-01').map(c => c.templateId).sort();
