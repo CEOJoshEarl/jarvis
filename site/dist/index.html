@@ -1,0 +1,995 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<style>:root{padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+</head>
+<body>
+<title>CEO Syndicate Fulfillment</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="White-label back-end fulfillment for credit repair and business funding. We run the disputes, mail, lender submissions and follow-up so you can sell.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@112..125,600..900&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: dark operations-room ground; content on a 1180px column; signature = the live "ops ledger" of real fulfillment events. */
+:root{
+  --ground:#010B06; --ground-2:#04150C; --panel:#07200F; --panel-2:#0B2A15; --line:#143A20;
+  --ink:#F2FFE8; --ink-2:#B6D9A6; --mute:#6F9363;
+  --green:#4CBB17; --lime:#9BF442; --gold:#FFB43A; --on-lime:#04150C; --red:#FF6B5B;
+  --display:"Archivo",ui-sans-serif,system-ui,sans-serif;
+  --body:"Manrope",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  --r:14px; --max:1180px;
+  color-scheme:dark;
+}
+@media (prefers-color-scheme: light){:root:not([data-theme="dark"]){
+  --ground:#F6FBF1; --ground-2:#EDF6E5; --panel:#FFFFFF; --panel-2:#F1F8EA; --line:#D6E8CB;
+  --ink:#06170C; --ink-2:#2F4A33; --mute:#5E7A58;
+  --green:#2E8F10; --lime:#4CBB17; --gold:#B76E00; --on-lime:#FFFFFF; --red:#C8372B;
+  color-scheme:light }}
+:root[data-theme="light"]{
+  --ground:#F6FBF1; --ground-2:#EDF6E5; --panel:#FFFFFF; --panel-2:#F1F8EA; --line:#D6E8CB;
+  --ink:#06170C; --ink-2:#2F4A33; --mute:#5E7A58;
+  --green:#2E8F10; --lime:#4CBB17; --gold:#B76E00; --on-lime:#FFFFFF; --red:#C8372B;
+  color-scheme:light }
+
+*{box-sizing:border-box}
+body{background:var(--ground);color:var(--ink);font:400 17px/1.6 var(--body);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--ground)}
+a{color:inherit}
+h1,h2,h3{font-family:var(--display);font-stretch:118%;letter-spacing:-.02em;line-height:1.02;margin:0;text-wrap:balance}
+h1{font-size:clamp(40px,6.6vw,84px);font-weight:900}
+h2{font-size:clamp(30px,4.2vw,52px);font-weight:850}
+h3{font-size:21px;font-weight:800;font-stretch:112%;letter-spacing:-.01em;line-height:1.15}
+p{margin:0}
+.wrap{max-width:var(--max);margin:0 auto;padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px))}
+.band{padding-block:clamp(64px,9vw,112px)}
+.band.alt{background:var(--ground-2);border-block:1px solid var(--line)}
+.eyebrow{font:600 12px/1 var(--mono);letter-spacing:.18em;text-transform:uppercase;color:var(--gold);display:inline-flex;gap:10px;align-items:center}
+.eyebrow::before{content:"";width:18px;height:2px;background:currentColor}
+.lede{font-size:clamp(18px,1.6vw,21px);color:var(--ink-2);max-width:60ch}
+.head{display:grid;gap:18px;max-width:780px;margin-bottom:48px}
+.hl{color:var(--lime)}
+.gold{color:var(--gold)}
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;font:800 16px/1 var(--body);text-decoration:none;border-radius:999px;padding:18px 26px;border:0;cursor:pointer;transition:transform .15s ease,box-shadow .15s ease,background .15s}
+.btn-primary{background:var(--lime);color:var(--on-lime);box-shadow:0 10px 30px -10px color-mix(in srgb,var(--lime) 70%,transparent)}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 16px 40px -12px color-mix(in srgb,var(--lime) 80%,transparent)}
+.btn-ghost{background:transparent;color:var(--ink);border:1.5px solid var(--line)}
+.btn-ghost:hover{border-color:var(--lime)}
+.btn:focus-visible,a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+.micro{font:500 13.5px/1.5 var(--body);color:var(--mute)}
+.ticks{display:flex;flex-wrap:wrap;gap:8px 22px;font-size:14.5px;color:var(--ink-2);font-weight:600}
+.ticks span::before{content:"✓";color:var(--lime);margin-right:8px;font-weight:800}
+
+/* nav */
+.nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:color-mix(in srgb,var(--ground) 86%,transparent);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.nav .wrap{display:flex;align-items:center;gap:28px;height:72px}
+.brand{display:flex;align-items:center;gap:11px;text-decoration:none;flex-shrink:0}
+.mark{width:34px;height:34px;border-radius:9px;background:linear-gradient(140deg,var(--green),var(--lime));display:grid;place-items:center}
+.mark svg{width:20px;height:20px}
+.brand b{font:900 17px/1 var(--display);font-stretch:120%;letter-spacing:-.01em;display:block}
+.brand small{font:600 10px/1 var(--mono);letter-spacing:.2em;color:var(--mute);text-transform:uppercase}
+.links{display:flex;gap:4px;margin-left:auto}
+.links a{text-decoration:none;font-weight:700;font-size:15px;color:var(--ink-2);padding:9px 14px;border-radius:999px}
+.links a:hover{color:var(--ink)}
+.links a[aria-current="page"]{color:var(--ink);background:var(--panel-2)}
+.nav .btn{padding:12px 18px;font-size:14.5px}
+@media (max-width:860px){.links{display:none}.nav .btn{margin-left:auto}}
+
+/* hero */
+.hero{padding-block:clamp(48px,7vw,96px) clamp(56px,8vw,100px);position:relative;overflow:hidden}
+.hero::after{content:"";position:absolute;inset:-30% -10% auto 40%;height:120%;background:radial-gradient(closest-side,color-mix(in srgb,var(--green) 22%,transparent),transparent);pointer-events:none;z-index:0}
+.hero .wrap{position:relative;z-index:1;display:grid;grid-template-columns:1.12fr .88fr;gap:56px;align-items:center}
+.hero-copy{display:grid;gap:24px;min-width:0}
+.hero-cta{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+@media (max-width:980px){.hero .wrap{grid-template-columns:1fr}}
+
+/* ops ledger */
+.ledger{background:var(--panel);border:1px solid var(--line);border-radius:18px;box-shadow:0 30px 80px -40px #000;overflow:hidden;min-width:0}
+.ledger-top{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid var(--line);font:600 11.5px/1 var(--mono);letter-spacing:.14em;color:var(--mute);text-transform:uppercase}
+.live{display:inline-flex;align-items:center;gap:8px;color:var(--lime)}
+.live i{width:8px;height:8px;border-radius:50%;background:var(--lime);box-shadow:0 0 0 0 var(--lime);animation:pulse 1.8s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--lime) 60%,transparent)}100%{box-shadow:0 0 0 10px transparent}}
+.rows{list-style:none;margin:0;padding:6px 0}
+.rows li{display:grid;grid-template-columns:62px 1fr auto;gap:12px;align-items:center;padding:11px 18px;border-bottom:1px dashed var(--line);font-size:14.5px}
+.rows li:last-child{border-bottom:0}
+.rows time{font:500 12.5px/1 var(--mono);color:var(--mute)}
+.rows b{display:block;font-weight:700;line-height:1.3}
+.rows small{color:var(--mute);font-size:12.5px}
+.tag{font:700 10.5px/1 var(--mono);letter-spacing:.08em;padding:5px 8px;border-radius:6px;text-transform:uppercase;white-space:nowrap}
+.t-cr{background:color-mix(in srgb,var(--lime) 16%,transparent);color:var(--lime)}
+.t-fd{background:color-mix(in srgb,var(--gold) 18%,transparent);color:var(--gold)}
+.rows li.new{animation:slide .5s ease}
+@keyframes slide{from{background:color-mix(in srgb,var(--lime) 10%,transparent)}to{background:transparent}}
+.ledger-foot{display:flex;justify-content:space-between;padding:12px 18px;border-top:1px solid var(--line);font:600 11.5px/1 var(--mono);color:var(--mute);letter-spacing:.06em}
+
+/* doors (home) */
+.doors{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+@media (max-width:860px){.doors{grid-template-columns:1fr}}
+.door{position:relative;display:grid;gap:18px;align-content:start;padding:34px;border-radius:22px;background:var(--panel);border:1.5px solid var(--line);text-decoration:none;transition:border-color .2s,transform .2s;overflow:hidden;min-width:0}
+.door:hover{border-color:var(--lime);transform:translateY(-3px)}
+.door.fund:hover{border-color:var(--gold)}
+.door .who{font:600 12px/1 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--mute)}
+.door h3{font-size:clamp(26px,2.6vw,34px);font-stretch:120%}
+.door p{color:var(--ink-2)}
+.door ul{list-style:none;padding:0;margin:0;display:grid;gap:9px;font-weight:600;font-size:15.5px}
+.door li::before{content:"→";color:var(--lime);margin-right:10px}
+.door.fund li::before{color:var(--gold)}
+.door .go{display:flex;align-items:center;justify-content:space-between;padding-top:18px;border-top:1px solid var(--line);font-weight:800}
+.door .go span:last-child{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:var(--lime);color:var(--on-lime);font-size:20px;transition:transform .2s}
+.door.fund .go span:last-child{background:var(--gold);color:#1C1200}
+.door:hover .go span:last-child{transform:translateX(4px)}
+.door .price{font:800 15px/1.3 var(--body)}
+.bridge{margin-top:20px;display:flex;gap:18px;align-items:center;flex-wrap:wrap;padding:22px 26px;border-radius:18px;border:1.5px dashed var(--line);background:var(--ground-2)}
+.bridge p{flex:1;min-width:260px;color:var(--ink-2)}
+.bridge strong{color:var(--ink)}
+
+/* pain / stat strip */
+.split{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+@media (max-width:900px){.split{grid-template-columns:1fr}}
+.pain{padding:28px;border-radius:var(--r);background:var(--panel);border:1px solid var(--line);display:grid;gap:12px;align-content:start}
+.pain .k{font:600 12px/1 var(--mono);color:var(--red);letter-spacing:.12em;text-transform:uppercase}
+.pain p{color:var(--ink-2);font-size:16px}
+.quiet{color:var(--mute)}
+
+/* features */
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:18px;overflow:hidden}
+@media (max-width:900px){.grid3{grid-template-columns:1fr}}
+.feat{background:var(--panel);padding:30px;display:grid;gap:12px;align-content:start}
+.feat p{color:var(--ink-2);font-size:16px}
+.ico{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;background:color-mix(in srgb,var(--lime) 14%,transparent);color:var(--lime)}
+.ico svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.fundpage .ico{background:color-mix(in srgb,var(--gold) 15%,transparent);color:var(--gold)}
+
+/* steps */
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;counter-reset:s}
+@media (max-width:980px){.steps{grid-template-columns:1fr 1fr}}
+@media (max-width:560px){.steps{grid-template-columns:1fr}}
+.step{padding:26px;border-radius:var(--r);border:1px solid var(--line);background:var(--panel);display:grid;gap:10px;align-content:start}
+.step .n{font:700 13px/1 var(--mono);color:var(--lime);letter-spacing:.1em}
+.fundpage .step .n{color:var(--gold)}
+.step p{color:var(--ink-2);font-size:15.5px}
+.step .when{font:600 12px/1 var(--mono);color:var(--mute);letter-spacing:.06em;text-transform:uppercase}
+
+/* cycle dial */
+.cycle{display:grid;grid-template-columns:340px 1fr;gap:56px;align-items:center}
+@media (max-width:900px){.cycle{grid-template-columns:1fr}}
+.dial{width:100%;max-width:340px;aspect-ratio:1;margin:0 auto}
+.dial text{font-family:var(--mono);fill:var(--mute);font-size:10px}
+.dial .big{font-family:var(--display);font-weight:900;font-size:58px;fill:var(--ink)}
+.dial .sm{font-family:var(--mono);font-size:11px;fill:var(--ink-2);letter-spacing:.12em}
+.timeline{display:grid;gap:0;border-left:2px solid var(--line);margin-left:6px}
+.tl{position:relative;padding:0 0 22px 26px}
+.tl::before{content:"";position:absolute;left:-8px;top:4px;width:14px;height:14px;border-radius:50%;background:var(--ground);border:2px solid var(--lime)}
+.tl .d{font:700 12px/1 var(--mono);color:var(--lime);letter-spacing:.1em}
+.tl b{display:block;margin:6px 0 2px;font-size:17px}
+.tl p{color:var(--ink-2);font-size:15px}
+
+/* portal */
+.portal{display:grid;grid-template-columns:.9fr 1.1fr;gap:48px;align-items:center}
+@media (max-width:980px){.portal{grid-template-columns:1fr}}
+.shot{border-radius:16px;border:1px solid var(--line);overflow:hidden;box-shadow:0 40px 90px -40px #000;background:var(--panel);max-width:100%}
+.shot img{display:block;width:100%;height:auto}
+.checks{list-style:none;padding:0;margin:0;display:grid;gap:14px}
+.checks li{display:grid;grid-template-columns:28px 1fr;gap:12px;color:var(--ink-2)}
+.checks li::before{content:"✓";width:26px;height:26px;border-radius:8px;display:grid;place-items:center;background:color-mix(in srgb,var(--lime) 16%,transparent);color:var(--lime);font-weight:800;font-size:14px}
+.fundpage .checks li::before{background:color-mix(in srgb,var(--gold) 16%,transparent);color:var(--gold)}
+.checks b{color:var(--ink)}
+
+/* calculator */
+.calc{display:grid;grid-template-columns:1fr 1fr;gap:0;border-radius:20px;overflow:hidden;border:1px solid var(--line)}
+@media (max-width:900px){.calc{grid-template-columns:1fr}}
+.calc-in{padding:34px;background:var(--panel);display:grid;gap:26px;align-content:start}
+.calc-out{padding:34px;background:var(--panel-2);display:grid;gap:18px;align-content:start}
+.field{display:grid;gap:10px}
+.field label{font-weight:700;display:flex;justify-content:space-between;gap:12px}
+.field output{font:700 15px/1 var(--mono);color:var(--lime)}
+input[type=range]{width:100%;accent-color:var(--lime)}
+.res{display:flex;justify-content:space-between;align-items:baseline;gap:16px;padding-bottom:14px;border-bottom:1px solid var(--line)}
+.res span{color:var(--ink-2);font-size:15px}
+.res b{font:800 26px/1 var(--display);font-stretch:115%;font-variant-numeric:tabular-nums;white-space:nowrap}
+.res.hero-num b{font-size:44px;color:var(--lime)}
+
+/* pricing */
+.tiers{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;align-items:stretch}
+@media (max-width:1060px){.tiers{grid-template-columns:1fr 1fr}}
+@media (max-width:560px){.tiers{grid-template-columns:1fr}}
+.tier{position:relative;padding:28px 24px;border-radius:18px;background:var(--panel);border:1.5px solid var(--line);display:grid;gap:14px;align-content:start}
+.tier.pick{border-color:var(--lime);background:linear-gradient(180deg,color-mix(in srgb,var(--lime) 9%,var(--panel)),var(--panel))}
+.tier .badge{position:absolute;top:-12px;left:24px;background:var(--lime);color:var(--on-lime);font:800 11px/1 var(--mono);letter-spacing:.1em;padding:6px 10px;border-radius:999px}
+.tier .nm{font:800 14px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-2)}
+.tier .pr{font:900 54px/1 var(--display);font-stretch:118%;letter-spacing:-.03em}
+.tier .pr small{font:600 15px/1 var(--body);color:var(--mute);letter-spacing:0;margin-left:4px}
+.tier .vol{font:600 13px/1.4 var(--mono);color:var(--gold)}
+.tier p{color:var(--ink-2);font-size:15px}
+.tier .btn{width:100%;padding:15px}
+.incl{margin-top:22px;padding:28px;border-radius:18px;border:1px solid var(--line);background:var(--ground-2);display:grid;grid-template-columns:repeat(3,1fr);gap:12px 28px}
+@media (max-width:900px){.incl{grid-template-columns:1fr}}
+.incl h3{grid-column:1/-1;font-size:17px;margin-bottom:4px}
+.incl span{font-size:15px;color:var(--ink-2);display:flex;gap:10px}
+.incl span::before{content:"✓";color:var(--lime);font-weight:800}
+.fine{margin-top:16px;font-size:13px;color:var(--mute);max-width:90ch}
+
+/* risk reversal */
+.promise{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+@media (max-width:900px){.promise{grid-template-columns:1fr 1fr}}
+@media (max-width:520px){.promise{grid-template-columns:1fr}}
+.promise div{padding:22px;border-radius:var(--r);border:1px solid var(--line);display:grid;gap:6px;align-content:start}
+.promise b{font:800 18px/1.2 var(--display);font-stretch:112%}
+.promise p{font-size:14.5px;color:var(--ink-2)}
+
+/* funding specifics */
+.chips{display:flex;flex-wrap:wrap;gap:10px}
+.chip{padding:10px 16px;border-radius:999px;border:1px solid var(--line);background:var(--panel);font-weight:700;font-size:15px}
+.stages{display:grid;grid-template-columns:repeat(8,1fr);gap:8px;margin-top:8px}
+@media (max-width:900px){.stages{grid-template-columns:repeat(4,1fr)}}
+@media (max-width:480px){.stages{grid-template-columns:repeat(2,1fr)}}
+.stage{padding:16px 14px;border-radius:12px;background:var(--panel);border:1px solid var(--line);display:grid;gap:8px;align-content:start}
+.stage i{font:700 11px/1 var(--mono);color:var(--gold);font-style:normal;letter-spacing:.1em}
+.stage b{font-size:14.5px;line-height:1.25}
+.stage small{font-size:12.5px;color:var(--mute);line-height:1.35}
+.products{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+@media (max-width:900px){.products{grid-template-columns:1fr 1fr}}
+@media (max-width:520px){.products{grid-template-columns:1fr}}
+.prod{padding:22px;border-radius:var(--r);background:var(--panel);border:1px solid var(--line);display:grid;gap:6px}
+.prod b{font-size:17px}
+.prod span{font:600 12.5px/1.4 var(--mono);color:var(--gold)}
+.prod p{font-size:14.5px;color:var(--ink-2)}
+.modes{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+@media (max-width:860px){.modes{grid-template-columns:1fr}}
+.mode{padding:30px;border-radius:18px;border:1.5px solid var(--line);background:var(--panel);display:grid;gap:12px;align-content:start}
+.mode.on{border-color:var(--gold)}
+.mode .k{font:700 12px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--gold)}
+.mode p{color:var(--ink-2)}
+.bubble{margin-top:6px;padding:14px 16px;border-radius:14px 14px 14px 4px;background:var(--panel-2);border:1px solid var(--line);font-size:14.5px}
+.bubble small{display:block;font:600 11.5px/1.4 var(--mono);color:var(--mute);margin-bottom:6px}
+.pay{display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center;padding:40px;border-radius:22px;background:var(--panel);border:1.5px solid var(--gold)}
+@media (max-width:900px){.pay{grid-template-columns:1fr;padding:28px}}
+.pay .big{font:900 clamp(40px,5vw,64px)/1 var(--display);font-stretch:120%;color:var(--gold);letter-spacing:-.03em}
+
+/* compliance */
+.law{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+@media (max-width:900px){.law{grid-template-columns:1fr 1fr}}
+@media (max-width:520px){.law{grid-template-columns:1fr}}
+.law div{padding:22px;border-radius:var(--r);background:var(--panel);border:1px solid var(--line);display:grid;gap:8px;align-content:start}
+.law b{font:700 12.5px/1 var(--mono);letter-spacing:.12em;color:var(--lime);text-transform:uppercase}
+.fundpage .law b{color:var(--gold)}
+.law p{font-size:14.5px;color:var(--ink-2)}
+
+/* faq */
+.faq{display:grid;gap:10px;max-width:880px}
+details{border:1px solid var(--line);border-radius:14px;background:var(--panel)}
+summary{cursor:pointer;list-style:none;padding:20px 22px;font-weight:800;font-size:17px;display:flex;justify-content:space-between;gap:16px}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";font:400 26px/1 var(--display);color:var(--lime);transition:transform .2s}
+details[open] summary::after{transform:rotate(45deg)}
+details p{padding:0 22px 20px;color:var(--ink-2);max-width:72ch}
+
+/* booking */
+.book{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start}
+@media (max-width:960px){.book{grid-template-columns:1fr}}
+.book-copy{display:grid;gap:20px}
+form.q{padding:32px;border-radius:22px;background:var(--panel);border:1.5px solid var(--line);display:grid;gap:20px}
+.prog{display:flex;gap:6px}
+.prog i{flex:1;height:5px;border-radius:5px;background:var(--line)}
+.prog i.on{background:var(--lime)}
+.qstep{display:grid;gap:16px}
+.qstep legend{font:800 21px/1.2 var(--display);font-stretch:112%;padding:0;margin-bottom:6px}
+fieldset{border:0;padding:0;margin:0;display:grid;gap:10px;min-width:0}
+.opt{display:flex;gap:12px;align-items:center;padding:15px 16px;border-radius:12px;border:1.5px solid var(--line);cursor:pointer;font-weight:700;background:var(--ground-2)}
+.opt:has(input:checked){border-color:var(--lime);background:color-mix(in srgb,var(--lime) 8%,var(--ground-2))}
+.opt input{accent-color:var(--lime);width:18px;height:18px}
+.opt small{display:block;font-weight:500;color:var(--mute);font-size:13px}
+.tf{display:grid;gap:7px}
+.tf label{font-weight:700;font-size:14.5px}
+.tf input,.tf select{font:500 16px/1.2 var(--body);padding:14px 15px;border-radius:12px;border:1.5px solid var(--line);background:var(--ground-2);color:var(--ink);width:100%}
+.tf input:focus{border-color:var(--lime);outline:none}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:520px){.row2{grid-template-columns:1fr}}
+.qnav{display:flex;gap:10px;justify-content:space-between;align-items:center}
+.err{color:var(--red);font-size:14px;font-weight:600;min-height:20px}
+.done{display:grid;gap:14px;text-align:left}
+.done .big{font:900 34px/1.05 var(--display);font-stretch:118%}
+
+/* final + footer */
+.final{text-align:left;display:grid;gap:22px;justify-items:start;padding:clamp(40px,6vw,72px);border-radius:28px;background:radial-gradient(120% 140% at 100% 0%,color-mix(in srgb,var(--green) 28%,var(--panel)),var(--panel));border:1px solid var(--line)}
+.final h2{max-width:18ch}
+footer{border-top:1px solid var(--line);padding-block:48px 40px;color:var(--mute);font-size:14px}
+.foot{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:28px}
+@media (max-width:860px){.foot{grid-template-columns:1fr 1fr}}
+.foot h4{margin:0 0 12px;font:700 12px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-2)}
+.foot a{display:block;text-decoration:none;padding:4px 0}
+.foot a:hover{color:var(--ink)}
+.legal{margin-top:36px;padding-top:22px;border-top:1px solid var(--line);font-size:12.5px;line-height:1.6;max-width:110ch}
+.refer{display:flex;gap:16px;align-items:center;justify-content:space-between;flex-wrap:wrap;padding:22px 26px;border-radius:16px;background:var(--panel-2);border:1px solid var(--line);margin-bottom:40px}
+.refer p{color:var(--ink-2)}
+.refer b{color:var(--ink)}
+
+/* views */
+.view[hidden]{display:none!important}
+.sticky-cta{position:fixed;left:0;right:0;bottom:0;z-index:40;padding:10px max(16px,env(safe-area-inset-right,0px)) calc(10px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));background:color-mix(in srgb,var(--ground) 92%,transparent);backdrop-filter:blur(12px);border-top:1px solid var(--line);display:none}
+.sticky-cta .btn{width:100%;padding:15px}
+@media (max-width:700px){.sticky-cta{display:block}footer{padding-bottom:110px}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+
+<nav class="nav" aria-label="Main">
+  <div class="wrap">
+    <a class="brand" href="#home" aria-label="CEO Syndicate Fulfillment home">
+      <span class="mark"><svg viewBox="0 0 24 24" fill="none" stroke="#04150C" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 17l5-5 4 4 7-8"/><path d="M15 8h5v5"/></svg></span>
+      <span><b>CEO Syndicate</b><small>Fulfillment</small></span>
+    </a>
+    <div class="links">
+      <a href="#home" data-nav="home">Home</a>
+      <a href="#credit-repair" data-nav="credit-repair">Credit Repair Fulfillment</a>
+      <a href="#business-funding" data-nav="business-funding">Business Funding Fulfillment</a>
+    </div>
+    <a class="btn btn-primary" href="#book" data-book>Book a partner call</a>
+  </div>
+</nav>
+
+<main>
+<!-- ===================================================== HOME ===================================================== -->
+<div class="view" id="v-home" data-view="home">
+  <section class="hero">
+    <div class="wrap">
+      <div class="hero-copy">
+        <span class="eyebrow">White-label back office · B2B only</span>
+        <h1>You close the deal. <span class="hl">We do the work.</span></h1>
+        <p class="lede">CEO Syndicate Fulfillment is the back-end team behind credit repair companies and the businesses that want to offer funding. We run the disputes, the mail, the lender submissions and the follow-up, under your brand, so your day goes to selling.</p>
+        <div class="hero-cta">
+          <a class="btn btn-primary" href="#choose">Pick your service ↓</a>
+          <a class="btn btn-ghost" href="#book" data-book>Book a 30-min call</a>
+        </div>
+        <div class="ticks"><span>Live in 48 hours</span><span>No monthly contracts</span><span>Your clients never see our name</span></div>
+      </div>
+      <aside class="ledger" aria-label="Example of a day of fulfillment activity">
+        <div class="ledger-top"><span>Fulfillment ledger · today</span><span class="live"><i></i>Live</span></div>
+        <ul class="rows" data-ledger="mixed"></ul>
+        <div class="ledger-foot"><span>Every action logged to your portal</span><span>Sample data</span></div>
+      </aside>
+    </div>
+  </section>
+
+  <section class="band alt" id="choose">
+    <div class="wrap">
+      <div class="head">
+        <span class="eyebrow">Choose your lane</span>
+        <h2>What do you want off your plate?</h2>
+        <p class="lede">Two services, run the same way: you own the client, we own the work, and you see every step in your partner portal.</p>
+      </div>
+      <div class="doors">
+        <a class="door" href="#credit-repair">
+          <span class="who">For credit repair companies</span>
+          <h3>Credit Repair Fulfillment</h3>
+          <p>Hand us your dispute work. We prepare, mail and track every round inside your software, every 35 days, without you touching an envelope.</p>
+          <ul><li>Dispute letters, Metro 2 challenges, CFPB and BBB filings</li><li>Postage and first-class mail included</li><li>In-system client updates every cycle</li></ul>
+          <span class="price">From <span class="hl">$30</span> per client, per cycle</span>
+          <span class="go"><span>See credit repair fulfillment</span><span aria-hidden="true">→</span></span>
+        </a>
+        <a class="door fund" href="#business-funding">
+          <span class="who">For any business with clients who need capital</span>
+          <h3>Business Funding Fulfillment</h3>
+          <p>Credit repair, accounting, tax, insurance, consulting. If your clients ask you about money, we build the file, match the lender and walk the deal to funded.</p>
+          <ul><li>Applications, documents, lender matching, submissions</li><li>SBA, lines of credit, term, equipment, business cards</li><li>We can talk to your client under your brand, if you want us to</li></ul>
+          <span class="price">No upfront cost. <span class="gold">You earn on every funded deal.</span></span>
+          <span class="go"><span>See business funding fulfillment</span><span aria-hidden="true">→</span></span>
+        </a>
+      </div>
+      <div class="bridge">
+        <p><strong>Your best funding lead is a credit repair graduate.</strong> They just fixed their credit and the next thing they want is capital. Partners who run both services sell to the same client twice.</p>
+        <a class="btn btn-ghost" href="#book" data-book data-pick="both">I want both</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="band">
+    <div class="wrap">
+      <div class="head">
+        <span class="eyebrow">Why partners hand it off</span>
+        <h2>Your sales are not the problem. <span class="quiet">Your back office is.</span></h2>
+      </div>
+      <div class="split">
+        <div class="pain"><span class="k">Hours</span><h3>You became the processor.</h3><p>Every client you sign adds letters to write, mail to send and files to update. Eventually the work you sold eats the time you need to sell more.</p></div>
+        <div class="pain"><span class="k">Payroll</span><h3>Hiring doesn't fix it.</h3><p>A trained processor typically costs $4,000 or more a month, takes months to get up to speed, and leaves with your process in their head.</p></div>
+        <div class="pain"><span class="k">Refunds</span><h3>Missed rounds cost you clients.</h3><p>When a cycle slips or a client stops hearing from you, they ask for their money back. Your reputation is only as good as your fulfillment.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band alt">
+    <div class="wrap portal">
+      <div style="display:grid;gap:22px;min-width:0">
+        <span class="eyebrow">Your partner portal</span>
+        <h2>See every client. Every round. Every deal.</h2>
+        <p class="lede">Most fulfillment shops go quiet once you pay. You get a portal that shows where each client stands, what we sent, what came back and what happens next.</p>
+        <ul class="checks">
+          <li><span><b>Live stage tracking</b> for every client, in both services</span></li>
+          <li><span><b>Messages tied to the client file</b>, so answers never get lost in email</span></li>
+          <li><span><b>Document checklists</b> that show what's missing and who owes it</span></li>
+          <li><span><b>Only your clients</b>, walled off from every other partner at the database level</span></li>
+        </ul>
+      </div>
+      <figure class="shot" style="margin:0"><img src="assets/portal-credit.jpg" alt="Partner portal showing a credit repair client's 8-stage journey, scores at all three bureaus and every disputed item" loading="lazy" width="1800" height="1125"></figure>
+    </div>
+  </section>
+
+  <section class="band">
+    <div class="wrap">
+      <div class="final">
+        <span class="eyebrow">30-minute partner call</span>
+        <h2>Stop running the back office. Start running the company.</h2>
+        <p class="lede">We map your volume and your bottleneck, then show you exactly what you'd pay. No pressure, no long contract.</p>
+        <a class="btn btn-primary" href="#book" data-book>Book my partner call →</a>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ============================================== CREDIT REPAIR =================================================== -->
+<div class="view" id="v-credit-repair" data-view="credit-repair" hidden>
+  <section class="hero">
+    <div class="wrap">
+      <div class="hero-copy">
+        <span class="eyebrow">Credit repair fulfillment · B2B only</span>
+        <h1>Sell the client. <span class="hl">We'll run every round.</span></h1>
+        <p class="lede">We prepare, mail and track your clients' disputes every 35 days, inside your own dispute software, under your brand. You keep the client and the relationship. We take the paperwork.</p>
+        <div class="hero-cta">
+          <a class="btn btn-primary" href="#book" data-book data-pick="credit">Map my fulfillment →</a>
+          <a class="btn btn-ghost" href="#cr-pricing">See pricing</a>
+        </div>
+        <p class="micro">What happens next: a few quick questions, then you pick a time for a 30-minute call.</p>
+        <div class="ticks"><span>Live in 48 hours</span><span>Postage included</span><span>Credits never expire</span></div>
+      </div>
+      <aside class="ledger" aria-label="Example of a day of credit repair fulfillment">
+        <div class="ledger-top"><span>Dispute ledger · today</span><span class="live"><i></i>Live</span></div>
+        <ul class="rows" data-ledger="credit"></ul>
+        <div class="ledger-foot"><span>Logged to your portal + your software</span><span>Sample data</span></div>
+      </aside>
+    </div>
+  </section>
+
+  <section class="band alt">
+    <div class="wrap">
+      <div class="head">
+        <span class="eyebrow">The cost of doing it yourself</span>
+        <h2>At 50 clients you're busy. <span class="quiet">At 200 you're drowning.</span></h2>
+        <p class="lede">The spreadsheet, the shared inbox and the trip to the post office got you this far. They will not get you to the next 100 clients.</p>
+      </div>
+      <div class="split">
+        <div class="pain"><span class="k">The workflow</span><h3>It breaks quietly.</h3><p>Rounds go out late, letters get missed, and nobody notices until a client asks why nothing has changed.</p></div>
+        <div class="pain"><span class="k">The hire</span><h3>It costs more than you think.</h3><p>Salary, training and turnover, plus the months before a new processor is any good. All to work inside the same broken system.</p></div>
+        <div class="pain"><span class="k">The blind spot</span><h3>You can't see what's stuck.</h3><p>Which clients went out this cycle? Who hasn't heard from you in a month? If the answer is "let me check," refunds are coming.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band">
+    <div class="wrap">
+      <div class="head">
+        <span class="eyebrow">What one credit covers</span>
+        <h2>One credit. One client. One full 35-day round.</h2>
+        <p class="lede">Every credit covers all six parts of the round, postage included. You tell us the strategy, we carry it out.</p>
+      </div>
+      <div class="grid3">
+        <div class="feat"><span class="ico"><svg viewBox="0 0 24 24"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6M8 13h8M8 17h5"/></svg></span><h3>Dispute preparation</h3><p>Factual and consumer law–based letters prepared from your instructions and your client's documents. Six to nine letters per credit, depending on the profile.</p></div>
+        <div class="feat"><span class="ico"><svg viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/></svg></span><h3>Metro 2 challenges</h3><p>Data challenges formatted to Metro 2 reporting standards, built from the data in your dispute software.</p></div>
+        <div class="feat"><span class="ico"><svg viewBox="0 0 24 24"><path d="M4 6h16v12H4z"/><path d="M4 7l8 6 8-6"/></svg></span><h3>Print and first-class mail</h3><p>We print, stuff, stamp and mail every letter first class, and keep copies on file. Postage is included in the credit.</p></div>
+        <div class="feat"><span class="ico"><svg viewBox="0 0 24 24"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7z"/></svg></span><h3>CFPB and BBB submissions</h3><p>Complaints prepared and filed when you authorize them and the client's documents support them.</p></div>
+        <div class="feat"><span class="ico"><svg viewBox="0 0 24 24"><path d="M12 3v18M5 7h14M7 7l-3 7h6zM17 7l-3 7h6z"/></svg></span><h3>Litigation review</h3><p>Files with possible violations go to independent law partners for review, giving your client leverage that makes deletions stick.</p></div>
+        <div class="feat"><span class="ico"><svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 4v5h-5"/></svg></span><h3>In-system updates</h3><p>At the close of each round we update status and results inside your software, so your client always has something new to see.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band alt">
+    <div class="wrap cycle">
+      <svg class="dial" viewBox="0 0 240 240" role="img" aria-label="A 35-day dispute cycle, from preparation on day 1 to in-system updates on day 35">
+        <circle cx="120" cy="120" r="96" fill="none" stroke="var(--line)" stroke-width="14"/>
+        <circle cx="120" cy="120" r="96" fill="none" stroke="var(--lime)" stroke-width="14" stroke-linecap="round" stroke-dasharray="603" stroke-dashoffset="150" transform="rotate(-90 120 120)"/>
+        <text class="big" x="120" y="128" text-anchor="middle">35</text>
+        <text class="sm" x="120" y="152" text-anchor="middle">DAY ROUND</text>
+        <text x="120" y="14" text-anchor="middle">DAY 1</text>
+        <text x="232" y="124" text-anchor="end">9</text>
+        <text x="120" y="236" text-anchor="middle">18</text>
+        <text x="8" y="124">27</text>
+      </svg>
+      <div style="display:grid;gap:22px;min-width:0">
+        <span class="eyebrow">Inside a round</span>
+        <h2>The same rhythm, every 35 days.</h2>
+        <div class="timeline">
+          <div class="tl"><span class="d">DAYS 1–3</span><b>Prepare</b><p>We pull the latest report data from your software and build the round's letters and challenges.</p></div>
+          <div class="tl"><span class="d">DAYS 3–5</span><b>Mail</b><p>Letters go out first class. Copies and mail dates are logged.</p></div>
+          <div class="tl"><span class="d">DAYS 5–30</span><b>Bureaus investigate</b><p>Bureaus and furnishers generally have 30 days to respond. We track every deadline.</p></div>
+          <div class="tl"><span class="d">DAYS 30–35</span><b>Update and plan</b><p>Results go into your software and your portal, and the next round is lined up.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band">
+    <div class="wrap">
+      <div class="head">
+        <span class="eyebrow">How it works</span>
+        <h2>Live in 48 hours. First round out this week.</h2>
+        <p class="lede">No new software and no changes your clients will notice. We plug into the dispute software you already use.</p>
+      </div>
+      <div class="steps">
+        <div class="step"><span class="n">STEP 01</span><span class="when">Today</span><h3>Book your call</h3><p>Answer a few questions and pick a 30-minute slot. We look at your software, your volume and where rounds are slipping.</p></div>
+        <div class="step"><span class="n">STEP 02</span><span class="when">Within 48 hours</span><h3>Get set up</h3><p>Choose your credit package, share your software access, and we set up your lane in an onboarding session with your team.</p></div>
+        <div class="step"><span class="n">STEP 03</span><span class="when">Every 35 days</span><h3>We run your rounds</h3><p>Our specialists work every file start to finish. A dedicated partner rep answers your questions in hours, not days.</p></div>
+        <div class="step"><span class="n">STEP 04</span><span class="when">Every month</span><h3>Partner review</h3><p>We meet monthly to go over your clients' progress: what moved, what's stuck and where to push next.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band alt">
+    <div class="wrap portal">
+      <figure class="shot" style="margin:0"><img src="assets/portal-credit.jpg" alt="Credit repair client file in the partner portal with bureau-by-bureau dispute status" loading="lazy" width="1800" height="1125"></figure>
+      <div style="display:grid;gap:22px;min-width:0">
+        <span class="eyebrow">Full visibility</span>
+        <h2>Know exactly where every client stands.</h2>
+        <p class="lede">Your partner portal shows each client's stage, each disputed item at all three bureaus, and every letter we sent.</p>
+        <ul class="checks">
+          <li><span><b>Bureau-by-bureau status</b>: in dispute, deleted, updated or verified</span></li>
+          <li><span><b>Overdue alerts</b> when a bureau misses its response window</span></li>
+          <li><span><b>Share-ready updates</b> you can forward to your client in one click</span></li>
+          <li><span><b>We never contact your clients.</b> Every question comes to you.</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="band">
+    <div class="wrap">
+      <div class="head">
+        <span class="eyebrow">Do the math</span>
+        <h2>What fulfillment costs vs. what you keep.</h2>
+        <p class="lede">Move the sliders to your numbers.</p>
+      </div>
+      <div class="calc">
+        <div class="calc-in">
+          <div class="field"><label for="c-clients">Active clients per month <output id="o-clients">60</output></label><input type="range" id="c-clients" min="10" max="400" step="5" value="60"></div>
+          <div class="field"><label for="c-fee">What you charge per client, per month <output id="o-fee">$99</output></label><input type="range" id="c-fee" min="49" max="249" step="5" value="99"></div>
+          <div class="field"><label for="c-mins">Minutes you spend per client, per round <output id="o-mins">45</output></label><input type="range" id="c-mins" min="15" max="120" step="5" value="45"></div>
+          <p class="micro">Estimates for planning only. Your rate depends on how many credits you buy. One credit covers one client's 35-day round.</p>
+        </div>
+        <div class="calc-out" aria-live="polite">
+          <div class="res"><span>Your tier</span><b id="r-tier">Pro · $35</b></div>
+          <div class="res"><span>Fulfillment per round</span><b id="r-cost">$2,100</b></div>
+          <div class="res"><span>Your revenue per month</span><b id="r-rev">$5,940</b></div>
+          <div class="res hero-num"><span>Kept after fulfillment</span><b id="r-keep">$3,840</b></div>
+          <div class="res"><span>Hours back each round</span><b id="r-hrs">45 hrs</b></div>
+          <a class="btn btn-primary" href="#book" data-book data-pick="credit">Lock in this rate →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band alt" id="cr-pricing">
+    <div class="wrap">
+      <div class="head">
+        <span class="eyebrow">Pricing</span>
+        <h2>Prepaid credits. No retainer. No surprises.</h2>
+        <p class="lede">One credit = one client = one 35-day round. Buy more, pay less per credit. Use them as you go.</p>
+      </div>
+      <div class="tiers">
+        <div class="tier"><span class="nm">Starter</span><div class="pr">$40<small>/ credit</small></div><span class="vol">10–19 credits · $200 setup</span><p>For smaller companies handing off fulfillment for the first time.</p><a class="btn btn-ghost" href="#book" data-book data-pick="credit">Start with Starter</a></div>
+        <div class="tier"><span class="nm">Standard</span><div class="pr">$37<small>/ credit</small></div><span class="vol">20–49 credits · $200 setup</span><p>For growing companies ready to stop processing in-house.</p><a class="btn btn-ghost" href="#book" data-book data-pick="credit">Start with Standard</a></div>
+        <div class="tier pick"><span class="badge">MOST CHOSEN</span><span class="nm">Pro</span><div class="pr">$35<small>/ credit</small></div><span class="vol">50–99 credits · $200 setup</span><p>For higher-volume companies running a real sales operation.</p><a class="btn btn-primary" href="#book" data-book data-pick="credit">Start on Pro →</a></div>
+        <div class="tier"><span class="nm">Elite</span><div class="pr">$30<small>/ credit</small></div><span class="vol">100+ credits · setup waived</span><p>For established companies scaling at volume.</p><a class="btn btn-ghost" href="#book" data-book data-pick="credit">Start with Elite</a></div>
+      </div>
+      <div class="incl">
+        <h3>Every tier includes all of it</h3>
+        <span>Full dispute workflow, start to finish</span><span>Factual and consumer law–based letters</span><span>Metro 2–aligned data challenges</span>
+        <span>CFPB and BBB submissions, as directed</span><span>Litigation review support</span><span>35-day in-system client updates</span>
+        <span>6–9 first-class letters per credit</span><span>Postage and mail included</span><span>Dedicated partner rep and portal</span>
+      </div>
+      <p class="fine">Credits pay for administrative processing performed each round under your instruction. They are not tied to deletions, score changes or any specific result. The number of letters varies by client profile.</p>
+    </div>
+  </section>
+
+  <section class="band">
+    <div class="wrap">
+      <div class="promise">
+        <div><b>No monthly contract</b><p>Buy credits when you need them. Stop whenever you want.</p></div>
+        <div><b>Credits don't expire</b><p>Prepay at the volume rate and use them on your schedule.</p></div>
+        <div><b>Your brand, not ours</b><p>We never contact your clients. They only ever see your company.</p></div>
+        <div><b>Setup waived at 100+</b><p>Elite partners skip the $200 setup fee entirely.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band alt">
+    <div class="wrap">
+      <div class="head"><span class="eyebrow">Compliance</span><h2>We hold the line so you can grow.</h2></div>
+      <div class="law">
+        <div><b>B2B only</b><p>We work only with credit repair organizations, never directly with consumers.</p></div>
+        <div><b>Your authorization</b><p>Every action is performed under your written instruction and your client's documents.</p></div>
+        <div><b>CROA · FCRA · TSR</b><p>Consumer-facing obligations stay with you as the credit repair organization. We work inside them.</p></div>
+        <div><b>Work, not results</b><p>We don't give legal or credit advice and we don't guarantee outcomes.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band">
+    <div class="wrap">
+      <div class="head"><span class="eyebrow">Questions</span><h2>Ask before you hand anything off.</h2></div>
+      <div class="faq">
+        <details><summary>Are you a credit repair company?</summary><p>No. We are a back-end fulfillment company for credit repair businesses. We don't sell to consumers or sign contracts with them. Your company stays the credit repair organization, and we do the administrative work for you.</p></details>
+        <details><summary>Do we use your software or ours?</summary><p>Yours. We work inside the dispute software you already use, so nothing changes for your clients. You also get our partner portal to see every client, letter and result in one place.</p></details>
+        <details><summary>Will you ever talk to my clients?</summary><p>No. For credit repair we never contact your clients. Questions, updates and documents come through you, and you decide what to share.</p></details>
+        <details><summary>What exactly does one credit cover?</summary><p>One client for one full 35-day round: letter preparation, Metro 2 challenges, authorized CFPB and BBB submissions, litigation review support, printing, first-class postage and in-system updates.</p></details>
+        <details><summary>Do credits expire?</summary><p>No. Buy at the volume rate that fits you and use them as your clients need rounds.</p></details>
+        <details><summary>Do you guarantee results?</summary><p>No one can honestly guarantee deletions or score changes. We guarantee the work: every round prepared, mailed and logged on time.</p></details>
+        <details><summary>How fast can we start?</summary><p>Most partners are live within 48 hours of sharing software access, and their first round goes out the same week.</p></details>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ============================================ BUSINESS FUNDING ================================================== -->
+<div class="view fundpage" id="v-business-funding" data-view="business-funding" hidden>
+  <section class="hero">
+    <div class="wrap">
+      <div class="hero-copy">
+        <span class="eyebrow" style="color:var(--lime)">Business funding fulfillment · white label</span>
+        <h1>Your clients already ask you about money. <span class="gold">Now you can say yes.</span></h1>
+        <p class="lede">We run the whole funding process behind your brand: application, documents, lender matching, submissions and closing. You make the introduction. You earn on every funded deal. You never have to become a loan expert.</p>
+        <div class="hero-cta">
+          <a class="btn btn-primary" href="#book" data-book data-pick="funding">Add funding to my business →</a>
+          <a class="btn btn-ghost" href="#bf-how">See how it works</a>
+        </div>
+        <div class="ticks"><span>No upfront cost</span><span>Any industry</span><span>You see every message</span></div>
+      </div>
+      <aside class="ledger" aria-label="Example of a day of business funding fulfillment">
+        <div class="ledger-top"><span>Funding desk · today</span><span class="live"><i></i>Live</span></div>
+        <ul class="rows" data-ledger="funding"></ul>
+        <div class="ledger-foot"><span>Every deal tracked in your portal</span><span>Sample data</span></div>
+      </aside>
+    </div>
+  </section>
+
+  <section class="band alt">
+    <div class="wrap">
+      <div class="head">
+        <span class="eyebrow">The money you're leaving on the table</span>
+        <h2>Every time you say "I don't do that," someone else gets paid.</h2>
+        <p class="lede">Your clients trust you with their credit, their books or their business. When they need capital, they go to a stranger online. You lose the fee and sometimes the client.</p>
+      </div>
+      <div class="split">
+        <div class="pain"><span class="k">Missed revenue</span><h3>The demand is already there.</h3><p>Business owners need equipment, payroll, inventory and room to grow. Those needs come up in your conversations every week.</p></div>
+        <div class="pain"><span class="k">No expertise needed</span><h3>You don't need to learn lending.</h3><p>Lenders, products, underwriting rules and paperwork are our job. Your job is to say "I have a team for that."</p></div>
+        <div class="pain"><span class="k">No new hires</span><h3>You don't need a funding department.</h3><p>A loan processor, lender relationships and a follow-up system take years to build. Ours is ready on day one.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band">
+    <div class="wrap">
+      <div class="head">
+        <span class="eyebrow">Built for businesses like yours</span>
+        <h2>If you serve business owners, you can offer funding.</h2>
+      </div>
+      <div class="chips">
+        <span class="chip">Credit repair companies</span><span class="chip">Accountants and CPAs</span><span class="chip">Tax preparers</span><span class="chip">Bookkeepers</span><span class="chip">Insurance agencies</span><span class="chip">Business coaches</span><span class="chip">Consultants</span><span class="chip">Marketing agencies</span><span class="chip">Real estate professionals</span><span class="chip">Business formation services</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="band alt" id="bf-how">
+    <div class="wrap">
+      <div class="head">
+        <span class="eyebrow">How a deal moves</span>
+        <h2>Eight stages from "I need capital" to funded.</h2>
+        <p class="lede">You see every stage in your partner portal, with the lenders we submitted to and every offer that came back.</p>
+      </div>
+      <div class="stages">
+        <div class="stage"><i>01</i><b>Application</b><small>You refer the client. We send a branded application.</small></div>
+        <div class="stage"><i>02</i><b>Documents</b><small>Bank statements, tax returns, P&amp;L, ID.</small></div>
+        <div class="stage"><i>03</i><b>Fundability review</b><small>Credit, revenue, time in business, debt.</small></div>
+        <div class="stage"><i>04</i><b>Lender matching</b><small>The right products for this profile.</small></div>
+        <div class="stage"><i>05</i><b>Submission</b><small>Packaged and sent to matched lenders.</small></div>
+        <div class="stage"><i>06</i><b>Offers</b><small>Compared side by side for your client.</small></div>
+        <div class="stage"><i>07</i><b>Closing</b><small>Contracts, conditions, final documents.</small></div>
+        <div class="stage"><i>08</i><b>Funded</b><small>Money lands. You get paid.</small></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band">
+    <div class="wrap">
+      <div class="head">
+        <span class="eyebrow">What we fund</span>
+        <h2>The right product for the profile, not the one that pays the most.</h2>
+      </div>
+      <div class="products">
+        <div class="prod"><b>SBA loans</b><span>Lowest rates · longer terms</span><p>For established businesses ready to grow, refinance or buy equipment and property.</p></div>
+        <div class="prod"><b>Lines of credit</b><span>Draw as needed</span><p>Flexible working capital for payroll, inventory and seasonal gaps.</p></div>
+        <div class="prod"><b>Term loans</b><span>Fixed payments</span><p>A lump sum for a defined project, expansion or purchase.</p></div>
+        <div class="prod"><b>Equipment financing</b><span>The equipment is the collateral</span><p>Vehicles, machinery and tools without tying up cash.</p></div>
+        <div class="prod"><b>Business credit cards</b><span>Startup-friendly</span><p>Building blocks for newer businesses and owners with strong personal credit.</p></div>
+        <div class="prod"><b>Revenue-based financing</b><span>Fast decisions</span><p>For businesses with steady deposits that need capital quickly.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band alt">
+    <div class="wrap">
+      <div class="head">
+        <span class="eyebrow">You decide how involved we are</span>
+        <h2>We can talk to your client as your team. Or stay behind you.</h2>
+        <p class="lede">Funding takes a lot of back-and-forth. Most partners let us handle it under their brand, so deals move faster. You choose, and you can change it for any client.</p>
+      </div>
+      <div class="modes">
+        <div class="mode on">
+          <span class="k">Option A · Most partners</span>
+          <h3>We work with your client, as your company.</h3>
+          <p>Messages, texts and emails go out under your name, such as "Summit Funding Desk." Your client never hears our name. You can read every message.</p>
+          <div class="bubble"><small>SENT AS SUMMIT FUNDING DESK · YOU CAN SEE THIS</small>Hi Carlos, the equipment quote was the last item. Your file goes to three lenders today.</div>
+        </div>
+        <div class="mode">
+          <span class="k">Option B</span>
+          <h3>Everything goes through you.</h3>
+          <p>We never contact your client. We tell you what we need and what to say, and you pass it along. Slower, but fully hands-on.</p>
+          <div class="bubble"><small>TO YOU ONLY</small>Carlos needs to upload a quote for the mowers. Once that's in, we submit to three lenders.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band">
+    <div class="wrap portal">
+      <div style="display:grid;gap:22px;min-width:0">
+        <span class="eyebrow">Your partner portal</span>
+        <h2>Every deal, every lender, every offer.</h2>
+        <p class="lede">Watch each file move, see which lenders it went to and compare the offers that came back. Your expected payout is right on the file.</p>
+        <ul class="checks">
+          <li><span><b>Offer comparison</b> by amount, term and rate</span></li>
+          <li><span><b>Document checklist</b> showing exactly what's missing</span></li>
+          <li><span><b>Full message history</b>, including everything we sent your client</span></li>
+          <li><span><b>Payout tracking</b> from pending to paid</span></li>
+        </ul>
+      </div>
+      <figure class="shot" style="margin:0"><img src="assets/portal-funding.jpg" alt="Partner portal showing a business funding file with lender submissions, offers and the partner's expected payout" loading="lazy" width="1800" height="1125"></figure>
+    </div>
+  </section>
+
+  <section class="band alt">
+    <div class="wrap">
+      <div class="pay">
+        <div style="display:grid;gap:16px">
+          <span class="eyebrow">How you get paid</span>
+          <div class="big">$0 upfront.</div>
+          <h3 style="font-size:26px">You earn a share of every deal that funds.</h3>
+          <p class="lede">No setup fee, no credits, no monthly bill. We only get paid when your client gets funded, so we only win when they do. Your exact split is set on your partner call, based on your volume.</p>
+        </div>
+        <div style="display:grid;gap:14px">
+          <div class="res"><span>Upfront cost</span><b class="gold">$0</b></div>
+          <div class="res"><span>Monthly fee</span><b class="gold">$0</b></div>
+          <div class="res"><span>When you get paid</span><b style="font-size:20px">At funding</b></div>
+          <a class="btn btn-primary" href="#book" data-book data-pick="funding">Get my partner split →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band">
+    <div class="wrap">
+      <div class="head"><span class="eyebrow">Compliance</span><h2>Clean deals. Clear disclosures.</h2></div>
+      <div class="law">
+        <div><b>No guarantees</b><p>Approvals, amounts and rates are always the lender's decision. We never promise funding.</p></div>
+        <div><b>Disclosures</b><p>We deliver the commercial financing disclosures that states like California and New York require.</p></div>
+        <div><b>Consent first</b><p>We only text your client with their written consent, and every message is logged.</p></div>
+        <div><b>Protected data</b><p>Bank statements and tax returns are encrypted and visible only to your team and ours.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band alt">
+    <div class="wrap">
+      <div class="head"><span class="eyebrow">Questions</span><h2>Before you send us your first client.</h2></div>
+      <div class="faq">
+        <details><summary>Do I need any lending experience?</summary><p>No. You refer the client and make the introduction. We handle the application, documents, lender choice, submissions and closing.</p></details>
+        <details><summary>Will you take my client?</summary><p>No. The client belongs to you. We work under your brand, you can see every message, and our partner agreement prohibits us from soliciting your clients.</p></details>
+        <details><summary>What kinds of businesses can you fund?</summary><p>Most established businesses with steady revenue, plus newer businesses whose owners have strong personal credit. The fundability review tells us which products fit before anything is submitted.</p></details>
+        <details><summary>How long does funding take?</summary><p>It depends on the product. Revenue-based financing can fund in days, lines of credit and term loans usually take one to three weeks, and SBA loans take longer.</p></details>
+        <details><summary>I already run credit repair with you. How do the two connect?</summary><p>Your graduating credit repair clients are often ready for funding. When a client finishes, we can flag them for a funding review in your portal.</p></details>
+        <details><summary>How much do I earn per deal?</summary><p>You earn a share of the fee on every funded deal. The split depends on your volume and how involved you want to be, and we set it with you on the partner call.</p></details>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ================================================= BOOKING (shared) ============================================= -->
+<section class="band" id="book">
+  <div class="wrap book">
+    <div class="book-copy">
+      <span class="eyebrow">Book a partner call</span>
+      <h2>Hand off the work. <span class="hl">Keep the client.</span></h2>
+      <p class="lede">Thirty minutes. We look at your volume, your current setup and where things slip, then show you exactly what you'd pay and what you'd earn.</p>
+      <ul class="checks">
+        <li><span><b>Live in 48 hours</b> for credit repair fulfillment</span></li>
+        <li><span><b>$0 upfront</b> for business funding fulfillment</span></li>
+        <li><span><b>No monthly contracts</b> on either service</span></li>
+        <li><span><b>B2B only.</b> We don't take consumer inquiries.</span></li>
+      </ul>
+    </div>
+    <form class="q" id="qform" novalidate>
+      <div class="prog" aria-hidden="true"><i class="on"></i><i></i><i></i></div>
+      <div class="qstep" data-step="1">
+        <fieldset><legend>What do you want help with?</legend>
+          <label class="opt"><input type="radio" name="svc" id="svc-credit" value="credit"><span>Credit repair fulfillment<small>Disputes, mail and updates every 35 days</small></span></label>
+          <label class="opt"><input type="radio" name="svc" id="svc-funding" value="funding"><span>Business funding fulfillment<small>We build and close funding deals under your brand</small></span></label>
+          <label class="opt"><input type="radio" name="svc" id="svc-both" value="both"><span>Both<small>Fix their credit, then fund their business</small></span></label>
+        </fieldset>
+      </div>
+      <div class="qstep" data-step="2" hidden>
+        <fieldset><legend>How many active clients do you have?</legend>
+          <label class="opt"><input type="radio" name="vol" id="vol-1" value="under-20"><span>Under 20</span></label>
+          <label class="opt"><input type="radio" name="vol" id="vol-2" value="20-49"><span>20 to 49</span></label>
+          <label class="opt"><input type="radio" name="vol" id="vol-3" value="50-99"><span>50 to 99</span></label>
+          <label class="opt"><input type="radio" name="vol" id="vol-4" value="100+"><span>100 or more</span></label>
+        </fieldset>
+      </div>
+      <div class="qstep" data-step="3" hidden>
+        <fieldset><legend>Where should we send your call link?</legend>
+          <div class="row2">
+            <div class="tf"><label for="f-name">Your name</label><input id="f-name" name="name" autocomplete="name" required></div>
+            <div class="tf"><label for="f-co">Company</label><input id="f-co" name="company" autocomplete="organization" required></div>
+          </div>
+          <div class="tf"><label for="f-email">Work email</label><input id="f-email" name="email" type="email" autocomplete="email" required></div>
+          <div class="tf"><label for="f-phone">Phone</label><input id="f-phone" name="phone" type="tel" autocomplete="tel"></div>
+          <p class="micro">By submitting, you agree we may contact you about a partnership. B2B inquiries only.</p>
+        </fieldset>
+      </div>
+      <div class="done" data-step="4" hidden>
+        <span class="eyebrow">You're in</span>
+        <div class="big">Next: pick your call time.</div>
+        <p class="lede" id="done-msg">We'll email your calendar link in a few minutes.</p>
+      </div>
+      <p class="err" id="qerr" role="alert"></p>
+      <div class="qnav" id="qnav">
+        <button type="button" class="btn btn-ghost" id="qback" hidden>← Back</button>
+        <button type="submit" class="btn btn-primary" id="qnext" style="margin-left:auto">Continue →</button>
+      </div>
+    </form>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="refer">
+      <p><b>Know a business that needs this?</b> Our referral partners earn $2 for every credit their referrals buy, plus monthly bonuses.</p>
+      <a class="btn btn-ghost" href="#book" data-book>Become a referral partner</a>
+    </div>
+    <div class="foot">
+      <div>
+        <a class="brand" href="#home"><span class="mark"><svg viewBox="0 0 24 24" fill="none" stroke="#04150C" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 17l5-5 4 4 7-8"/><path d="M15 8h5v5"/></svg></span><span><b style="color:var(--ink)">CEO Syndicate</b><small>Fulfillment</small></span></a>
+        <p style="margin-top:14px;max-width:34ch">White-label back-end fulfillment for credit repair and business funding.</p>
+      </div>
+      <div><h4>Services</h4><a href="#credit-repair">Credit repair fulfillment</a><a href="#business-funding">Business funding fulfillment</a><a href="#cr-pricing">Pricing</a></div>
+      <div><h4>Partners</h4><a href="#book" data-book>Book a call</a><a href="#book" data-book>Referral program</a><a href="#home">Partner portal login</a></div>
+      <div><h4>Legal</h4><a href="#home">Privacy policy</a><a href="#home">Terms of service</a><a href="#home">Compliance</a></div>
+    </div>
+    <p class="legal">CEO Syndicate Fulfillment is a B2B back-end fulfillment provider. We do not sell credit repair services to consumers, do not provide legal, credit or financial advice, and do not guarantee dispute outcomes, approvals or funding amounts. Partners are responsible for their own compliance with applicable federal and state laws, including CROA, FCRA, TSR and state commercial financing disclosure laws. © 2026 CEO Syndicate.</p>
+  </div>
+</footer>
+
+<div class="sticky-cta"><a class="btn btn-primary" href="#book" data-book>Book a partner call</a></div>
+
+<script>
+(() => {
+  /* ---------- routing ---------- */
+  const views = ['home','credit-repair','business-funding'];
+  const titles = {home:'CEO Syndicate Fulfillment','credit-repair':'Credit Repair Fulfillment · CEO Syndicate','business-funding':'Business Funding Fulfillment · CEO Syndicate'};
+  let current = 'home';
+  function show(name){
+    current = name;
+    document.querySelectorAll('[data-view]').forEach(v => v.hidden = v.dataset.view !== name);
+    document.querySelectorAll('[data-nav]').forEach(a => { if (a.dataset.nav === name) a.setAttribute('aria-current','page'); else a.removeAttribute('aria-current'); });
+    document.title = titles[name];
+  }
+  function route(){
+    const h = location.hash.slice(1);
+    if (views.includes(h)) { show(h); window.scrollTo(0,0); return; }
+    if (!h) { show('home'); return; }
+    const target = document.getElementById(h);
+    if (target){ const v = target.closest('[data-view]'); if (v && v.hidden) show(v.dataset.view); requestAnimationFrame(()=>target.scrollIntoView({behavior:'smooth',block:'start'})); }
+  }
+  addEventListener('hashchange', route); route();
+
+  /* ---------- ledgers (sample data) ---------- */
+  const feeds = {
+    credit:[
+      ['9:04','Round 3 letters prepared','Client MR · 8 letters','cr','Prepared'],
+      ['9:31','Metro 2 challenge sent','Equifax · late-pay reporting','cr','Mailed'],
+      ['10:12','CFPB complaint filed','Authorized by partner','cr','Filed'],
+      ['10:40','First-class mail out','42 envelopes · on cycle','cr','Mailed'],
+      ['11:18','Litigation review opened','Sent to law partner','cr','Review'],
+      ['11:52','Results updated in software','Client DA · 3 deletions','cr','Updated'],
+      ['12:20','Round 2 letters prepared','Client JT · 7 letters','cr','Prepared'],
+      ['12:47','Bureau response logged','TransUnion · 2 items updated','cr','Logged']
+    ],
+    funding:[
+      ['9:10','Application received','Landscaping LLC · $150K ask','fd','New'],
+      ['9:42','Bank statements verified','6 months · avg $84K/mo','fd','Verified'],
+      ['10:05','Fundability review done','Fits SBA + equipment','fd','Ready'],
+      ['10:38','Submitted to 3 lenders','Equipment · SBA · LOC','fd','Sent'],
+      ['11:20','Offer received','$95K equipment · 5 yr','fd','Offer'],
+      ['12:02','Client message sent as partner','Quote requested · logged','fd','Sent'],
+      ['12:44','Deal funded','$60K line of credit','fd','Funded'],
+      ['1:15','Partner payout queued','Paid at funding','fd','Payout']
+    ]
+  };
+  const mins = t => { const [h,m]=t.split(':').map(Number); return (h<7?h+12:h)*60+m; };
+  feeds.mixed = [...feeds.credit, ...feeds.funding].sort((a,b)=>mins(a[0])-mins(b[0]));
+  function row(r){ const li=document.createElement('li'); li.innerHTML=`<time>${r[0]}</time><span><b>${r[1]}</b><small>${r[2]}</small></span><span class="tag t-${r[3]}">${r[4]}</span>`; return li; }
+  document.querySelectorAll('[data-ledger]').forEach(ul => {
+    const data = feeds[ul.dataset.ledger]; let i = 0; const n = 6;
+    data.slice(0,n).forEach(r => ul.appendChild(row(r))); i = n;
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    setInterval(() => { if (ul.closest('[data-view]').hidden) return; const li=row(data[i++ % data.length]); li.classList.add('new'); ul.prepend(li); if (ul.children.length>n) ul.lastElementChild.remove(); }, 3200);
+  });
+
+  /* ---------- calculator ---------- */
+  const $ = id => document.getElementById(id);
+  const fmt = n => '$' + Math.round(n).toLocaleString('en-US');
+  function tierFor(c){ return c>=100?['Elite',30]:c>=50?['Pro',35]:c>=20?['Standard',37]:['Starter',40]; }
+  function calc(){
+    const c=+$('c-clients').value, fee=+$('c-fee').value, m=+$('c-mins').value;
+    const [t,rate]=tierFor(c);
+    $('o-clients').textContent=c; $('o-fee').textContent=fmt(fee); $('o-mins').textContent=m;
+    const cost=c*rate, rev=c*fee*35/30;
+    $('r-tier').textContent=`${t} · $${rate}`; $('r-cost').textContent=fmt(cost);
+    $('r-rev').textContent=fmt(rev); $('r-keep').textContent=fmt(rev-cost);
+    $('r-hrs').textContent=Math.round(c*m/60)+' hrs';
+  }
+  ['c-clients','c-fee','c-mins'].forEach(id=>$(id).addEventListener('input',calc)); calc();
+
+  /* ---------- booking form ---------- */
+  const form=$('qform'), err=$('qerr'), next=$('qnext'), back=$('qback');
+  let step=1;
+  document.addEventListener('click', e => {
+    const a = e.target.closest('[data-pick]'); if (!a) return;
+    const r = document.getElementById('svc-'+a.dataset.pick); if (r) r.checked = true;
+  });
+  function render(){
+    form.querySelectorAll('[data-step]').forEach(s=>s.hidden=+s.dataset.step!==step);
+    form.querySelectorAll('.prog i').forEach((b,i)=>b.classList.toggle('on',i<step));
+    back.hidden = step===1 || step===4; $('qnav').hidden = step===4;
+    next.textContent = step===3 ? 'Book my call →' : 'Continue →';
+    err.textContent='';
+  }
+  function valid(){
+    if(step===1 && !form.svc.value) return 'Pick a service to continue.';
+    if(step===2 && !form.vol.value) return 'Pick your client volume to continue.';
+    if(step===3){
+      if(!$('f-name').value.trim()) return 'Add your name.';
+      if(!$('f-co').value.trim()) return 'Add your company name.';
+      if(!/^\S+@\S+\.\S+$/.test($('f-email').value)) return 'Add a valid work email, like you@company.com.';
+    }
+    return '';
+  }
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    const m = valid(); if (m){ err.textContent=m; return; }
+    if (step===3){
+      const s = {credit:'credit repair fulfillment',funding:'business funding fulfillment',both:'credit repair and business funding fulfillment'}[form.svc.value];
+      $('done-msg').textContent = `Thanks, ${$('f-name').value.trim().split(' ')[0]}. We'll email your calendar link for a ${s} call to ${$('f-email').value.trim()}.`;
+    }
+    step++; render();
+  });
+  form.addEventListener('change', e => { if (e.target.type==='radio' && step<3) { err.textContent=''; setTimeout(()=>{ step++; render(); },180); } });
+  back.addEventListener('click', ()=>{ step--; render(); });
+  render();
+})();
+</script>
+
+</body>
+</html>
