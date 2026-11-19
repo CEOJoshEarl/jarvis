@@ -61,22 +61,22 @@ describe('front of the house', () => {
 });
 
 describe("Andrew's tiers", () => {
-  const at = (tier: 500 | 700 | 1000): FamilyConfig => ({ ...EARL_FAMILY, tiers: [{ tier, from: '2026-01-01' }] });
-  it('$700 moves cooktop to Angela on Sunday and appliances to Max', () => {
-    expect(owner('2026-12-04', 'kitchen-cooktop', at(700))).toBeUndefined();
-    expect(owner('2026-12-06', 'kitchen-cooktop-sunday', at(700))).toEqual(['angela']);
-    expect(owner('2026-12-04', 'kitchen-appliances', at(700))).toEqual(['max']);
-    expect(owner('2026-12-04', 'kitchen-mop', at(700))).toEqual(['andrew']);
+  const at = (tier: 1 | 2 | 3): FamilyConfig => ({ ...EARL_FAMILY, tiers: [{ tier, from: '2026-01-01' }] });
+  it('level 2 moves cooktop to Angela on Sunday and appliances to Max', () => {
+    expect(owner('2026-12-04', 'kitchen-cooktop', at(2))).toBeUndefined();
+    expect(owner('2026-12-06', 'kitchen-cooktop-sunday', at(2))).toEqual(['angela']);
+    expect(owner('2026-12-04', 'kitchen-appliances', at(2))).toEqual(['max']);
+    expect(owner('2026-12-04', 'kitchen-mop', at(2))).toEqual(['andrew']);
   });
-  it('$1,000 moves mopping, bins and Uso mornings', () => {
-    expect(owner('2026-12-04', 'kitchen-mop', at(1000))).toEqual(['vanilla']);
-    expect(owner('2026-12-02', 'trash-out', at(1000))).toEqual(['max']);
-    expect(owner('2026-12-02', 'uso-morning', at(1000))).toEqual(['josh']);
-    expect(owner('2026-11-21', 'gutters', at(1000))).toEqual(['andrew']);
-    expect(owner('2026-12-21', 'storage-room', at(1000))).toBeUndefined();
+  it('level 3 moves mopping, bins and Uso mornings', () => {
+    expect(owner('2026-12-04', 'kitchen-mop', at(3))).toEqual(['vanilla']);
+    expect(owner('2026-12-02', 'trash-out', at(3))).toEqual(['max']);
+    expect(owner('2026-12-02', 'uso-morning', at(3))).toEqual(['josh']);
+    expect(owner('2026-11-21', 'gutters', at(3))).toEqual(['andrew']);
+    expect(owner('2026-12-21', 'storage-room', at(3))).toBeUndefined();
   });
   it('diff lists what changes', () => {
-    const d = tierDiff(EARL_CATALOG, EARL_FAMILY, 500, 700, '2026-12-01').map(c => c.templateId).sort();
+    const d = tierDiff(EARL_CATALOG, EARL_FAMILY, 1, 2, '2026-12-01').map(c => c.templateId).sort();
     expect(d).toEqual(['kitchen-appliances', 'kitchen-cooktop', 'kitchen-cooktop-sunday', 'smoke-detectors']);
   });
 });

@@ -6,12 +6,7 @@ import { memberOf, useApp } from '../store';
 import { Avatar, Avatars, Logo, toast } from '../ui';
 import { sounds } from '../fx';
 import { FamilyMembers, ProfileSheet } from './Profile';
-
-const TIER_PERKS: Record<Tier, string[]> = {
-  500: ['Curfew 12 AM', 'Buys and cooks his own food', 'Does his own laundry'],
-  700: ['No curfew. Tells Josh if he will be late or not home', 'Food bought and cooked for him', 'Does his own laundry'],
-  1000: ['No curfew. Tells Josh if he will be late or not home', 'Food bought and cooked for him', 'Laundry done for him'],
-};
+import { canSeePlan, EVERY_PLAN, money, PLAN_HOLDER, PLAN_OPTIONS, planFor } from '../plans';
 
 function firstOfNextMonth(d: string) {
   let [y, m] = parse(d); m++; if (m > 12) { m = 1; y++; }
@@ -32,12 +27,13 @@ function TierCard() {
     acc[c.title] = prev ? { ...prev, from: prev.from ?? c.from, to: prev.to ?? c.to } : c;
     return acc;
   }, {}));
-  const andrew = memberOf(family, 'andrew');
+  const andrew = memberOf(family, PLAN_HOLDER);
+  const price = (t: Tier) => money(planFor(t).monthlyCents);
   return (
     <section className="card stack">
-      <div className="row"><Avatar m={andrew} size="lg" /><div><h2 className="h2">Andrew's tier</h2><p className="sub">Now ${current.toLocaleString()} a month{scheduled !== current ? `. $${scheduled.toLocaleString()} starts ${prettyDate(startsOn)}` : ''}</p></div></div>
-      <div className="seg">{([500, 700, 1000] as Tier[]).map(t => <button key={t} className={pick === t ? 'on' : ''} onClick={() => { setPick(t); sounds.tap(); }}>${t.toLocaleString()}</button>)}</div>
-      <div className="stack" style={{ gap: 6 }}>{TIER_PERKS[pick].map(p => <div key={p} className="row sub" style={{ color: 'var(--ink)' }}>· {p}</div>)}</div>
+      <div className="row"><Avatar m={andrew} size="lg" /><div className="grow"><h2 className="h2">{andrew?.name}'s plan</h2><p className="sub">Now {price(current)} a month{scheduled !== current ? `. ${price(scheduled)} starts ${prettyDate(startsOn)}` : ''}</p></div><span className="pill p-dim">Private</span></div>
+      <div className="seg">{PLAN_OPTIONS.map(o => <button key={o.level} className={pick === o.level ? 'on' : ''} onClick={() => { setPick(o.level); sounds.tap(); }}>{money(o.monthlyCents)}</button>)}</div>
+      <div className="stack" style={{ gap: 6 }}>{planFor(pick).perks.map(p => <div key={p} className="row sub" style={{ color: 'var(--ink)' }}>· {p}</div>)}</div>
       {pick !== current && (
         <div className="stack" style={{ gap: 8 }}>
           <span className="eyebrow">{changes.length} chores change hands</span>
@@ -47,15 +43,28 @@ function TierCard() {
               <span className="row sub" style={{ gap: 6 }}><Avatars ms={(c.from ?? []).map(i => memberOf(family, i))} size="sm" />→<Avatars ms={(c.to ?? []).map(i => memberOf(family, i))} size="sm" /><span style={{ minWidth: 70, textAlign: 'right' }}>{name(c.to)}</span></span>
             </div>
           ))}
-          {pick !== 500 && <p className="sub">Light bulbs in the shared rooms move to Josh too. Those are assigned by hand when one burns out.</p>}
+          {pick !== 1 && <p className="sub">Light bulbs in the shared rooms move to Josh too. Those are assigned by hand when one burns out.</p>}
         </div>
       )}
       {pick !== scheduled && (
-        <button className="btn btn-em" onClick={() => { app.setTier(pick, startsOn); sounds.approve(); toast(`$${pick.toLocaleString()} starts ${prettyDate(startsOn)}`); }}>
-          Start ${pick.toLocaleString()} on {prettyDate(startsOn)}
+        <button className="btn btn-em" onClick={() => { app.setTier(pick, startsOn); sounds.approve(); toast(`${price(pick)} starts ${prettyDate(startsOn)}`); }}>
+          Start {price(pick)} on {prettyDate(startsOn)}
         </button>
       )}
-      <p className="sub">Every tier: chores, buying Uso's food, no overnight guests. Changes start on the 1st so nobody's week moves under them.</p>
+      <p className="sub">{EVERY_PLAN} Changes start on the 1st so nobody's week moves under them. Only you, Vanilla and {andrew?.name} can see this card. Siblings only see which chores are theirs.</p>
+    </section>
+  );
+}
+
+function MyPlanCard() {
+  const app = useApp();
+  const plan = planFor(app.tier);
+  return (
+    <section className="card stack">
+      <div className="row between"><h2 className="h2">My plan</h2><span className="pill p-dim">Private</span></div>
+      <div className="row between"><span className="sub">Monthly</span><b className="mono">{money(plan.monthlyCents)}</b></div>
+      <div className="stack" style={{ gap: 6 }}>{plan.perks.map(p => <div key={p} className="sub" style={{ color: 'var(--ink)' }}>· {p}</div>)}</div>
+      <p className="sub">{EVERY_PLAN} Only you and your parents can see this. To change plans, talk to Josh. Changes start on the 1st.</p>
     </section>
   );
 }
@@ -91,6 +100,7 @@ export function More() {
       {editMe && me && <ProfileSheet m={me} onClose={() => setEditMe(false)} />}
       {app.isAdmin && <FamilyMembers />}
       {app.isAdmin && <TierCard />}
+      {!app.isAdmin && canSeePlan(app.me, app.isAdmin) && <MyPlanCard />}
       {app.isAdmin && <RotationCard />}
       <section className="card stack">
         <h2 className="h2">Preview another day</h2>
@@ -98,11 +108,11 @@ export function More() {
         <input type="date" id="preview-date" value={app.previewDate ?? app.today} onChange={e => app.setPreviewDate(e.target.value || null)} />
         {app.previewDate && <button className="btn btn-ghost" onClick={() => app.setPreviewDate(null)}>Back to today</button>}
       </section>
-      <section className="card stack">
+      {app.isAdmin && <section className="card stack">
         <h2 className="h2">Filled in for now</h2>
         <p className="sub">The plan didn't say. Tell Claude to change any of these.</p>
         <ul className="stack" style={{ margin: 0, paddingLeft: 18, gap: 8, fontSize: 13.5 }}>{app.assumptions.map(a => <li key={a}>{a}</li>)}</ul>
-      </section>
+      </section>}
       <section className="card stack">
         <h2 className="h2">Demo mode</h2>
         <p className="sub">Data stays on this device until the family database is connected. Proof photos delete after 14 days.</p>

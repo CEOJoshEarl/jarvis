@@ -6,7 +6,7 @@ import { addDays, daysBetween, daysInMonth, parse, weekStart, weekday, month } f
 import type { ChoreTemplate, FamilyConfig, MemberId, OwnerRule, TaskInstance, Tier, Weekday } from './types';
 
 export function tierOn(family: FamilyConfig, date: string): Tier {
-  let t: Tier = family.tiers[0]?.tier ?? 500;
+  let t: Tier = family.tiers[0]?.tier ?? 1;
   for (const h of [...family.tiers].sort((a, b) => a.from.localeCompare(b.from))) {
     if (h.from <= date) t = h.tier;
   }

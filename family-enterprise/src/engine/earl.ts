@@ -1,5 +1,6 @@
 // The Earl family: first family on Family Enterprise.
-// Every chore in the Earl Family Household Plan, with Andrew's tiers.
+// Every chore in the Earl Family Household Plan. Andrew's plan shows here only as chore level 1, 2 or 3;
+// prices and perks are private (see src/plans.ts).
 // Anything the plan didn't pin down is listed in EARL_ASSUMPTIONS so it can
 // be confirmed or changed in Settings.
 
@@ -23,7 +24,7 @@ export const EARL_FAMILY: FamilyConfig = {
     { id: 'max', name: 'Max', short: 'MX', color: '#4DA3FF', role: 'member' },
     { id: 'uso', name: 'Uso', short: 'US', color: '#D9A36A', role: 'pet' },
   ],
-  tiers: [{ tier: 500, from: '2026-11-01' }],
+  tiers: [{ tier: 1, from: '2026-11-01' }],
   rotation: {
     start: '2026-11-29',
     // Week-one order is random; reshuffle in Settings if you like.
@@ -96,25 +97,25 @@ export const EARL_CATALOG: ChoreTemplate[] = [
   {
     id: 'kitchen-mop', title: 'Mop the kitchen', area: 'Kitchen', checklist: ['Mop the kitchen and sitting area'],
     proof: 'photo', schedule: { kind: 'weekly', due: 5 }, owner: fixed('andrew'),
-    byTier: { 1000: fixed('vanilla') }, due: '21:00',
+    byTier: { 3: fixed('vanilla') }, due: '21:00',
   },
   {
     id: 'kitchen-appliances', title: 'Wipe appliances and microwave', area: 'Kitchen',
     checklist: ['Fridge, dishwasher and stove fronts', 'Microwave inside and out'],
     proof: 'photo', schedule: { kind: 'weekly', due: 5 }, owner: fixed('andrew'),
-    byTier: { 700: fixed('max'), 1000: fixed('max') }, due: '21:00',
+    byTier: { 2: fixed('max'), 3: fixed('max') }, due: '21:00',
   },
   {
     id: 'kitchen-cooktop', title: 'Scrub cooktop and clean the stove fan filter', area: 'Kitchen',
     checklist: ['Scrub the cooktop', 'Clean the stove fan filter'],
     proof: 'photo', schedule: { kind: 'weekly', due: 5 }, owner: fixed('andrew'),
-    byTier: { 700: null, 1000: null }, due: '21:00',
+    byTier: { 2: null, 3: null }, due: '21:00',
   },
   {
     id: 'kitchen-cooktop-sunday', title: 'Scrub cooktop and clean the stove fan filter', area: 'Kitchen',
     checklist: ['Scrub the cooktop', 'Clean the stove fan filter'],
     proof: 'photo', schedule: { kind: 'weekly', due: 0 }, owner: fixed('angela'),
-    byTier: { 500: null }, due: '21:00',
+    byTier: { 1: null }, due: '21:00',
   },
   {
     id: 'kitchen-towels', title: 'Swap kitchen towels and sponges', area: 'Kitchen', checklist: ['Fresh towels', 'New sponges'],
@@ -130,7 +131,7 @@ export const EARL_CATALOG: ChoreTemplate[] = [
   {
     id: 'uso-morning', title: "Uso's morning feed, water and walk", area: 'Uso',
     checklist: ['Food', 'Fresh water', 'Walk'], proof: 'either',
-    schedule: { kind: 'daily' }, owner: fixed('andrew'), byTier: { 1000: fixed('josh') },
+    schedule: { kind: 'daily' }, owner: fixed('andrew'), byTier: { 3: fixed('josh') },
     due: '10:00', dueOn: { 6: '08:00' }, note: 'Saturday: before we leave at 8.',
   },
   {
@@ -162,7 +163,7 @@ export const EARL_CATALOG: ChoreTemplate[] = [
   },
   {
     id: 'uso-food', title: "Buy Uso's food", area: 'Uso', checklist: ['Check the bag', 'Restock before it runs out'],
-    proof: 'photo', schedule: { kind: 'monthly', dueDay: 7 }, owner: fixed('andrew'), due: '21:00', note: 'Andrew buys Uso\'s food at every tier.',
+    proof: 'photo', schedule: { kind: 'monthly', dueDay: 7 }, owner: fixed('andrew'), due: '21:00',
   },
 
   // ---------------- Josh ----------------
@@ -280,17 +281,17 @@ export const EARL_CATALOG: ChoreTemplate[] = [
   // ---------------- Andrew: outside and the house ----------------
   {
     id: 'trash-out', title: 'Trash bins to the street', area: 'Outside', checklist: ['Both bins at the curb'],
-    proof: 'photo', schedule: { kind: 'weekly', due: 3 }, owner: fixed('andrew'), byTier: { 1000: fixed('max') },
+    proof: 'photo', schedule: { kind: 'weekly', due: 3 }, owner: fixed('andrew'), byTier: { 3: fixed('max') },
     due: '19:00', note: 'Pickup is Thursday.',
   },
   {
     id: 'trash-back', title: 'Trash bins back behind the house', area: 'Outside', checklist: ['Behind the house, hidden from the street'],
-    proof: 'photo', schedule: { kind: 'weekly', due: 4 }, owner: fixed('andrew'), byTier: { 1000: fixed('max') },
+    proof: 'photo', schedule: { kind: 'weekly', due: 4 }, owner: fixed('andrew'), byTier: { 3: fixed('max') },
     due: '19:00', note: 'Behind the house. Not the side, not the front. This has been an HOA issue.',
   },
   {
     id: 'trash-rinse', title: 'Rinse the trash bins', area: 'Outside', checklist: ['Both bins rinsed'],
-    proof: 'photo', schedule: { kind: 'monthly', dueDay: 21, months: SPRING_TO_FALL }, owner: fixed('andrew'), byTier: { 1000: fixed('max') }, due: '19:00',
+    proof: 'photo', schedule: { kind: 'monthly', dueDay: 21, months: SPRING_TO_FALL }, owner: fixed('andrew'), byTier: { 3: fixed('max') }, due: '19:00',
   },
   {
     id: 'yard', title: 'Yard work', area: 'Outside', checklist: ['Grass', 'Hedges', 'Weeds', 'Leaves'],
@@ -306,11 +307,11 @@ export const EARL_CATALOG: ChoreTemplate[] = [
   },
   {
     id: 'gutters', title: 'Clean the gutters', area: 'Outside', checklist: ['Gutters cleared', 'Downspouts flowing'],
-    proof: 'either', schedule: { kind: 'monthly', dueDay: 21, months: [5, 11] }, owner: fixed('andrew'), due: '18:00', note: 'Andrew at every tier.',
+    proof: 'either', schedule: { kind: 'monthly', dueDay: 21, months: [5, 11] }, owner: fixed('andrew'), due: '18:00',
   },
   {
     id: 'outside-windows', title: 'Outside windows', area: 'Outside', checklist: ['All outside windows washed'],
-    proof: 'photo', schedule: { kind: 'monthly', dueDay: 21, months: [4, 10] }, owner: fixed('andrew'), byTier: { 1000: null }, due: '18:00',
+    proof: 'photo', schedule: { kind: 'monthly', dueDay: 21, months: [4, 10] }, owner: fixed('andrew'), byTier: { 3: null }, due: '18:00',
   },
   {
     id: 'pressure-wash', title: 'Pressure washing', area: 'Outside', checklist: ['House', 'Deck', 'Driveway'],
@@ -322,7 +323,7 @@ export const EARL_CATALOG: ChoreTemplate[] = [
   },
   {
     id: 'storage-room', title: 'Upstairs storage room', area: 'Storage room', checklist: ['Floor clear', 'Everything in its spot'],
-    proof: 'photo', schedule: { kind: 'monthly', dueDay: 21 }, owner: fixed('andrew'), byTier: { 1000: null }, due: '21:00',
+    proof: 'photo', schedule: { kind: 'monthly', dueDay: 21 }, owner: fixed('andrew'), byTier: { 3: null }, due: '21:00',
   },
   {
     id: 'hvac', title: 'Change the HVAC filters', area: 'House', checklist: ['New filters in', 'Date written on them'],
@@ -331,12 +332,12 @@ export const EARL_CATALOG: ChoreTemplate[] = [
   {
     id: 'smoke-detectors', title: 'Test smoke detectors and change batteries', area: 'House', checklist: ['Every detector tested', 'Fresh batteries'],
     proof: 'either', schedule: { kind: 'monthly', dueDay: 15, months: [3, 11] }, owner: fixed('andrew'),
-    byTier: { 700: fixed('josh'), 1000: fixed('josh') }, due: '21:00',
+    byTier: { 2: fixed('josh'), 3: fixed('josh') }, due: '21:00',
   },
   {
     id: 'bulb', title: 'Replace a light bulb', area: 'House', checklist: ['Bulb replaced'],
     proof: 'photo', schedule: { kind: 'asNeeded' }, owner: fixed('andrew'), due: '21:00',
-    note: "$500: Andrew does all bulbs. $700: Josh does the master suite, guest bath, living, dining, kitchen, laundry and the hall to the master. $1,000: Josh does all but Andrew's room, the main hallway and his bathroom.",
+    note: 'A parent assigns this to whoever covers that room.',
   },
   {
     id: 'packages', title: 'Bring in packages', area: 'Packages', checklist: ['Packages inside'],
@@ -359,6 +360,6 @@ export const EARL_ASSUMPTIONS: string[] = [
   'Gutters: May and November. Outside windows: April and October. HVAC filters: every 3 months. Smoke detectors: March and November.',
   'Living and dining room weekly and monthly: Angela. Kitchen monthly deep clean and swapping towels and sponges: Vanilla.',
   'Nightly front of the house reset (foyer, living and dining room), Sunday to Friday by 9 PM: whoever has the foyer in the rotation that week.',
-  'Gutters stay with Andrew at every tier. At $1,000, outside windows and the storage room come off his list with no one named to take them.',
+  'Gutters stay with Andrew on every plan. On his top plan, outside windows and the storage room come off his list with no one named to take them.',
   'Each person signs off their own room photo; Josh and Vanilla approve each other\'s.',
 ];

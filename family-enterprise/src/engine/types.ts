@@ -2,7 +2,11 @@
 // same engine with their own catalog.
 
 export type MemberId = string;
-export type Tier = 500 | 700 | 1000;
+/**
+ * Chore level for a member with a paid plan (Andrew): 1, 2 or 3. Only decides who does which chore.
+ * What the plan costs and its perks are private (parents and that member only) and live in plans.ts / the database.
+ */
+export type Tier = 1 | 2 | 3;
 
 export interface Member {
   id: MemberId;
@@ -43,7 +47,7 @@ export interface ChoreTemplate {
   proof: ProofKind;
   schedule: Schedule;
   owner: OwnerRule;
-  /** Override the owner per tier of Andrew's plan. `null` removes the chore at that tier. */
+  /** Override the owner per chore level of Andrew's plan. `null` removes the chore at that level. */
   byTier?: Partial<Record<Tier, OwnerRule | null>>;
   /** Default due time HH:MM, local family time. */
   due: string;
