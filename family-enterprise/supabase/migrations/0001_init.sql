@@ -58,58 +58,36 @@ create table rotation_groups (
   primary key (family_id, key)
 );
 
-create table chore_templates (             -- the catalog; `spec` holds schedule, owner rules and tier overrides
-  id text not null,
+create table chore_owner_overrides (      -- owners set by parents in the app; the chore catalog itself ships with the app
   family_id uuid not null references families on delete cascade,
-  spec jsonb not null,
-  active boolean not null default true,
-  primary key (family_id, id)
+  template_id text not null,
+  member_keys text[] not null,
+  primary key (family_id, template_id)
 );
 
 -- ---------- Tasks and proof ----------
-create table task_instances (              -- created nightly by the scheduler from the catalog
-  id text not null,                         -- '<template>@<due date>'
-  family_id uuid not null references families on delete cascade,
-  template_id text not null,
-  title text not null,
-  area text not null,
-  checklist text[] not null default '{}',
-  proof text not null,
-  assignee_keys text[] not null,
-  starts_on date not null,
-  due_date date not null,
-  due_at timestamp not null,                -- family-local wall clock
-  points numeric not null default 1,
-  status text not null default 'open'
-    check (status in ('open', 'pending', 'rejected', 'done_on_time', 'done_late', 'missed')),
-  points_awarded numeric,
-  primary key (family_id, id)
-);
-create index on task_instances (family_id, due_date);
-create index on task_instances using gin (assignee_keys);
-
 create table submissions (
   id uuid primary key default gen_random_uuid(),
-  family_id uuid not null,
+  family_id uuid not null references families on delete cascade,
   instance_id text not null,
   member_id uuid not null references members,
   submitted_at timestamptz not null default now(),
   checked text[] not null default '{}',
   proof_path text,                          -- storage object in the 'proofs' bucket
-  proof_type text check (proof_type in ('photo', 'video')),
-  foreign key (family_id, instance_id) references task_instances (family_id, id) on delete cascade
+  proof_type text check (proof_type in ('photo', 'video'))
 );
+create index on submissions (family_id, instance_id);
 
 create table reviews (
   id uuid primary key default gen_random_uuid(),
-  family_id uuid not null,
+  family_id uuid not null references families on delete cascade,
   instance_id text not null,
   reviewer_id uuid references members,      -- null = approved automatically at midnight
   decision text not null check (decision in ('approved', 'rejected')),
   reason text,
-  reviewed_at timestamptz not null default now(),
-  foreign key (family_id, instance_id) references task_instances (family_id, id) on delete cascade
+  reviewed_at timestamptz not null default now()
 );
+create index on reviews (family_id, instance_id);
 
 -- ---------- Penalties, fun account and rent (Phase 3) ----------
 create table ledger (                      -- fines, payments into the family fun account, rent
@@ -149,8 +127,8 @@ create table push_subscriptions (
 do $$
 declare t text;
 begin
-  foreach t in array array['families','members','tier_history','rotation_groups','chore_templates',
-                           'task_instances','submissions','reviews','ledger','rent_plans'] loop
+  foreach t in array array['families','members','tier_history','rotation_groups','chore_owner_overrides',
+                           'submissions','reviews','ledger','rent_plans'] loop
     execute format('alter table %I enable row level security', t);
   end loop;
 end $$;
@@ -162,23 +140,17 @@ create policy "admins edit family" on families for update using (is_family_admin
 do $$
 declare t text;
 begin
-  foreach t in array array['members','tier_history','rotation_groups','chore_templates','task_instances',
+  foreach t in array array['members','tier_history','rotation_groups','chore_owner_overrides',
                            'submissions','reviews','ledger','rent_plans'] loop
     execute format('create policy "family reads" on %I for select using (family_id in (select my_family_ids()))', t);
   end loop;
-  foreach t in array array['members','tier_history','rotation_groups','chore_templates','rent_plans','ledger'] loop
+  foreach t in array array['members','tier_history','rotation_groups','chore_owner_overrides','rent_plans','ledger'] loop
     execute format('create policy "admins write" on %I for all using (is_family_admin(family_id)) with check (is_family_admin(family_id))', t);
   end loop;
 end $$;
 
--- People submit proof for their own tasks only.
-create policy "submit own proof" on submissions for insert with check (
-  member_id = my_member_id(family_id)
-  and exists (
-    select 1 from task_instances i join members m on m.id = member_id
-    where i.family_id = submissions.family_id and i.id = submissions.instance_id and m.key = any (i.assignee_keys)
-  )
-);
+-- People submit proof as themselves only.
+create policy "submit own proof" on submissions for insert with check (member_id = my_member_id(family_id));
 -- Parents review, but never their own submission.
 create policy "admins review" on reviews for insert with check (
   is_family_admin(family_id) and reviewer_id = my_member_id(family_id)
@@ -198,15 +170,15 @@ values ('proofs', 'proofs', false, 52428800, array['image/jpeg','image/png','ima
 on conflict (id) do nothing;
 
 create policy "family reads proofs" on storage.objects for select
-  using (bucket_id = 'proofs' and (storage.foldername(name))[1]::uuid in (select my_family_ids()));
+  using (bucket_id = 'proofs' and (storage.foldername(name))[1] in (select my_family_ids()::text));
 create policy "family uploads proofs" on storage.objects for insert
-  with check (bucket_id = 'proofs' and (storage.foldername(name))[1]::uuid in (select my_family_ids()));
+  with check (bucket_id = 'proofs' and (storage.foldername(name))[1] in (select my_family_ids()::text));
 
 -- ---------- Proof retention: 14 days ----------
 -- The nightly job (an Edge Function on a pg_cron schedule) deletes storage
 -- objects older than this, then clears proof_path here.
 create or replace function expired_proofs(days int default 14)
 returns table (family_id uuid, proof_path text)
-language sql stable as
+language sql stable set search_path = public as
 $$ select family_id, proof_path from submissions
    where proof_path is not null and submitted_at < now() - make_interval(days => days) $$;
