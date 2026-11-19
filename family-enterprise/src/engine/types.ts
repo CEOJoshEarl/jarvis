@@ -13,7 +13,7 @@ export interface Member {
   name: string;
   short: string; // two-letter avatar
   color: string;
-  role: 'admin' | 'member' | 'pet';
+  role: 'admin' | 'member';
   /** Profile picture (data URL in demo mode, storage path once the database is connected). */
   photo?: string;
 }

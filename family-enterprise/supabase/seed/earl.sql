@@ -7,7 +7,7 @@ with f as (
   select f.id, v.key, v.name, v.short, v.color, v.role from f, (values
     ('josh','Josh','JE','#F5B83D','admin'), ('vanilla','Vanilla','VA','#FF7AA8','admin'),
     ('andrew','Andrew','AN','#2FD3C5','member'), ('angela','Angela','AG','#A98BFF','member'),
-    ('max','Max','MX','#4DA3FF','member'), ('uso','Uso','US','#D9A36A','pet')
+    ('max','Max','MX','#4DA3FF','member')
   ) as v(key,name,short,color,role)
   returning id, family_id, key
 ), t as (

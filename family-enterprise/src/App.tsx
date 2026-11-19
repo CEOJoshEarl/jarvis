@@ -12,8 +12,7 @@ type Tab = 'today' | 'family' | 'approve' | 'more';
 
 function SignIn() {
   const app = useApp();
-  const people = app.family.members.filter(m => m.role !== 'pet');
-  const uso = app.family.members.find(m => m.role === 'pet');
+  const people = app.family.members;
   return (
     <div className="page" style={{ alignContent: 'center', minHeight: '100%', gap: 22 }}>
       <Logo family={app.family.name} />
@@ -27,7 +26,6 @@ function SignIn() {
             <Avatar m={p} size="lg" /><b>{p.name}</b>
           </button>
         ))}
-        {uso && <div className="card stack" style={{ justifyItems: 'center', gap: 8, padding: '16px 6px', opacity: .55 }}><Avatar m={uso} size="lg" /><b>{uso.name}</b></div>}
       </div>
       <div className="banner">Demo mode: pick a person to try the app. Google sign-in turns on when the family database is connected.</div>
     </div>

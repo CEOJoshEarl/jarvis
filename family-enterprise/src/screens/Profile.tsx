@@ -53,7 +53,7 @@ export function FamilyMembers() {
       {app.family.members.map(m => (
         <button key={m.id} className="row" style={{ textAlign: 'left' }} onClick={() => setEdit(m)}>
           <Avatar m={m} />
-          <span className="grow"><b>{m.name}</b><div className="sub">{m.role === 'admin' ? 'Parent' : m.role === 'pet' ? 'The dog' : 'Family member'}{m.photo ? '' : ' · no picture yet'}</div></span>
+          <span className="grow"><b>{m.name}</b><div className="sub">{m.role === 'admin' ? 'Parent' : 'Family member'}{m.photo ? '' : ' · no picture yet'}</div></span>
           <span className="sub">Edit</span>
         </button>
       ))}

@@ -22,7 +22,6 @@ export const EARL_FAMILY: FamilyConfig = {
     { id: 'andrew', name: 'Andrew', short: 'AN', color: '#2FD3C5', role: 'member' },
     { id: 'angela', name: 'Angela', short: 'AG', color: '#A98BFF', role: 'member' },
     { id: 'max', name: 'Max', short: 'MX', color: '#4DA3FF', role: 'member' },
-    { id: 'uso', name: 'Uso', short: 'US', color: '#D9A36A', role: 'pet' },
   ],
   tiers: [{ tier: 1, from: '2026-11-01' }],
   rotation: {

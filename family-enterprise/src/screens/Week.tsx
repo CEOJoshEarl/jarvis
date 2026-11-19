@@ -24,7 +24,7 @@ export function Week() {
   const [sel, setSel] = useState<{ who: MemberId; day: string } | null>({ who: app.me!, day: today });
   const [open, setOpen] = useState<Task | null>(null);
   const days = Array.from({ length: 7 }, (_, i) => addDays(start, i));
-  const people = family.members.filter(m => m.role !== 'pet');
+  const people = family.members;
   const byDay = Object.fromEntries(days.map(d => [d, app.due(d)]));
   const selTasks = sel ? (byDay[sel.day] ?? app.due(sel.day)).filter(t => t.assignees.includes(sel.who)) : [];
   const friday = addDays(start, 5);
@@ -95,7 +95,7 @@ function Unassigned() {
   const [editing, setEditing] = useState<string | null>(null);
   const [pick, setPick] = useState<MemberId[]>([]);
   if (!list.length) return null;
-  const people = app.family.members.filter(m => m.role !== 'pet');
+  const people = app.family.members;
   return (
     <section className="stack" style={{ gap: 8 }}>
       <span className="eyebrow">Needs an owner · {list.length}</span>
