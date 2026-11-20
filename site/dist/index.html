@@ -3,6 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<link rel="icon" type="image/png" href="assets/icon-64.png">
+<link rel="apple-touch-icon" href="assets/icon-192.png">
+<meta property="og:image" content="assets/icon-512.png">
 <style>:root{padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
 </head>
 <body>
@@ -15,9 +18,10 @@
 <style>
 /* Layout: The Business Funders navy + green; content on a 1180px column; signature = the live "ops ledger" of real fulfillment events. */
 :root{
-  --ground:#070F26; --ground-2:#0B1636; --panel:#0F1D45; --panel-2:#142554; --line:#22386F;
-  --ink:#F3F6FF; --ink-2:#BAC6E6; --mute:#8090B8;
-  --green:#3ABB13; --lime:#5BD62F; --gold:#8FB3FF; --on-lime:#061208; --red:#FF7A6B;
+  --ground:#000413; --ground-2:#030A22; --panel:#071233; --panel-2:#0B1A45; --line:#16275C;
+  --ink:#F2F5FF; --ink-2:#B4C1E6; --mute:#7A8AB6;
+  --green:#4CC236; --lime:#5FD63F; --gold:#4F86FF; --on-lime:#03120A; --red:#FF7A6B;
+  --navbg:#000413; --logo-l:none; --logo-d:block;
   --display:"Raleway",ui-sans-serif,system-ui,sans-serif;
   --body:"Montserrat",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
   --mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
@@ -25,19 +29,21 @@
   color-scheme:dark;
 }
 @media (prefers-color-scheme: light){:root:not([data-theme="dark"]){
-  --ground:#F6F8FD; --ground-2:#EDF1FA; --panel:#FFFFFF; --panel-2:#F2F5FC; --line:#D9E0F1;
-  --ink:#1C2F72; --ink-2:#3D4B78; --mute:#6A779E;
-  --green:#2E9E10; --lime:#3ABB13; --gold:#2F55C8; --on-lime:#FFFFFF; --red:#C8372B;
+  --ground:#F7F9FE; --ground-2:#EEF2FB; --panel:#FFFFFF; --panel-2:#F2F5FC; --line:#DAE1F2;
+  --ink:#0B1440; --ink-2:#33406E; --mute:#66739C;
+  --green:#2E9E10; --lime:#3BB21E; --gold:#1554E0; --on-lime:#FFFFFF; --red:#C8372B;
+  --navbg:#FEFEFE; --logo-l:block; --logo-d:none;
   color-scheme:light }}
 :root[data-theme="light"]{
-  --ground:#F6F8FD; --ground-2:#EDF1FA; --panel:#FFFFFF; --panel-2:#F2F5FC; --line:#D9E0F1;
-  --ink:#1C2F72; --ink-2:#3D4B78; --mute:#6A779E;
-  --green:#2E9E10; --lime:#3ABB13; --gold:#2F55C8; --on-lime:#FFFFFF; --red:#C8372B;
+  --ground:#F7F9FE; --ground-2:#EEF2FB; --panel:#FFFFFF; --panel-2:#F2F5FC; --line:#DAE1F2;
+  --ink:#0B1440; --ink-2:#33406E; --mute:#66739C;
+  --green:#2E9E10; --lime:#3BB21E; --gold:#1554E0; --on-lime:#FFFFFF; --red:#C8372B;
+  --navbg:#FEFEFE; --logo-l:block; --logo-d:none;
   color-scheme:light }
 
 *{box-sizing:border-box}
 body{background:var(--ground);color:var(--ink);font:400 17px/1.6 var(--body);-webkit-font-smoothing:antialiased;overflow-x:hidden}
-body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--ground)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--navbg)}
 a{color:inherit}
 h1,h2,h3{font-family:var(--display);letter-spacing:-.015em;line-height:1.05;margin:0;text-wrap:balance}
 h1{font-size:clamp(40px,6.6vw,84px);font-weight:900}
@@ -66,12 +72,14 @@ p{margin:0}
 .ticks span::before{content:"✓";color:var(--lime);margin-right:8px;font-weight:800}
 
 /* nav */
-.nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:color-mix(in srgb,var(--ground) 86%,transparent);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:var(--navbg);border-bottom:1px solid var(--line)}
 .nav .wrap{display:flex;align-items:center;gap:28px;height:72px}
 .brand{display:flex;align-items:center;gap:11px;text-decoration:none;flex-shrink:0}
 .mark{width:34px;height:34px;border-radius:9px;background:linear-gradient(140deg,var(--green),var(--lime));display:grid;place-items:center}
 .mark svg{width:20px;height:20px}
-.mark{background:linear-gradient(140deg,#1C2F72,#2F55C8)}.mark svg path{stroke:#5BD62F}
+.logo{height:54px;width:auto;display:block}.logo-l{display:var(--logo-l);mix-blend-mode:multiply}.logo-d{display:var(--logo-d);mix-blend-mode:lighten}
+.foot .logo{height:56px}.brand .sub{font:600 10px/1 var(--mono);letter-spacing:.2em;color:var(--mute);text-transform:uppercase;padding-left:12px;border-left:1px solid var(--line);align-self:center}
+@media (max-width:560px){.brand .sub{display:none}.logo{height:40px}}
 .brand b{font:900 17px/1 var(--display);font-stretch:120%;letter-spacing:-.01em;display:block}
 .brand small{font:600 10px/1 var(--mono);letter-spacing:.2em;color:var(--mute);text-transform:uppercase}
 .links{display:flex;gap:4px;margin-left:auto}
@@ -324,7 +332,7 @@ fieldset{border:0;padding:0;margin:0;display:grid;gap:10px;min-width:0}
 /* final + footer */
 .final{text-align:left;display:grid;gap:22px;justify-items:start;padding:clamp(40px,6vw,72px);border-radius:28px;background:radial-gradient(120% 140% at 100% 0%,color-mix(in srgb,var(--green) 28%,var(--panel)),var(--panel));border:1px solid var(--line)}
 .final h2{max-width:18ch}
-footer{border-top:1px solid var(--line);padding-block:48px 40px;color:var(--mute);font-size:14px}
+footer{border-top:1px solid var(--line);padding-block:48px 40px;color:var(--mute);font-size:14px;background:var(--navbg)}
 .foot{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:28px}
 @media (max-width:860px){.foot{grid-template-columns:1fr 1fr}}
 .foot h4{margin:0 0 12px;font:700 12px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-2)}
@@ -347,8 +355,8 @@ footer{border-top:1px solid var(--line);padding-block:48px 40px;color:var(--mute
 <nav class="nav" aria-label="Main">
   <div class="wrap">
     <a class="brand" href="#home" aria-label="The Business Funders Fulfillment home">
-      <span class="mark"><svg viewBox="0 0 24 24" fill="none" stroke="#04150C" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 17l5-5 4 4 7-8"/><path d="M15 8h5v5"/></svg></span>
-      <span><b>The Business Funders</b><small>Fulfillment</small></span>
+      <img class="logo logo-l" src="assets/logo-light.webp" alt="The Business Funders" width="234" height="112"><img class="logo logo-d" src="assets/logo-dark.webp" alt="The Business Funders" width="242" height="112">
+      <span class="sub">Fulfillment</span>
     </a>
     <div class="links">
       <a href="#home" data-nav="home">Home</a>
@@ -918,7 +926,7 @@ footer{border-top:1px solid var(--line);padding-block:48px 40px;color:var(--mute
     </div>
     <div class="foot">
       <div>
-        <a class="brand" href="#home"><span class="mark"><svg viewBox="0 0 24 24" fill="none" stroke="#04150C" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 17l5-5 4 4 7-8"/><path d="M15 8h5v5"/></svg></span><span><b style="color:var(--ink)">The Business Funders</b><small>Fulfillment</small></span></a>
+        <a class="brand" href="#home" aria-label="The Business Funders home"><img class="logo logo-l" src="assets/logo-light.webp" alt="The Business Funders" width="234" height="112"><img class="logo logo-d" src="assets/logo-dark.webp" alt="The Business Funders" width="242" height="112"></a>
         <p style="margin-top:14px;max-width:34ch">White-label back-end fulfillment for credit repair and business funding.</p>
       </div>
       <div><h4>Services</h4><a href="#credit-repair">Credit repair fulfillment</a><a href="#business-funding">Business funding fulfillment</a><a href="#cr-pricing">Pricing</a></div>
