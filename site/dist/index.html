@@ -6,40 +6,40 @@
 <style>:root{padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
 </head>
 <body>
-<title>CEO Syndicate Fulfillment</title>
+<title>The Business Funders Fulfillment</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <meta name="description" content="White-label back-end fulfillment for credit repair and business funding. We run the disputes, mail, lender submissions and follow-up so you can sell.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@112..125,600..900&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Raleway:wght@700;800;900&family=Montserrat:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap">
 <style>
-/* Layout: dark operations-room ground; content on a 1180px column; signature = the live "ops ledger" of real fulfillment events. */
+/* Layout: The Business Funders navy + green; content on a 1180px column; signature = the live "ops ledger" of real fulfillment events. */
 :root{
-  --ground:#010B06; --ground-2:#04150C; --panel:#07200F; --panel-2:#0B2A15; --line:#143A20;
-  --ink:#F2FFE8; --ink-2:#B6D9A6; --mute:#6F9363;
-  --green:#4CBB17; --lime:#9BF442; --gold:#FFB43A; --on-lime:#04150C; --red:#FF6B5B;
-  --display:"Archivo",ui-sans-serif,system-ui,sans-serif;
-  --body:"Manrope",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+  --ground:#070F26; --ground-2:#0B1636; --panel:#0F1D45; --panel-2:#142554; --line:#22386F;
+  --ink:#F3F6FF; --ink-2:#BAC6E6; --mute:#8090B8;
+  --green:#3ABB13; --lime:#5BD62F; --gold:#8FB3FF; --on-lime:#061208; --red:#FF7A6B;
+  --display:"Raleway",ui-sans-serif,system-ui,sans-serif;
+  --body:"Montserrat",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
   --mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
   --r:14px; --max:1180px;
   color-scheme:dark;
 }
 @media (prefers-color-scheme: light){:root:not([data-theme="dark"]){
-  --ground:#F6FBF1; --ground-2:#EDF6E5; --panel:#FFFFFF; --panel-2:#F1F8EA; --line:#D6E8CB;
-  --ink:#06170C; --ink-2:#2F4A33; --mute:#5E7A58;
-  --green:#2E8F10; --lime:#4CBB17; --gold:#B76E00; --on-lime:#FFFFFF; --red:#C8372B;
+  --ground:#F6F8FD; --ground-2:#EDF1FA; --panel:#FFFFFF; --panel-2:#F2F5FC; --line:#D9E0F1;
+  --ink:#1C2F72; --ink-2:#3D4B78; --mute:#6A779E;
+  --green:#2E9E10; --lime:#3ABB13; --gold:#2F55C8; --on-lime:#FFFFFF; --red:#C8372B;
   color-scheme:light }}
 :root[data-theme="light"]{
-  --ground:#F6FBF1; --ground-2:#EDF6E5; --panel:#FFFFFF; --panel-2:#F1F8EA; --line:#D6E8CB;
-  --ink:#06170C; --ink-2:#2F4A33; --mute:#5E7A58;
-  --green:#2E8F10; --lime:#4CBB17; --gold:#B76E00; --on-lime:#FFFFFF; --red:#C8372B;
+  --ground:#F6F8FD; --ground-2:#EDF1FA; --panel:#FFFFFF; --panel-2:#F2F5FC; --line:#D9E0F1;
+  --ink:#1C2F72; --ink-2:#3D4B78; --mute:#6A779E;
+  --green:#2E9E10; --lime:#3ABB13; --gold:#2F55C8; --on-lime:#FFFFFF; --red:#C8372B;
   color-scheme:light }
 
 *{box-sizing:border-box}
 body{background:var(--ground);color:var(--ink);font:400 17px/1.6 var(--body);-webkit-font-smoothing:antialiased;overflow-x:hidden}
 body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--ground)}
 a{color:inherit}
-h1,h2,h3{font-family:var(--display);font-stretch:118%;letter-spacing:-.02em;line-height:1.02;margin:0;text-wrap:balance}
+h1,h2,h3{font-family:var(--display);letter-spacing:-.015em;line-height:1.05;margin:0;text-wrap:balance}
 h1{font-size:clamp(40px,6.6vw,84px);font-weight:900}
 h2{font-size:clamp(30px,4.2vw,52px);font-weight:850}
 h3{font-size:21px;font-weight:800;font-stretch:112%;letter-spacing:-.01em;line-height:1.15}
@@ -55,7 +55,7 @@ p{margin:0}
 .gold{color:var(--gold)}
 
 /* buttons */
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;font:800 16px/1 var(--body);text-decoration:none;border-radius:999px;padding:18px 26px;border:0;cursor:pointer;transition:transform .15s ease,box-shadow .15s ease,background .15s}
+.btn{white-space:nowrap;display:inline-flex;align-items:center;justify-content:center;gap:10px;font:800 16px/1 var(--body);text-decoration:none;border-radius:999px;padding:18px 26px;border:0;cursor:pointer;transition:transform .15s ease,box-shadow .15s ease,background .15s}
 .btn-primary{background:var(--lime);color:var(--on-lime);box-shadow:0 10px 30px -10px color-mix(in srgb,var(--lime) 70%,transparent)}
 .btn-primary:hover{transform:translateY(-2px);box-shadow:0 16px 40px -12px color-mix(in srgb,var(--lime) 80%,transparent)}
 .btn-ghost{background:transparent;color:var(--ink);border:1.5px solid var(--line)}
@@ -71,14 +71,17 @@ p{margin:0}
 .brand{display:flex;align-items:center;gap:11px;text-decoration:none;flex-shrink:0}
 .mark{width:34px;height:34px;border-radius:9px;background:linear-gradient(140deg,var(--green),var(--lime));display:grid;place-items:center}
 .mark svg{width:20px;height:20px}
+.mark{background:linear-gradient(140deg,#1C2F72,#2F55C8)}.mark svg path{stroke:#5BD62F}
 .brand b{font:900 17px/1 var(--display);font-stretch:120%;letter-spacing:-.01em;display:block}
 .brand small{font:600 10px/1 var(--mono);letter-spacing:.2em;color:var(--mute);text-transform:uppercase}
 .links{display:flex;gap:4px;margin-left:auto}
-.links a{text-decoration:none;font-weight:700;font-size:15px;color:var(--ink-2);padding:9px 14px;border-radius:999px}
+.links a{white-space:nowrap;text-decoration:none;font-weight:700;font-size:15px;color:var(--ink-2);padding:9px 14px;border-radius:999px}
 .links a:hover{color:var(--ink)}
 .links a[aria-current="page"]{color:var(--ink);background:var(--panel-2)}
 .nav .btn{padding:12px 18px;font-size:14.5px}
-@media (max-width:860px){.links{display:none}.nav .btn{margin-left:auto}}
+.navlogin{text-decoration:none;font-weight:700;font-size:14.5px;color:var(--ink-2);white-space:nowrap}.navlogin:hover{color:var(--ink)}
+@media (max-width:1040px){.links{display:none}.navlogin{margin-left:auto}}
+@media (max-width:480px){.navlogin{display:none}.nav .btn{margin-left:auto}}
 
 /* hero */
 .hero{padding-block:clamp(48px,7vw,96px) clamp(56px,8vw,100px);position:relative;overflow:hidden}
@@ -121,13 +124,21 @@ p{margin:0}
 .door.fund li::before{color:var(--gold)}
 .door .go{display:flex;align-items:center;justify-content:space-between;padding-top:18px;border-top:1px solid var(--line);font-weight:800}
 .door .go span:last-child{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:var(--lime);color:var(--on-lime);font-size:20px;transition:transform .2s}
-.door.fund .go span:last-child{background:var(--gold);color:#1C1200}
+.door.fund .go span:last-child{background:var(--gold);color:#fff}
 .door:hover .go span:last-child{transform:translateX(4px)}
 .door .price{font:800 15px/1.3 var(--body)}
 .bridge{margin-top:20px;display:flex;gap:18px;align-items:center;flex-wrap:wrap;padding:22px 26px;border-radius:18px;border:1.5px dashed var(--line);background:var(--ground-2)}
 .bridge p{flex:1;min-width:260px;color:var(--ink-2)}
 .bridge strong{color:var(--ink)}
 
+/* stat band */
+.statband{border-block:1px solid var(--line);background:var(--panel)}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);padding-block:30px}
+.stats div{display:grid;gap:4px;padding:0 20px;border-left:1px solid var(--line)}
+.stats div:first-child{border-left:0;padding-left:0}
+.stats b{font:900 clamp(32px,3.6vw,46px)/1 var(--display);color:var(--lime);letter-spacing:-.02em}
+.stats span{font-size:14px;color:var(--ink-2);font-weight:600}
+@media (max-width:760px){.stats{grid-template-columns:1fr 1fr;gap:22px}.stats div:nth-child(3){border-left:0;padding-left:0}}
 /* pain / stat strip */
 .split{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
 @media (max-width:900px){.split{grid-template-columns:1fr}}
@@ -304,6 +315,7 @@ footer{border-top:1px solid var(--line);padding-block:48px 40px;color:var(--mute
 .foot h4{margin:0 0 12px;font:700 12px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-2)}
 .foot a{display:block;text-decoration:none;padding:4px 0}
 .foot a:hover{color:var(--ink)}
+.foot .contact{display:block;padding:4px 0;user-select:all;overflow-wrap:anywhere}
 .legal{margin-top:36px;padding-top:22px;border-top:1px solid var(--line);font-size:12.5px;line-height:1.6;max-width:110ch}
 .refer{display:flex;gap:16px;align-items:center;justify-content:space-between;flex-wrap:wrap;padding:22px 26px;border-radius:16px;background:var(--panel-2);border:1px solid var(--line);margin-bottom:40px}
 .refer p{color:var(--ink-2)}
@@ -319,15 +331,16 @@ footer{border-top:1px solid var(--line);padding-block:48px 40px;color:var(--mute
 
 <nav class="nav" aria-label="Main">
   <div class="wrap">
-    <a class="brand" href="#home" aria-label="CEO Syndicate Fulfillment home">
+    <a class="brand" href="#home" aria-label="The Business Funders Fulfillment home">
       <span class="mark"><svg viewBox="0 0 24 24" fill="none" stroke="#04150C" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 17l5-5 4 4 7-8"/><path d="M15 8h5v5"/></svg></span>
-      <span><b>CEO Syndicate</b><small>Fulfillment</small></span>
+      <span><b>The Business Funders</b><small>Fulfillment</small></span>
     </a>
     <div class="links">
       <a href="#home" data-nav="home">Home</a>
-      <a href="#credit-repair" data-nav="credit-repair">Credit Repair Fulfillment</a>
-      <a href="#business-funding" data-nav="business-funding">Business Funding Fulfillment</a>
+      <a href="#credit-repair" data-nav="credit-repair">Credit Repair</a>
+      <a href="#business-funding" data-nav="business-funding">Business Funding</a>
     </div>
+    <a class="navlogin" href="https://portal.thebusinessfunders.com/" target="_blank" rel="noopener">Partner login</a>
     <a class="btn btn-primary" href="#book" data-book>Book a partner call</a>
   </div>
 </nav>
@@ -340,18 +353,27 @@ footer{border-top:1px solid var(--line);padding-block:48px 40px;color:var(--mute
       <div class="hero-copy">
         <span class="eyebrow">White-label back office · B2B only</span>
         <h1>You close the deal. <span class="hl">We do the work.</span></h1>
-        <p class="lede">CEO Syndicate Fulfillment is the back-end team behind credit repair companies and the businesses that want to offer funding. We run the disputes, the mail, the lender submissions and the follow-up, under your brand, so your day goes to selling.</p>
+        <p class="lede">The Business Funders is the back-end team behind credit repair companies and the businesses that want to offer funding. We run the disputes, the mail, the lender submissions and the follow-up, under your brand, so your day goes to selling.</p>
         <div class="hero-cta">
           <a class="btn btn-primary" href="#choose">Pick your service ↓</a>
           <a class="btn btn-ghost" href="#book" data-book>Book a 30-min call</a>
         </div>
-        <div class="ticks"><span>Live in 48 hours</span><span>No monthly contracts</span><span>Your clients never see our name</span></div>
+        <div class="ticks"><span>47 fulfillment specialists</span><span>100+ active partners</span><span>Live in 48 hours</span></div>
       </div>
       <aside class="ledger" aria-label="Example of a day of fulfillment activity">
         <div class="ledger-top"><span>Fulfillment ledger · today</span><span class="live"><i></i>Live</span></div>
         <ul class="rows" data-ledger="mixed"></ul>
         <div class="ledger-foot"><span>Every action logged to your portal</span><span>Sample data</span></div>
       </aside>
+    </div>
+  </section>
+
+  <section class="statband" aria-label="Company facts">
+    <div class="wrap stats">
+      <div><b>47</b><span>Fulfillment specialists</span></div>
+      <div><b>100+</b><span>Active partner companies</span></div>
+      <div><b>48 hrs</b><span>From signed to live</span></div>
+      <div><b>50/50</b><span>Funding fee split</span></div>
     </div>
   </section>
 
@@ -376,7 +398,7 @@ footer{border-top:1px solid var(--line);padding-block:48px 40px;color:var(--mute
           <h3>Business Funding Fulfillment</h3>
           <p>Credit repair, accounting, tax, insurance, consulting. If your clients ask you about money, we build the file, match the lender and walk the deal to funded.</p>
           <ul><li>Applications, documents, lender matching, submissions</li><li>SBA, lines of credit, term, equipment, business cards</li><li>We can talk to your client under your brand, if you want us to</li></ul>
-          <span class="price">No upfront cost. <span class="gold">You earn on every funded deal.</span></span>
+          <span class="price">No upfront cost. <span class="gold">You keep 50% of every funding fee.</span></span>
           <span class="go"><span>See business funding fulfillment</span><span aria-hidden="true">→</span></span>
         </a>
       </div>
@@ -443,7 +465,7 @@ footer{border-top:1px solid var(--line);padding-block:48px 40px;color:var(--mute
           <a class="btn btn-ghost" href="#cr-pricing">See pricing</a>
         </div>
         <p class="micro">What happens next: a few quick questions, then you pick a time for a 30-minute call.</p>
-        <div class="ticks"><span>Live in 48 hours</span><span>Postage included</span><span>Credits never expire</span></div>
+        <div class="ticks"><span>Trusted by 100+ partners</span><span>Live in 48 hours</span><span>Postage included</span></div>
       </div>
       <aside class="ledger" aria-label="Example of a day of credit repair fulfillment">
         <div class="ledger-top"><span>Dispute ledger · today</span><span class="live"><i></i>Live</span></div>
@@ -521,7 +543,7 @@ footer{border-top:1px solid var(--line);padding-block:48px 40px;color:var(--mute
       <div class="steps">
         <div class="step"><span class="n">STEP 01</span><span class="when">Today</span><h3>Book your call</h3><p>Answer a few questions and pick a 30-minute slot. We look at your software, your volume and where rounds are slipping.</p></div>
         <div class="step"><span class="n">STEP 02</span><span class="when">Within 48 hours</span><h3>Get set up</h3><p>Choose your credit package, share your software access, and we set up your lane in an onboarding session with your team.</p></div>
-        <div class="step"><span class="n">STEP 03</span><span class="when">Every 35 days</span><h3>We run your rounds</h3><p>Our specialists work every file start to finish. A dedicated partner rep answers your questions in hours, not days.</p></div>
+        <div class="step"><span class="n">STEP 03</span><span class="when">Every 35 days</span><h3>47 specialists run your rounds</h3><p>Our team works every file start to finish. A dedicated partner rep answers your questions in hours, not days.</p></div>
         <div class="step"><span class="n">STEP 04</span><span class="when">Every month</span><h3>Partner review</h3><p>We meet monthly to go over your clients' progress: what moved, what's stuck and where to push next.</p></div>
       </div>
     </div>
@@ -639,12 +661,12 @@ footer{border-top:1px solid var(--line);padding-block:48px 40px;color:var(--mute
       <div class="hero-copy">
         <span class="eyebrow" style="color:var(--lime)">Business funding fulfillment · white label</span>
         <h1>Your clients already ask you about money. <span class="gold">Now you can say yes.</span></h1>
-        <p class="lede">We run the whole funding process behind your brand: application, documents, lender matching, submissions and closing. You make the introduction. You earn on every funded deal. You never have to become a loan expert.</p>
+        <p class="lede">We run the whole funding process behind your brand: application, documents, lender matching, submissions and closing. You make the introduction. You keep half the fee on every funded deal. You never have to become a loan expert.</p>
         <div class="hero-cta">
           <a class="btn btn-primary" href="#book" data-book data-pick="funding">Add funding to my business →</a>
           <a class="btn btn-ghost" href="#bf-how">See how it works</a>
         </div>
-        <div class="ticks"><span>No upfront cost</span><span>Any industry</span><span>You see every message</span></div>
+        <div class="ticks"><span>50/50 fee split</span><span>$0 upfront</span><span>You see every message</span></div>
       </div>
       <aside class="ledger" aria-label="Example of a day of business funding fulfillment">
         <div class="ledger-top"><span>Funding desk · today</span><span class="live"><i></i>Live</span></div>
@@ -765,14 +787,15 @@ footer{border-top:1px solid var(--line);padding-block:48px 40px;color:var(--mute
         <div style="display:grid;gap:16px">
           <span class="eyebrow">How you get paid</span>
           <div class="big">$0 upfront.</div>
-          <h3 style="font-size:26px">You earn a share of every deal that funds.</h3>
-          <p class="lede">No setup fee, no credits, no monthly bill. We only get paid when your client gets funded, so we only win when they do. Your exact split is set on your partner call, based on your volume.</p>
+          <h3 style="font-size:26px">You keep 50% of the fee on every deal that funds.</h3>
+          <p class="lede">No setup fee, no credits, no monthly bill. We only get paid when your client gets funded, and then we split the fee with you down the middle. You bring the relationship, we do the work, and we share the win.</p>
         </div>
         <div style="display:grid;gap:14px">
           <div class="res"><span>Upfront cost</span><b class="gold">$0</b></div>
           <div class="res"><span>Monthly fee</span><b class="gold">$0</b></div>
+          <div class="res"><span>Your share of every fee</span><b class="gold">50%</b></div>
           <div class="res"><span>When you get paid</span><b style="font-size:20px">At funding</b></div>
-          <a class="btn btn-primary" href="#book" data-book data-pick="funding">Get my partner split →</a>
+          <a class="btn btn-primary" href="#book" data-book data-pick="funding">Become a funding partner →</a>
         </div>
       </div>
     </div>
@@ -799,7 +822,7 @@ footer{border-top:1px solid var(--line);padding-block:48px 40px;color:var(--mute
         <details><summary>What kinds of businesses can you fund?</summary><p>Most established businesses with steady revenue, plus newer businesses whose owners have strong personal credit. The fundability review tells us which products fit before anything is submitted.</p></details>
         <details><summary>How long does funding take?</summary><p>It depends on the product. Revenue-based financing can fund in days, lines of credit and term loans usually take one to three weeks, and SBA loans take longer.</p></details>
         <details><summary>I already run credit repair with you. How do the two connect?</summary><p>Your graduating credit repair clients are often ready for funding. When a client finishes, we can flag them for a funding review in your portal.</p></details>
-        <details><summary>How much do I earn per deal?</summary><p>You earn a share of the fee on every funded deal. The split depends on your volume and how involved you want to be, and we set it with you on the partner call.</p></details>
+        <details><summary>How much do I earn per deal?</summary><p>Half. Every funding fee is split 50/50 between you and us, and your share is paid when the deal funds. You can track every payout in your partner portal.</p></details>
       </div>
     </div>
   </section>
@@ -811,10 +834,10 @@ footer{border-top:1px solid var(--line);padding-block:48px 40px;color:var(--mute
     <div class="book-copy">
       <span class="eyebrow">Book a partner call</span>
       <h2>Hand off the work. <span class="hl">Keep the client.</span></h2>
-      <p class="lede">Thirty minutes. We look at your volume, your current setup and where things slip, then show you exactly what you'd pay and what you'd earn.</p>
+      <p class="lede">Thirty minutes with our partner team. We look at your volume, your current setup and where things slip, then show you exactly what you'd pay and what you'd earn. Join 100+ partners who already hand it off.</p>
       <ul class="checks">
         <li><span><b>Live in 48 hours</b> for credit repair fulfillment</span></li>
-        <li><span><b>$0 upfront</b> for business funding fulfillment</span></li>
+        <li><span><b>50/50 fee split</b> and $0 upfront for business funding</span></li>
         <li><span><b>No monthly contracts</b> on either service</span></li>
         <li><span><b>B2B only.</b> We don't take consumer inquiries.</span></li>
       </ul>
@@ -850,7 +873,9 @@ footer{border-top:1px solid var(--line);padding-block:48px 40px;color:var(--mute
       <div class="done" data-step="4" hidden>
         <span class="eyebrow">You're in</span>
         <div class="big">Next: pick your call time.</div>
-        <p class="lede" id="done-msg">We'll email your calendar link in a few minutes.</p>
+        <p class="lede" id="done-msg">Choose a time that works for you below.</p>
+        <div id="cal-slot"></div>
+        <a class="btn btn-primary" id="cal-link" href="https://thebusinessfunders.com/funding-strategy-session" target="_blank" rel="noopener">Open the partner calendar →</a>
       </div>
       <p class="err" id="qerr" role="alert"></p>
       <div class="qnav" id="qnav">
@@ -866,28 +891,37 @@ footer{border-top:1px solid var(--line);padding-block:48px 40px;color:var(--mute
   <div class="wrap">
     <div class="refer">
       <p><b>Know a business that needs this?</b> Our referral partners earn $2 for every credit their referrals buy, plus monthly bonuses.</p>
-      <a class="btn btn-ghost" href="#book" data-book>Become a referral partner</a>
+      <a class="btn btn-ghost" href="https://thebusinessfunders.com/partnerships" target="_blank" rel="noopener">Become a referral partner</a>
     </div>
     <div class="foot">
       <div>
-        <a class="brand" href="#home"><span class="mark"><svg viewBox="0 0 24 24" fill="none" stroke="#04150C" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 17l5-5 4 4 7-8"/><path d="M15 8h5v5"/></svg></span><span><b style="color:var(--ink)">CEO Syndicate</b><small>Fulfillment</small></span></a>
+        <a class="brand" href="#home"><span class="mark"><svg viewBox="0 0 24 24" fill="none" stroke="#04150C" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 17l5-5 4 4 7-8"/><path d="M15 8h5v5"/></svg></span><span><b style="color:var(--ink)">The Business Funders</b><small>Fulfillment</small></span></a>
         <p style="margin-top:14px;max-width:34ch">White-label back-end fulfillment for credit repair and business funding.</p>
       </div>
       <div><h4>Services</h4><a href="#credit-repair">Credit repair fulfillment</a><a href="#business-funding">Business funding fulfillment</a><a href="#cr-pricing">Pricing</a></div>
-      <div><h4>Partners</h4><a href="#book" data-book>Book a call</a><a href="#book" data-book>Referral program</a><a href="#home">Partner portal login</a></div>
-      <div><h4>Legal</h4><a href="#home">Privacy policy</a><a href="#home">Terms of service</a><a href="#home">Compliance</a></div>
+      <div><h4>Partners</h4><a href="#book" data-book>Book a call</a><a href="https://thebusinessfunders.com/partnerships" target="_blank" rel="noopener">Referral program</a><a href="https://portal.thebusinessfunders.com/" target="_blank" rel="noopener">Partner portal login</a><span class="contact">Text 1-888-994-4548</span><span class="contact">partnership@thebusinessfunders.com</span></div>
+      <div><h4>Legal</h4><a href="https://thebusinessfunders.com/privacy-policy" target="_blank" rel="noopener">Privacy policy</a><a href="https://thebusinessfunders.com/terms-of-use" target="_blank" rel="noopener">Terms of use</a><a href="https://thebusinessfunders.com/terms-and-conditions" target="_blank" rel="noopener">Terms and conditions</a></div>
     </div>
-    <p class="legal">CEO Syndicate Fulfillment is a B2B back-end fulfillment provider. We do not sell credit repair services to consumers, do not provide legal, credit or financial advice, and do not guarantee dispute outcomes, approvals or funding amounts. Partners are responsible for their own compliance with applicable federal and state laws, including CROA, FCRA, TSR and state commercial financing disclosure laws. © 2026 CEO Syndicate.</p>
+    <p class="legal">The Business Funders is a B2B back-end fulfillment provider. We do not sell credit repair services to consumers, do not provide legal, credit or financial advice, and do not guarantee dispute outcomes, approvals or funding amounts. Partners are responsible for their own compliance with applicable federal and state laws, including CROA, FCRA, TSR and state commercial financing disclosure laws. © 2026 The Business Funders. A CEO Syndicate company.</p>
   </div>
 </footer>
 
 <div class="sticky-cta"><a class="btn btn-primary" href="#book" data-book>Book a partner call</a></div>
 
 <script>
+/* GoHighLevel connection. calendarUrl: the partner calendar's booking link (GHL > Calendars > Share > Permanent link).
+   webhookUrl (optional): a GHL workflow "Inbound Webhook" URL that receives the qualifier answers.
+   embed: true shows the calendar inside the page; false opens it in a new tab. */
+window.TBF_GHL = window.TBF_GHL || {
+  calendarUrl: '',
+  webhookUrl: '',
+  embed: true,
+  fallbackUrl: 'https://thebusinessfunders.com/funding-strategy-session'
+};
 (() => {
   /* ---------- routing ---------- */
   const views = ['home','credit-repair','business-funding'];
-  const titles = {home:'CEO Syndicate Fulfillment','credit-repair':'Credit Repair Fulfillment · CEO Syndicate','business-funding':'Business Funding Fulfillment · CEO Syndicate'};
+  const titles = {home:'The Business Funders Fulfillment','credit-repair':'Credit Repair Fulfillment · The Business Funders','business-funding':'Business Funding Fulfillment · The Business Funders'};
   let current = 'home';
   function show(name){
     current = name;
@@ -979,17 +1013,44 @@ footer{border-top:1px solid var(--line);padding-block:48px 40px;color:var(--mute
   form.addEventListener('submit', e => {
     e.preventDefault();
     const m = valid(); if (m){ err.textContent=m; return; }
-    if (step===3){
-      const s = {credit:'credit repair fulfillment',funding:'business funding fulfillment',both:'credit repair and business funding fulfillment'}[form.svc.value];
-      $('done-msg').textContent = `Thanks, ${$('f-name').value.trim().split(' ')[0]}. We'll email your calendar link for a ${s} call to ${$('f-email').value.trim()}.`;
-    }
+    if (step===3) connectGHL();
     step++; render();
   });
   form.addEventListener('change', e => { if (e.target.type==='radio' && step<3) { err.textContent=''; setTimeout(()=>{ step++; render(); },180); } });
   back.addEventListener('click', ()=>{ step--; render(); });
+
+  function connectGHL(){
+    const G = window.TBF_GHL, full = $('f-name').value.trim(), parts = full.split(/\s+/);
+    const lead = {
+      first_name: parts[0] || '', last_name: parts.slice(1).join(' '),
+      email: $('f-email').value.trim(), phone: $('f-phone').value.trim(), company_name: $('f-co').value.trim(),
+      service: form.svc.value, active_clients: form.vol.value, source: 'Fulfillment website', page: current
+    };
+    const svc = {credit:'credit repair fulfillment',funding:'business funding fulfillment',both:'credit repair and business funding fulfillment'}[lead.service];
+    $('done-msg').textContent = `Thanks, ${lead.first_name}. Pick a time below for your ${svc} partner call.`;
+    if (G.webhookUrl) {
+      try { fetch(G.webhookUrl, { method:'POST', mode:'no-cors', body: new URLSearchParams(lead) }).catch(()=>{}); } catch(e) {}
+    }
+    const base = G.calendarUrl || G.fallbackUrl;
+    let url = base;
+    if (G.calendarUrl) {
+      const q = new URLSearchParams({ first_name:lead.first_name, last_name:lead.last_name, email:lead.email, phone:lead.phone,
+        utm_source:'fulfillment-site', utm_campaign:lead.service, utm_content:lead.active_clients });
+      url = base + (base.includes('?') ? '&' : '?') + q.toString();
+    }
+    const link = $('cal-link'); link.href = url;
+    const slot = $('cal-slot'); slot.textContent = '';
+    if (G.embed && G.calendarUrl) {
+      const f = document.createElement('iframe');
+      f.src = url; f.title = 'Book your partner call'; f.id = 'tbf-calendar';
+      f.style.cssText = 'width:100%;min-height:720px;border:0;border-radius:14px;background:#fff';
+      slot.appendChild(f); link.textContent = 'Trouble loading? Open the calendar →'; link.className = 'micro';
+    }
+  }
   render();
 })();
 </script>
 
+<script src="https://link.msgsndr.com/js/form_embed.js" async></script>
 </body>
 </html>
