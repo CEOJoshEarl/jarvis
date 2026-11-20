@@ -79,9 +79,24 @@ p{margin:0}
 .links a:hover{color:var(--ink)}
 .links a[aria-current="page"]{color:var(--ink);background:var(--panel-2)}
 .nav .btn{padding:12px 18px;font-size:14.5px}
-.navlogin{text-decoration:none;font-weight:700;font-size:14.5px;color:var(--ink-2);white-space:nowrap}.navlogin:hover{color:var(--ink)}
-@media (max-width:1040px){.links{display:none}.navlogin{margin-left:auto}}
-@media (max-width:480px){.navlogin{display:none}.nav .btn{margin-left:auto}}
+/* log in chooser */
+.login{position:relative}
+@media (max-width:1040px){.links{display:none}.login{margin-left:auto}}
+.login-btn{display:inline-flex;align-items:center;gap:8px;font:700 14.5px/1 var(--body);color:var(--ink);background:transparent;border:1.5px solid var(--line);border-radius:999px;padding:11px 16px;cursor:pointer;white-space:nowrap}
+.login-btn:hover,.login-btn[aria-expanded="true"]{border-color:var(--lime)}
+.login-btn svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.login-btn .chev{width:12px;height:12px;transition:transform .2s}
+.login-btn[aria-expanded="true"] .chev{transform:rotate(180deg)}
+.login-menu{position:absolute;right:0;top:calc(100% + 10px);width:min(330px,calc(100vw - 32px));background:var(--panel);border:1px solid var(--line);border-radius:16px;box-shadow:0 24px 60px -20px rgba(0,0,0,.45);padding:8px;display:grid;gap:2px;z-index:70}
+.login-menu p{margin:6px 10px 6px;font:600 11px/1 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--mute)}
+.login-menu a{display:grid;grid-template-columns:38px 1fr 14px;gap:12px;align-items:center;padding:11px 10px;border-radius:12px;text-decoration:none}
+.login-menu a:hover,.login-menu a:focus-visible{background:var(--panel-2);outline:none}
+.login-menu a b{display:block;font-size:15px;color:var(--ink)}
+.login-menu a small{display:block;font-size:12.5px;color:var(--mute);line-height:1.35}
+.login-menu a > span:last-child{color:var(--mute)}
+.li-ico{width:38px;height:38px;border-radius:11px;display:grid;place-items:center;background:color-mix(in srgb,var(--lime) 14%,transparent);color:var(--lime)}
+.li-ico svg{width:19px;height:19px;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+@media (max-width:480px){.nav .btn-primary{display:none}.login-btn{padding:10px 14px}}
 
 /* hero */
 .hero{padding-block:clamp(48px,7vw,96px) clamp(56px,8vw,100px);position:relative;overflow:hidden}
@@ -340,7 +355,15 @@ footer{border-top:1px solid var(--line);padding-block:48px 40px;color:var(--mute
       <a href="#credit-repair" data-nav="credit-repair">Credit Repair</a>
       <a href="#business-funding" data-nav="business-funding">Business Funding</a>
     </div>
-    <a class="navlogin" href="https://portal.thebusinessfunders.com/" target="_blank" rel="noopener">Partner login</a>
+    <div class="login">
+      <button type="button" class="login-btn" id="login-btn" aria-haspopup="true" aria-expanded="false" aria-controls="login-menu"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>Log in<svg class="chev" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></button>
+      <div class="login-menu" id="login-menu" role="menu" aria-labelledby="login-btn" hidden>
+        <p>Who's logging in?</p>
+        <a role="menuitem" href="https://portal.thebusinessfunders.com/client.html" target="_blank" rel="noopener"><span class="li-ico"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg></span><span><b>Client</b><small>Track your file, upload documents, message us</small></span><span aria-hidden="true">→</span></a>
+        <a role="menuitem" href="https://thebusinessfunders.com/partnerships#login" target="_blank" rel="noopener"><span class="li-ico"><svg viewBox="0 0 24 24"><path d="M16 11V7a4 4 0 0 0-8 0v4"/><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M12 15v2"/></svg></span><span><b>Affiliate partner</b><small>Referrals, client progress and payouts</small></span><span aria-hidden="true">→</span></a>
+        <a role="menuitem" href="https://portal.thebusinessfunders.com/" target="_blank" rel="noopener"><span class="li-ico"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><circle cx="17" cy="9" r="2.5"/><path d="M2.5 20c0-3.3 3-5 6.5-5s6.5 1.7 6.5 5M15 15.2c3 .1 6.5 1.3 6.5 4.8"/></svg></span><span><b>Team member</b><small>The internal fulfillment workspace</small></span><span aria-hidden="true">→</span></a>
+      </div>
+    </div>
     <a class="btn btn-primary" href="#book" data-book>Book a partner call</a>
   </div>
 </nav>
@@ -899,7 +922,7 @@ footer{border-top:1px solid var(--line);padding-block:48px 40px;color:var(--mute
         <p style="margin-top:14px;max-width:34ch">White-label back-end fulfillment for credit repair and business funding.</p>
       </div>
       <div><h4>Services</h4><a href="#credit-repair">Credit repair fulfillment</a><a href="#business-funding">Business funding fulfillment</a><a href="#cr-pricing">Pricing</a></div>
-      <div><h4>Partners</h4><a href="#book" data-book>Book a call</a><a href="https://thebusinessfunders.com/partnerships" target="_blank" rel="noopener">Referral program</a><a href="https://portal.thebusinessfunders.com/" target="_blank" rel="noopener">Partner portal login</a><span class="contact">Text 1-888-994-4548</span><span class="contact">partnership@thebusinessfunders.com</span></div>
+      <div><h4>Partners</h4><a href="#book" data-book>Book a call</a><a href="https://thebusinessfunders.com/partnerships" target="_blank" rel="noopener">Referral program</a><a href="https://portal.thebusinessfunders.com/client.html" target="_blank" rel="noopener">Client login</a><a href="https://thebusinessfunders.com/partnerships#login" target="_blank" rel="noopener">Affiliate login</a><a href="https://portal.thebusinessfunders.com/" target="_blank" rel="noopener">Team login</a><span class="contact">Text 1-888-994-4548</span><span class="contact">partnership@thebusinessfunders.com</span></div>
       <div><h4>Legal</h4><a href="https://thebusinessfunders.com/privacy-policy" target="_blank" rel="noopener">Privacy policy</a><a href="https://thebusinessfunders.com/terms-of-use" target="_blank" rel="noopener">Terms of use</a><a href="https://thebusinessfunders.com/terms-and-conditions" target="_blank" rel="noopener">Terms and conditions</a></div>
     </div>
     <p class="legal">The Business Funders is a B2B back-end fulfillment provider. We do not sell credit repair services to consumers, do not provide legal, credit or financial advice, and do not guarantee dispute outcomes, approvals or funding amounts. Partners are responsible for their own compliance with applicable federal and state laws, including CROA, FCRA, TSR and state commercial financing disclosure laws. © 2026 The Business Funders. A CEO Syndicate company.</p>
@@ -937,6 +960,20 @@ window.TBF_GHL = window.TBF_GHL || {
     if (target){ const v = target.closest('[data-view]'); if (v && v.hidden) show(v.dataset.view); requestAnimationFrame(()=>target.scrollIntoView({behavior:'smooth',block:'start'})); }
   }
   addEventListener('hashchange', route); route();
+
+  /* ---------- log in chooser ---------- */
+  const lb = document.getElementById('login-btn'), lm = document.getElementById('login-menu');
+  const setMenu = open => { lm.hidden = !open; lb.setAttribute('aria-expanded', String(open)); if (open) lm.querySelector('a').focus(); };
+  lb.addEventListener('click', e => { e.stopPropagation(); setMenu(lm.hidden); });
+  document.addEventListener('click', e => { if (!lm.hidden && !lm.contains(e.target)) setMenu(false); });
+  document.addEventListener('keydown', e => {
+    if (lm.hidden) return;
+    const items = [...lm.querySelectorAll('a')], i = items.indexOf(document.activeElement);
+    if (e.key === 'Escape') { setMenu(false); lb.focus(); }
+    if (e.key === 'ArrowDown') { e.preventDefault(); items[(i + 1) % items.length].focus(); }
+    if (e.key === 'ArrowUp') { e.preventDefault(); items[(i - 1 + items.length) % items.length].focus(); }
+  });
+  lm.addEventListener('click', e => { if (e.target.closest('a')) setMenu(false); });
 
   /* ---------- ledgers (sample data) ---------- */
   const feeds = {
